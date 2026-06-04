@@ -1,1 +1,469 @@
-﻿Chapitre 4 : Réalisation et implémentation
+\chapter{Réalisation de la Solution}
+
+\section*{Introduction}
+Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA. Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans le DAG Airflow \texttt{dailyow22}, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
+
+% =========================
+\section{Environnement technique de développement}
+
+\subsection{Environnement Hadoop et cluster}
+
+Le développement et les tests ont été réalisés dans l'environnement Hadoop de CIH Bank. L'accès aux tables Hive et aux fichiers HDFS est effectué via les interfaces disponibles dans l'environnement Data Office, en utilisant les comptes de service existants du domaine Tiers.
+
+Les versions des composants utilisés dans l'environnement de production sont les suivantes :
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Composant} & \textbf{Version} \\
+\hline
+Apache Hadoop (HDFS) & Cluster CIH Bank \\
+\hline
+Apache Hive & Cluster CIH Bank \\
+\hline
+Apache Spark & Cluster CIH Bank \\
+\hline
+Apache Airflow & Cluster CIH Bank \\
+\hline
+Dremio & Instance CIH Bank \\
+\hline
+Python & 3.x \\
+\hline
+Soda Core & soda-core-spark \\
+\hline
+Tableau & Tableau Desktop / Server CIH Bank \\
+\hline
+\end{tabular}
+\caption{Versions des composants de l'environnement technique}
+\end{table}
+
+\subsection{Installation de Soda Core}
+
+Soda Core est installé dans l'environnement Python accessible depuis les workers Airflow. Le connecteur retenu est \texttt{soda-core-spark}, qui permet à Soda Core d'utiliser une \texttt{SparkSession} existante comme moteur d'exécution pour interroger les tables Hive de la zone RAW.
+
+\begin{verbatim}
+pip install soda-core-spark
+\end{verbatim}
+
+% =========================
+\section{Implémentation du moteur DQ — Soda Core}
+
+\subsection{Structure des fichiers du projet DQ}
+
+Le projet DQ est organisé selon l'arborescence suivante :
+
+\begin{verbatim}
+dq_tiers/
+|-- dq_tiers_checks.py          # Script principal Python
+|-- checks/
+|   |-- checks_kyc.yml          # Regles DQ colonnes KYC
+|   |-- checks_csp.yml          # Regles DQ colonnes CSP
+|   +-- checks_pipeline.yml     # Regles fraicheur & pipeline
++-- utils/
+    +-- hive_writer.py          # Module d'ecriture resultats dans Hive
+\end{verbatim}
+
+\subsection{Fichier de configuration YAML — Règles KYC (\texttt{checks\_kyc.yml})}
+
+\begin{verbatim}
+# checks_kyc.yml
+# Règles Data Quality — Domaine KYC
+# Source : raw_nova_referentieltiers.ccm_npdescription (zone RAW)
+# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquée
+
+checks for ccm_npdescription:
+
+  # --- Complétude ---
+  - missing_count(name) = 0:
+      name: "KYC-01 | Complétude | Nom"
+      fail: error
+      attributes:
+        criticite: CRITIQUE
+        domaine: KYC
+        dimension: completeness
+
+  - missing_count(first_name) = 0:
+      name: "KYC-02 | Complétude | Prénom"
+      fail: error
+      attributes:
+        criticite: CRITIQUE
+        domaine: KYC
+        dimension: completeness
+
+  - missing_count(birthdate) = 0:
+      name: "KYC-03 | Complétude | Date de naissance"
+      fail: error
+      attributes:
+        criticite: CRITIQUE
+        domaine: KYC
+        dimension: completeness
+
+  - missing_count(nationality_country) = 0:
+      name: "KYC-04 | Complétude | Nationalité"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: KYC
+        dimension: completeness
+
+  # --- Validité ---
+  - invalid_count(civility) = 0:
+      valid values: ["M.", "MME", "MLLE"]
+      name: "KYC-05 | Validité | Civilité hors référentiel"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: KYC
+        dimension: validity
+
+  - invalid_count(gender) = 0:
+      valid values: ["M", "F"]
+      name: "KYC-06 | Validité | Genre hors référentiel"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: KYC
+        dimension: validity
+
+  # --- Fraîcheur ---
+  - freshness(batch_datetime_eaac4) < 26h:
+      name: "KYC-07 | Fraîcheur | Retard batch"
+      fail: error
+      attributes:
+        criticite: HAUTE
+        domaine: PIPELINE
+        dimension: freshness
+\end{verbatim}
+
+\subsection{Fichier de configuration YAML — Règles CSP (\texttt{checks\_csp.yml})}
+
+\begin{verbatim}
+# checks_csp.yml
+# Règles Data Quality — Domaine CSP
+# Source : raw_nova_referentieltiers.ccm_job (zone RAW)
+# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquée
+
+checks for ccm_job:
+
+  # --- Complétude triple CSP ---
+  - missing_percent(professional_sector) < 5:
+      name: "CSP-01 | Complétude | Secteur professionnel"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: CSP
+        dimension: completeness
+
+  - missing_percent(occupation) < 5:
+      name: "CSP-02 | Complétude | Code profession"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: CSP
+        dimension: completeness
+
+  - missing_percent(socioprofessional_category) < 5:
+      name: "CSP-03 | Complétude | Code CSP"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: CSP
+        dimension: completeness
+
+  # --- Validité ---
+  - invalid_count(professional_situation) = 0:
+      valid values: ["SAL", "FON", "TRI", "AUT", "EMP", "NDE"]
+      name: "CSP-04 | Validité | Situation professionnelle"
+      fail: warn
+      attributes:
+        criticite: HAUTE
+        domaine: CSP
+        dimension: validity
+
+  # --- Conformité PPE ---
+  - missing_count(politically_exposed) = 0:
+      name: "CSP-05 | Complétude | PPE (Personne Politiquement Exposée)"
+      fail: error
+      attributes:
+        criticite: CRITIQUE
+        domaine: CSP
+        dimension: completeness
+\end{verbatim}
+
+\subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
+
+\begin{verbatim}
+# dq_tiers_checks.py
+# Pipeline de Data Quality — Référentiel Tiers PP Clients — Zone RAW
+# CIH Bank — Data Office
+# Auteur : Saad BENDAHOU
+# Périmètre : base raw_nova_referentieltiers (HDFS /data/raw/novatiers/)
+# Déclenchement : post-ingestion DAG dailyow22 (22h00)
+
+import argparse
+from datetime import date
+from pyspark.sql import SparkSession
+from soda.scan import Scan
+
+def run_dq_checks(run_date: str):
+    """
+    Exécute les contrôles DQ Soda Core sur les tables Hive
+    du domaine Tiers et persiste les résultats.
+    """
+    # --- 1. Initialisation de la SparkSession ---
+    spark = SparkSession.builder \
+        .appName("DQ_Tiers_Checks") \
+        .enableHiveSupport() \
+        .getOrCreate()
+
+    # --- 2. Initialisation du scan Soda Core ---
+    scan = Scan()
+    scan.set_data_source_name("hive_raw")
+
+    # Connexion Soda --> Hive RAW via Spark
+    # Base cible : raw_nova_referentieltiers (copie exacte NOVA)
+    from soda.core.spark_df_data_source import SparkDfDataSource
+    spark_source = SparkDfDataSource(
+        data_source_name="hive_raw",
+        spark_session=spark
+    )
+    scan.add_spark_session(spark, "hive_raw")
+
+    # --- 3. Chargement des fichiers de règles YAML ---
+    scan.add_sodacl_yaml_file("checks/checks_kyc.yml")
+    scan.add_sodacl_yaml_file("checks/checks_csp.yml")
+    scan.add_sodacl_yaml_file("checks/checks_pipeline.yml")
+
+    # --- 4. Exécution des checks ---
+    scan.execute()
+
+    # --- 5. Collecte et persistance des résultats ---
+    results = scan.get_scan_results()
+    from utils.hive_writer import write_scores, write_anomalies
+    write_scores(spark, results, run_date, dag_name="dailyow22")
+    write_anomalies(spark, results, run_date)
+
+    spark.stop()
+    print(f"[DQ Tiers] Contrôles terminés pour la date {run_date}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run_date", type=str,
+                        default=str(date.today()))
+    args = parser.parse_args()
+    run_dq_checks(args.run_date)
+\end{verbatim}
+
+% =========================
+\section{Création des tables Hive de persistance}
+
+Les tables de persistance DQ sont créées dans la base Hive \texttt{dq\_results}. Le script HiveQL de création est le suivant :
+
+\begin{verbatim}
+-- Création de la base dédiée DQ
+CREATE DATABASE IF NOT EXISTS dq_results
+COMMENT 'Base de résultats Data Quality — CIH Bank Data Office';
+
+-- Table des scores DQ historisés
+CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_scores (
+    dag_name        STRING,
+    table_name      STRING,
+    column_name     STRING,
+    check_name      STRING,
+    dimension       STRING,
+    criticite       STRING,
+    domaine         STRING,
+    metric_value    DOUBLE,
+    threshold       DOUBLE,
+    passed          BOOLEAN,
+    score_dq        DOUBLE
+)
+PARTITIONED BY (run_date DATE)
+STORED AS ORC
+TBLPROPERTIES ('orc.compress'='SNAPPY');
+
+-- Table du détail des anomalies
+CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_anomalies (
+    table_name      STRING,
+    column_name     STRING,
+    check_name      STRING,
+    identifier      STRING,
+    radical         STRING,
+    anomaly_detail  STRING,
+    criticite       STRING
+)
+PARTITIONED BY (run_date DATE)
+STORED AS ORC
+TBLPROPERTIES ('orc.compress'='SNAPPY');
+\end{verbatim}
+
+% =========================
+\section{Intégration dans le DAG Airflow \texttt{dailyow22}}
+
+\subsection{Ajout de la tâche DQ}
+
+La tâche de Data Quality est ajoutée au DAG \texttt{dailyow22} en tant qu'opérateur Python, déclenchée après la fin de toutes les tâches d'ingestion Sqoop des tables \texttt{CCM\_*}. Le \texttt{TriggerRule.ALL\_DONE} garantit que les contrôles DQ s'exécutent même si certaines tâches d'ingestion ont échoué partiellement.
+
+\begin{verbatim}
+# Extrait du DAG dailyow22 (Airflow)
+from airflow.operators.python import PythonOperator
+from airflow.utils.trigger_rule import TriggerRule
+import subprocess
+
+def run_dq_tiers(**context):
+    run_date = context['ds']  # Format YYYY-MM-DD
+    result = subprocess.run(
+        [
+            'python',
+            '/opt/airflow/scripts/dq/dq_tiers_checks.py',
+            '--run_date', run_date
+        ],
+        capture_output=True,
+        text=True
+    )
+    if result.returncode != 0:
+        raise Exception(f"DQ Tiers failed:\n{result.stderr}")
+
+dq_tiers_task = PythonOperator(
+    task_id='run_dq_tiers_checks',
+    python_callable=run_dq_tiers,
+    trigger_rule=TriggerRule.ALL_DONE,
+    dag=dag
+)
+
+# Positionnement dans le graphe : après toutes les ingestions CCM_*
+[ccm_party_task, ccm_npdescription_task, ccm_job_task,
+ ccm_portfolio_task, ccm_context_task] >> dq_tiers_task
+\end{verbatim}
+
+\subsection{Planification et monitoring}
+
+Le DAG \texttt{dailyow22} s'exécute quotidiennement à \textbf{22h00}. La tâche DQ \texttt{run\_dq\_tiers\_checks} se déclenche donc automatiquement chaque nuit après l'ingestion, sans intervention manuelle. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ lui-même.
+
+% =========================
+\section{Création des vues Dremio}
+
+Trois vues SQL sont créées dans Dremio, dans le nouveau schéma \texttt{dq-tiers}, pointant vers les tables Hive de la base \texttt{dq\_results}.
+
+\subsection{Vue \texttt{v.dq\_scores\_history}}
+
+\begin{verbatim}
+-- Vue Dremio : historique des scores DQ
+CREATE OR REPLACE VIEW "dq-tiers"."v.dq_scores_history" AS
+SELECT
+    run_date,
+    dag_name,
+    table_name,
+    column_name,
+    check_name,
+    dimension,
+    criticite,
+    domaine,
+    metric_value,
+    threshold,
+    passed,
+    score_dq
+FROM hive.dq_results.dq_tiers_scores
+ORDER BY run_date DESC, criticite ASC;
+\end{verbatim}
+
+\subsection{Vue \texttt{v.dq\_kpis\_summary}}
+
+\begin{verbatim}
+-- Vue Dremio : KPIs agrégés par domaine et dimension
+CREATE OR REPLACE VIEW "dq-tiers"."v.dq_kpis_summary" AS
+SELECT
+    run_date,
+    domaine,
+    dimension,
+    criticite,
+    COUNT(*)                        AS nb_checks,
+    SUM(CASE WHEN passed THEN 1
+             ELSE 0 END)           AS nb_checks_ok,
+    AVG(score_dq)                  AS score_moyen,
+    MIN(score_dq)                  AS score_min
+FROM hive.dq_results.dq_tiers_scores
+GROUP BY run_date, domaine, dimension, criticite
+ORDER BY run_date DESC, domaine, criticite;
+\end{verbatim}
+
+\subsection{Vue \texttt{v.dq\_anomalies\_detail}}
+
+\begin{verbatim}
+-- Vue Dremio : détail des anomalies pour Data Stewards
+CREATE OR REPLACE VIEW "dq-tiers"."v.dq_anomalies_detail" AS
+SELECT
+    run_date,
+    table_name,
+    column_name,
+    check_name,
+    identifier,
+    radical,
+    anomaly_detail,
+    criticite
+FROM hive.dq_results.dq_tiers_anomalies
+ORDER BY run_date DESC,
+         CASE criticite
+             WHEN 'CRITIQUE' THEN 1
+             WHEN 'HAUTE'    THEN 2
+             WHEN 'MOYENNE'  THEN 3
+             ELSE 4
+         END;
+\end{verbatim}
+
+% =========================
+\section{Réalisation du dashboard Tableau}
+
+\subsection{Connexion Tableau à Dremio}
+
+Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC Dremio. Les trois vues du schéma \texttt{dq-tiers} sont importées comme sources de données dans Tableau : \texttt{v.dq\_scores\_history}, \texttt{v.dq\_kpis\_summary} et \texttt{v.dq\_anomalies\_detail}.
+
+\subsection{Onglet 1 — Vue Exécutive}
+
+La figure \ref{fig:dashboard_exec} présente l'onglet « Vue Exécutive » du dashboard.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/dashboard_vue_exec.png}
+    \caption{Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}
+    \label{fig:dashboard_exec}
+\end{figure}
+
+Cet onglet affiche :
+\begin{itemize}
+    \item Le score DQ global du jour pour le domaine KYC et le domaine CSP (indicateurs chiffrés 0–100)
+    \item La courbe d'évolution des scores sur les 30 derniers jours
+    \item Le nombre d'alertes critiques et hautes en cours
+    \item La date et l'heure de la dernière exécution du batch (\texttt{dailyow22})
+\end{itemize}
+
+\subsection{Onglet 2 — Détail KYC}
+
+La figure \ref{fig:dashboard_kyc} présente l'onglet « Détail KYC ».
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/dashboard_kyc.png}
+    \caption{Dashboard Tableau — Détail KYC : score par colonne et dimension DQ}
+    \label{fig:dashboard_kyc}
+\end{figure}
+
+\subsection{Onglet 3 — Détail CSP}
+
+La figure \ref{fig:dashboard_csp} présente l'onglet « Détail CSP ».
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/dashboard_csp.png}
+    \caption{Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}
+    \label{fig:dashboard_csp}
+\end{figure}
+
+\subsection{Onglet 4 — Anomalies et Remédiation}
+
+Le quatrième onglet présente la liste paginée des enregistrements clients en anomalie, triée par criticité décroissante. Elle est directement exportable en Excel par les Data Stewards pour engagement d'actions correctives dans NOVA. Les colonnes affichées sont : \texttt{radical} (numéro client CIH), \texttt{table\_name}, \texttt{column\_name}, \texttt{anomaly\_detail}, \texttt{criticite}, \texttt{run\_date}.
+
+\section*{Conclusion}
+
+Ce chapitre a présenté l'implémentation concrète des différents composants du pipeline de Data Quality Tiers : le script Soda Core avec ses fichiers de configuration YAML, les tables Hive de persistance, la tâche Airflow post-ingestion, les vues Dremio d'exposition et le dashboard Tableau de visualisation. L'ensemble de ces composants forme un pipeline automatisé, opérationnel chaque nuit à 22h, qui permet de mesurer, historiser et restituer la qualité des données KYC et CSP du Référentiel Tiers. Le chapitre suivant présente les résultats obtenus lors des premières exécutions.
