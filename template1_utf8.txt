@@ -1,0 +1,204 @@
+﻿
+ 
+
+
+
+
+
+RAPPORT DE STAGE DE FIN D’ETUDES
+5éme Année en Ingénierie Informatique et Réseaux — Année universitaire 2025 / 2026
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dédicaces
+
+
+[Rédigez ici vos dédicaces]
+
+Remerciements
+
+
+[Rédigez ici vos remerciements]
+
+Table des matières
+
+
+
+Liste des figures
+
+
+Liste des tableaux
+
+
+Liste des abréviations
+
+
+
+Introduction générale
+
+
+
+[Rédigez ici le contexte et la problématique]
+
+
+[Rédigez ici l'annonce du plan]
+
+
+Introduction du chapitre
+[Rédigez ici l'introduction du chapitre]
+1.1  Présentation de l'organisme d'accueil
+[Décrivez l'organisme d'accueil : secteur, historique, structure, département concerné]
+[  Insérer l'organigramme de l'entreprise  ]
+
+1.2  Étude de l'existant
+1.2.1  Description de l'existant
+[Décrivez le fonctionnement actuel du système ou processus concerné]
+1.2.2  Critique de l'existant
+[Listez et analysez les limites de l'existant]
+1.2.3  Solution proposée
+[Présentez et justifiez la solution retenue]
+1.3  Choix du modèle de développement
+[Décrivez et justifiez le modèle de développement retenu]
+1.4  Planning prévisionnel
+
+Tableau 1 : Planning prévisionnel
+Conclusion du chapitre
+[Conclusion du chapitre 1]
+
+
+Introduction du chapitre
+[Introduction du chapitre 2]
+2.1  Besoins fonctionnels
+2.1.1  [Besoin fonctionnel 1]
+Sous-besoin 1.1 : [Description]
+Sous-besoin 1.2 : [Description]
+2.1.2  [Besoin fonctionnel 2]
+Sous-besoin 2.1 : [Description]
+Sous-besoin 2.2 : [Description]
+2.2  Besoins non fonctionnels
+Performance : [temps de réponse, capacité]
+Sécurité : [authentification, autorisation, chiffrement]
+Disponibilité : [taux de disponibilité requis]
+Maintenabilité : [modularité, documentation du code]
+2.3  Modélisation des cas d'utilisation
+2.3.1  Acteurs du système
+
+Tableau 2 : Acteurs du système
+2.3.2  Diagramme global des cas d'utilisation
+[  Insérer le diagramme de cas d'utilisation global  ]
+Figure 1 : Diagramme des cas d'utilisation global
+2.3.3  Description textuelle des cas d'utilisation
+
+Tableau 3 : Description du cas d'utilisation
+Conclusion du chapitre
+[Conclusion du chapitre 2]
+
+
+Introduction du chapitre
+[Introduction du chapitre 3]
+3.1  Modélisation dynamique
+3.1.1  Diagrammes de séquences
+[  Insérer le diagramme de séquence — [Nom du scénario]  ]
+Figure X : Diagramme de séquences — [Nom du scénario]
+3.1.2  Diagrammes d'états-transitions
+[  Insérer le diagramme d'états-transitions — [Classe concernée]  ]
+Figure X : Diagramme d'états-transitions — [Classe]
+3.1.3  Diagrammes d'activités
+[  Insérer le diagramme d'activités — [CU concerné]  ]
+Figure X : Diagramme d'activités — [CU]
+3.2  Modélisation statique
+3.2.1  Diagramme de classes
+[  Insérer le diagramme de classes  ]
+Figure X : Diagramme de classes
+3.2.2  Modèle relationnel
+[Décrivez les règles de passage, puis présentez le schéma relationnel]
+3.2.3  Dictionnaire de données
+
+Tableau 4 : Dictionnaire de données
+3.3  Architecture de l'application
+3.3.1  Architecture logicielle (diagramme de composants)
+[  Insérer le diagramme de composants  ]
+3.3.2  Architecture matérielle (diagramme de déploiement)
+[  Insérer le diagramme de déploiement  ]
+Conclusion du chapitre
+[Conclusion du chapitre 3]
+
+
+Introduction du chapitre
+[Introduction du chapitre 4]
+4.1  Environnement de développement
+4.1.1  Environnement matériel
+[Décrivez l'environnement matériel utilisé]
+4.1.2  Environnement logiciel
+
+Tableau 5 : Environnement logiciel
+4.2  Présentation des interfaces graphiques
+4.2.1  [Interface 1 — ex : Page d'accueil / Authentification]
+[  Insérer la capture d'écran de l'interface 1  ]
+Figure X : [Nom de l'interface 1]
+[Commentez l'interface en 2–3 lignes : fonctionnalités visibles, navigation, interactions principales]
+4.2.2  [Interface 2]
+[  Insérer la capture d'écran de l'interface 2  ]
+Figure X : [Nom de l'interface 2]
+[Commentaire]
+Conclusion du chapitre
+[Conclusion du chapitre 4]
+
+Conclusion générale
+
+
+[Rappel de l'objectif et récapitulatif du travail réalisé]
+[Résultats obtenus et réponses aux problèmes posés en introduction]
+[Regard critique : limites identifiées et perspectives d'amélioration]
+
+Bibliographie et Nétographie
+
+
+Bibliographie
+[1] NOM, Prénom. « Titre de l'ouvrage », Lieu, Éditeur, Année, pages.
+Nétographie
+[2] [URL complète] : Description du contenu consulté.
+
+ANNEXES
+
+Annexe A — [Titre]
+[Contenu de l'annexe A]
+
+Annexe B — [Titre]
+[Contenu de l'annexe B]
+
+Guide de mise en forme (Référence rapide)
+
+
+Règles typographiques essentielles
+Utilisez toujours le pronom « nous » (jamais « je »)
+Justifiez tout le texte du corps du rapport
+Un titre ou sous-titre ne doit jamais figurer en fin de page
+N'utilisez pas « : » à la fin d'un titre ou sous-titre
+Les titres et sous-titres ne sont ni soulignés ni écrits en italique
+Chaque puce se termine par « , » sauf la dernière qui se termine par « . »
+Évitez les couleurs sauf pour les captures d'interface
+Chaque figure doit être référencée dans le texte avant son apparition
+Maximum 10 diagrammes de séquences dans le chapitre 3
+Volume du rapport : 50 à 60 pages (Introduction → Conclusion)
+
+

@@ -1,0 +1,141 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{longtable}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Rapport de Stage - Saad BENDAHOU},
+    pdfpagemode=FullScreen,
+}
+
+% Configuration des marges
+\geometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
+
+\begin{document}
+
+% --- Page de Garde ---
+\begin{titlepage}
+    \centering
+    
+    % Logos
+    \begin{minipage}{0.28\textwidth}
+        \begin{flushleft}
+            \includegraphics[height=1.5cm, width=\textwidth, keepaspectratio]{logos/unica.png}
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.28\textwidth}
+        \centering
+        \includegraphics[height=6.25cm, width=\textwidth, keepaspectratio]{logos/cih.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.28\textwidth}
+        \begin{flushright}
+            \includegraphics[height=6.25cm, width=\textwidth, keepaspectratio]{logos/emsi.png}
+        \end{flushright}
+    \end{minipage}
+
+    \vspace{2cm}
+    
+    {\large \textbf{Rapport de Stage de Fin d'Études}}\\[0.5cm]
+    {\large Pour l'obtention du Diplôme d'Ingénieur d'État et du Master}\\[1.5cm]
+
+    \begin{tikzpicture}
+        \draw[line width=1pt] (0,0) -- (\textwidth,0);
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    {\huge \bfseries \setstretch{1.2} Conception et mise en œuvre d’un pipeline automatisé de contrôle de la qualité des données : Cas des données CSP et KYC \par}
+    \vspace{1cm}
+    
+    \begin{tikzpicture}
+        \draw[line width=1pt] (0,0) -- (\textwidth,0);
+    \end{tikzpicture}
+
+    \vfill
+
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushleft} \large
+            \textbf{Réalisé par :}\\[0.3cm]
+            SAAD BENDAHOU
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushright} \large
+            \textbf{Filière :}\\[0.3cm]
+            MIAGE (Méthodes Informatiques Appliquées à la Gestion des Entreprises)\\
+            MIAGE I2A (Informatique et Intelligence Artificielle)
+        \end{flushright}
+    \end{minipage}
+
+    \vspace{2cm}
+
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushleft} \large
+            \textbf{Encadrant de l'École :}\\
+            Mr. Marouan Skiti
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushright} \large
+            \textbf{Encadrants de CIH BANK :}\\
+            Mr. Mohamed Agouzzal\\
+            Mr. Marouan Naoui
+        \end{flushright}
+    \end{minipage}
+
+    \vfill
+
+    {\large Année Universitaire : 2025 -- 2026}
+
+\end{titlepage}
+
+% --- Front Matter ---
+\pagenumbering{roman}
+
+\input{sections/dedicaces.tex}
+\input{sections/remerciements.tex}
+
+\input{sections/resume.tex}
+\input{sections/abstract.tex}
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\listoftables
+\newpage
+\input{sections/abbreviations.tex}
+
+% --- Main Matter ---
+\newpage
+\pagenumbering{arabic}
+\input{sections/introduction.tex}
+
+\input{sections/chapitre1.tex}
+\input{sections/chapitre2.tex}
+\input{sections/chapitre3.tex}
+\input{sections/chapitre4.tex}
+\input{sections/chapitre5.tex}
+
+% --- Back Matter ---
+\input{sections/conclusion.tex}
+
+\end{document}
