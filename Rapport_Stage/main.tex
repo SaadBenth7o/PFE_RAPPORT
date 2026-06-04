@@ -26,6 +26,60 @@
 % Configuration des marges
 \geometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
 
+% --- Coloriage de code professionnel style IDE (listings) ---
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.45,0.45,0.45}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.98}
+\definecolor{codeblue}{rgb}{0.0,0.4,0.7}
+\definecolor{codedarkblue}{rgb}{0.0,0.0,0.4}
+\definecolor{codeorange}{rgb}{0.8,0.4,0.0}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen}\itshape,
+    keywordstyle=\color{codeblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=6pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single,
+    rulecolor=\color{lightgray},
+    framesep=4pt,
+    aboveskip=10pt,
+    belowskip=10pt,
+    escapeinside={(*@}{@*)}
+}
+
+\lstset{style=mystyle}
+
+% Langage YAML personnalisé pour listings
+\lstdefinelanguage{YAML}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{codeblue},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{codepurple},
+  moredelim=[l][\color{codeorange}]{\&},
+  moredelim=[l][\color{codeorange}]{\*},
+  moredelim=**[il][\color{codeorange}\mdseries]{:},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
 \begin{document}
 
 % --- Page de Garde ---

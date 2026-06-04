@@ -42,9 +42,9 @@ Tableau & Tableau Desktop / Server CIH Bank \\
 
 Soda Core est installé dans l'environnement Python accessible depuis les workers Airflow. Le connecteur retenu est \texttt{soda-core-spark}, qui permet à Soda Core d'utiliser une \texttt{SparkSession} existante comme moteur d'exécution pour interroger les tables Hive de la zone RAW.
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 pip install soda-core-spark
-\end{verbatim}
+\end{lstlisting}
 
 % =========================
 \section{Implémentation du moteur DQ — Soda Core}
@@ -53,7 +53,7 @@ pip install soda-core-spark
 
 Le projet DQ est organisé selon l'arborescence suivante :
 
-\begin{verbatim}
+\begin{lstlisting}
 dq_tiers/
 |-- dq_tiers_checks.py          # Script principal Python
 |-- checks/
@@ -62,21 +62,21 @@ dq_tiers/
 |   +-- checks_pipeline.yml     # Regles fraicheur & pipeline
 +-- utils/
     +-- hive_writer.py          # Module d'ecriture resultats dans Hive
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Fichier de configuration YAML — Règles KYC (\texttt{checks\_kyc.yml})}
 
-\begin{verbatim}
+\begin{lstlisting}[language=YAML]
 # checks_kyc.yml
-# Règles Data Quality — Domaine KYC
+# Regles Data Quality - Domaine KYC
 # Source : raw_nova_referentieltiers.ccm_npdescription (zone RAW)
-# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquée
+# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquee
 
 checks for ccm_npdescription:
 
-  # --- Complétude ---
+  # --- Completude ---
   - missing_count(name) = 0:
-      name: "KYC-01 | Complétude | Nom"
+      name: "KYC-01 | Completude | Nom"
       fail: error
       attributes:
         criticite: CRITIQUE
@@ -84,7 +84,7 @@ checks for ccm_npdescription:
         dimension: completeness
 
   - missing_count(first_name) = 0:
-      name: "KYC-02 | Complétude | Prénom"
+      name: "KYC-02 | Completude | Prenom"
       fail: error
       attributes:
         criticite: CRITIQUE
@@ -92,7 +92,7 @@ checks for ccm_npdescription:
         dimension: completeness
 
   - missing_count(birthdate) = 0:
-      name: "KYC-03 | Complétude | Date de naissance"
+      name: "KYC-03 | Completude | Date de naissance"
       fail: error
       attributes:
         criticite: CRITIQUE
@@ -100,17 +100,17 @@ checks for ccm_npdescription:
         dimension: completeness
 
   - missing_count(nationality_country) = 0:
-      name: "KYC-04 | Complétude | Nationalité"
+      name: "KYC-04 | Completude | Nationalite"
       fail: warn
       attributes:
         criticite: HAUTE
         domaine: KYC
         dimension: completeness
 
-  # --- Validité ---
+  # --- Validite ---
   - invalid_count(civility) = 0:
       valid values: ["M.", "MME", "MLLE"]
-      name: "KYC-05 | Validité | Civilité hors référentiel"
+      name: "KYC-05 | Validite | Civilite hors referentiel"
       fail: warn
       attributes:
         criticite: HAUTE
@@ -119,36 +119,36 @@ checks for ccm_npdescription:
 
   - invalid_count(gender) = 0:
       valid values: ["M", "F"]
-      name: "KYC-06 | Validité | Genre hors référentiel"
+      name: "KYC-06 | Validite | Genre hors referentiel"
       fail: warn
       attributes:
         criticite: HAUTE
         domaine: KYC
         dimension: validity
 
-  # --- Fraîcheur ---
+  # --- Fraicheur ---
   - freshness(batch_datetime_eaac4) < 26h:
-      name: "KYC-07 | Fraîcheur | Retard batch"
+      name: "KYC-07 | Fraicheur | Retard batch"
       fail: error
       attributes:
         criticite: HAUTE
         domaine: PIPELINE
         dimension: freshness
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Fichier de configuration YAML — Règles CSP (\texttt{checks\_csp.yml})}
 
-\begin{verbatim}
+\begin{lstlisting}[language=YAML]
 # checks_csp.yml
-# Règles Data Quality — Domaine CSP
+# Regles Data Quality - Domaine CSP
 # Source : raw_nova_referentieltiers.ccm_job (zone RAW)
-# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquée
+# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquee
 
 checks for ccm_job:
 
-  # --- Complétude triple CSP ---
+  # --- Completude triple CSP ---
   - missing_percent(professional_sector) < 5:
-      name: "CSP-01 | Complétude | Secteur professionnel"
+      name: "CSP-01 | Completude | Secteur professionnel"
       fail: warn
       attributes:
         criticite: HAUTE
@@ -156,7 +156,7 @@ checks for ccm_job:
         dimension: completeness
 
   - missing_percent(occupation) < 5:
-      name: "CSP-02 | Complétude | Code profession"
+      name: "CSP-02 | Completude | Code profession"
       fail: warn
       attributes:
         criticite: HAUTE
@@ -164,42 +164,42 @@ checks for ccm_job:
         dimension: completeness
 
   - missing_percent(socioprofessional_category) < 5:
-      name: "CSP-03 | Complétude | Code CSP"
+      name: "CSP-03 | Completude | Code CSP"
       fail: warn
       attributes:
         criticite: HAUTE
         domaine: CSP
         dimension: completeness
 
-  # --- Validité ---
+  # --- Validite ---
   - invalid_count(professional_situation) = 0:
       valid values: ["SAL", "FON", "TRI", "AUT", "EMP", "NDE"]
-      name: "CSP-04 | Validité | Situation professionnelle"
+      name: "CSP-04 | Validite | Situation professionnelle"
       fail: warn
       attributes:
         criticite: HAUTE
         domaine: CSP
         dimension: validity
 
-  # --- Conformité PPE ---
+  # --- Conformite PPE ---
   - missing_count(politically_exposed) = 0:
-      name: "CSP-05 | Complétude | PPE (Personne Politiquement Exposée)"
+      name: "CSP-05 | Completude | PPE (Personne Politiquement Exposee)"
       fail: error
       attributes:
         criticite: CRITIQUE
         domaine: CSP
         dimension: completeness
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 # dq_tiers_checks.py
-# Pipeline de Data Quality — Référentiel Tiers PP Clients — Zone RAW
-# CIH Bank — Data Office
+# Pipeline de Data Quality - Referentiel Tiers PP Clients - Zone RAW
+# CIH Bank - Data Office
 # Auteur : Saad BENDAHOU
-# Périmètre : base raw_nova_referentieltiers (HDFS /data/raw/novatiers/)
-# Déclenchement : post-ingestion DAG dailyow22 (22h00)
+# Perimetre : base raw_nova_referentieltiers (HDFS /data/raw/novatiers/)
+# Declenchement : post-ingestion DAG dailyow22 (22h00)
 
 import argparse
 from datetime import date
@@ -208,8 +208,8 @@ from soda.scan import Scan
 
 def run_dq_checks(run_date: str):
     """
-    Exécute les contrôles DQ Soda Core sur les tables Hive
-    du domaine Tiers et persiste les résultats.
+    Execute les controles DQ Soda Core sur les tables Hive
+    du domaine Tiers et persiste les resultats.
     """
     # --- 1. Initialisation de la SparkSession ---
     spark = SparkSession.builder \
@@ -230,22 +230,22 @@ def run_dq_checks(run_date: str):
     )
     scan.add_spark_session(spark, "hive_raw")
 
-    # --- 3. Chargement des fichiers de règles YAML ---
+    # --- 3. Chargement des fichiers de regles YAML ---
     scan.add_sodacl_yaml_file("checks/checks_kyc.yml")
     scan.add_sodacl_yaml_file("checks/checks_csp.yml")
     scan.add_sodacl_yaml_file("checks/checks_pipeline.yml")
 
-    # --- 4. Exécution des checks ---
+    # --- 4. Execution des checks ---
     scan.execute()
 
-    # --- 5. Collecte et persistance des résultats ---
+    # --- 5. Collecte et persistance des resultats ---
     results = scan.get_scan_results()
     from utils.hive_writer import write_scores, write_anomalies
     write_scores(spark, results, run_date, dag_name="dailyow22")
     write_anomalies(spark, results, run_date)
 
     spark.stop()
-    print(f"[DQ Tiers] Contrôles terminés pour la date {run_date}")
+    print(f"[DQ Tiers] Controles termines pour la date {run_date}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -253,19 +253,19 @@ if __name__ == "__main__":
                         default=str(date.today()))
     args = parser.parse_args()
     run_dq_checks(args.run_date)
-\end{verbatim}
+\end{lstlisting}
 
 % =========================
 \section{Création des tables Hive de persistance}
 
 Les tables de persistance DQ sont créées dans la base Hive \texttt{dq\_results}. Le script HiveQL de création est le suivant :
 
-\begin{verbatim}
--- Création de la base dédiée DQ
+\begin{lstlisting}[language=SQL]
+-- Creation de la base dediee DQ
 CREATE DATABASE IF NOT EXISTS dq_results
-COMMENT 'Base de résultats Data Quality — CIH Bank Data Office';
+COMMENT 'Base de resultats Data Quality - CIH Bank Data Office';
 
--- Table des scores DQ historisés
+-- Table des scores DQ historises
 CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_scores (
     dag_name        STRING,
     table_name      STRING,
@@ -283,7 +283,7 @@ PARTITIONED BY (run_date DATE)
 STORED AS ORC
 TBLPROPERTIES ('orc.compress'='SNAPPY');
 
--- Table du détail des anomalies
+-- Table du detail des anomalies
 CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_anomalies (
     table_name      STRING,
     column_name     STRING,
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_anomalies (
 PARTITIONED BY (run_date DATE)
 STORED AS ORC
 TBLPROPERTIES ('orc.compress'='SNAPPY');
-\end{verbatim}
+\end{lstlisting}
 
 % =========================
 \section{Intégration dans le DAG Airflow \texttt{dailyow22}}
@@ -305,7 +305,7 @@ TBLPROPERTIES ('orc.compress'='SNAPPY');
 
 La tâche de Data Quality est ajoutée au DAG \texttt{dailyow22} en tant qu'opérateur Python, déclenchée après la fin de toutes les tâches d'ingestion Sqoop des tables \texttt{CCM\_*}. Le \texttt{TriggerRule.ALL\_DONE} garantit que les contrôles DQ s'exécutent même si certaines tâches d'ingestion ont échoué partiellement.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 # Extrait du DAG dailyow22 (Airflow)
 from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
@@ -332,10 +332,10 @@ dq_tiers_task = PythonOperator(
     dag=dag
 )
 
-# Positionnement dans le graphe : après toutes les ingestions CCM_*
+# Positionnement dans le graphe : apres toutes les ingestions CCM_*
 [ccm_party_task, ccm_npdescription_task, ccm_job_task,
  ccm_portfolio_task, ccm_context_task] >> dq_tiers_task
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Planification et monitoring}
 
@@ -348,7 +348,7 @@ Trois vues SQL sont créées dans Dremio, dans le nouveau schéma \texttt{dq-tie
 
 \subsection{Vue \texttt{v.dq\_scores\_history}}
 
-\begin{verbatim}
+\begin{lstlisting}[language=SQL]
 -- Vue Dremio : historique des scores DQ
 CREATE OR REPLACE VIEW "dq-tiers"."v.dq_scores_history" AS
 SELECT
@@ -366,12 +366,12 @@ SELECT
     score_dq
 FROM hive.dq_results.dq_tiers_scores
 ORDER BY run_date DESC, criticite ASC;
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Vue \texttt{v.dq\_kpis\_summary}}
 
-\begin{verbatim}
--- Vue Dremio : KPIs agrégés par domaine et dimension
+\begin{lstlisting}[language=SQL]
+-- Vue Dremio : KPIs agreges par domaine et dimension
 CREATE OR REPLACE VIEW "dq-tiers"."v.dq_kpis_summary" AS
 SELECT
     run_date,
@@ -386,12 +386,12 @@ SELECT
 FROM hive.dq_results.dq_tiers_scores
 GROUP BY run_date, domaine, dimension, criticite
 ORDER BY run_date DESC, domaine, criticite;
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Vue \texttt{v.dq\_anomalies\_detail}}
 
-\begin{verbatim}
--- Vue Dremio : détail des anomalies pour Data Stewards
+\begin{lstlisting}[language=SQL]
+-- Vue Dremio : detail des anomalies pour Data Stewards
 CREATE OR REPLACE VIEW "dq-tiers"."v.dq_anomalies_detail" AS
 SELECT
     run_date,
@@ -410,7 +410,7 @@ ORDER BY run_date DESC,
              WHEN 'MOYENNE'  THEN 3
              ELSE 4
          END;
-\end{verbatim}
+\end{lstlisting}
 
 % =========================
 \section{Réalisation du dashboard Tableau}
