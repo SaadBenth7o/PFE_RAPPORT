@@ -1,0 +1,281 @@
+﻿All sheets: ['TIERS_PIPELINE_DOC', 'PP_CLIENT_DOC', 'SCRIPTS_INDEX']
+
+=== SHEET: TIERS_PIPELINE_DOC — Shape: (91, 9) ===
+Row 0: DOCUMENTATION PIPELINE — RÉFÉRENTIEL TIERS PP CLIENTS
+Row 1: Banque CIH  |  Périmètre : tables CCM_* utilisées par la vue CIHONE  |  Bout en bout : Oracle NOVA → HDFS → Dremio → Tableau
+Row 3: ━━  1. VUE D'ENSEMBLE — FLUX TECHNIQUE BOUT EN BOUT
+Row 4: ORACLE NOVA (CCM_*) | ──Sqoop OW──▶ | HDFS / HIVE RAW
+(raw_nova_referentieltiers) | ──Spark──▶ | HIVE STAGING
+(staging_nova_referentieltiers) | ──Dremio──▶ | DREMIO VIEWS
+(staging-nova-referentieltiers) | ──SQL──▶ | OUTPUT CIHONE
+(28 colonnes PP Clients)
+Row 5: Source : Oracle 11g
+Base : NOVA
+Tables : CCM_* | DAG : nova_referentieltiers_clients
+Script : nova_referentieltiers_clients.sh
+Mode : OW Full  |  Cadence : Quotidien | DAG : referentieltiers_ingestion
+Script : staging_novareferentieltiersclients.sh
+Mode : OW  |  Format : Parquet/ORC | Schéma : staging-nova-referentieltiers
++ staging-e_params (operational_posts)
+10 vues exposées | Fichier : PP_Client.xlsx
+Échantillon : 5 000 PP
+28 colonnes identifiées
+Row 6: ⚠️  DOUBLON : DAG dailyow22 → nova_tiers.sh charge les mêmes CCM_* vers base 'novatiers' — Dremio ne lit PAS cette base — vérifier utilité
+Row 8: ━━  2. COUCHE RAW — TABLES CCM_* LUES PAR DREMIO (raw_nova_referentieltiers)
+Row 9: DAG Airflow | nova_referentieltiers_clients | Mode | OW Full (Overwrite) | Cadence | Quotidien (22h)
+Row 10: Base HDFS/Hive cible | raw_nova_referentieltiers | Timestamp | Aucun (OW complet) | Source Oracle | NOVA 11g — schéma CCM
+Row 12: # | TABLE CCM_* (Oracle source) | TABLE RAW (Hive) | RÔLE MÉTIER | VUE DREMIO CORRESPONDANTE | CLÉ PRINCIPALE | LIEN VERS TABLE | PRIORITÉ DQ
+Row 13: 1 | CCM_PARTY | ccm_party | Identifiant tiers — entité mère de tout client | customers | identifier (UUID) | Racine — toutes les tables y réfèrent | 🔴 CRITIQUE
+Row 14: 2 | CCM_NATURALPERSON | ccm_naturalperson | Personne physique — flag collectif | natural_person | identifier (UUID) | FK → CCM_PARTY | 🔴 CRITIQUE
+Row 15: 3 | CCM_NATURALPERSON_DESCRIPTION | ccm_naturalperson_description | Identité complète : nom, prénom, civilité, genre, naiss., nationalité, famille, FATCA | natural_person_description | identifier (UUID) | FK → CCM_NATURALPERSON | 🔴 CRITIQUE
+Row 16: 4 | CCM_PROFESSIONAL | ccm_professional | Emploi : secteur, profession, CSP, employeur, PEP, situation pro | customer_job | identifier (UUID) | FK → CCM_NATURALPERSON | 🟠 HAUTE
+Row 17: 5 | CCM_CUSTOMER | ccm_customer | Statut client : type, marché, banque, KYC, date création | customer_party | identifier (UUID) | FK → CCM_PARTY | 🔴 CRITIQUE
+Row 18: 6 | CCM_PORTFOLIO | ccm_portfolio | Portefeuille / gestionnaire : code portefeuille, nature, agence | portfolio | identifier (UUID) | FK → CCM_CUSTOMER | 🟠 HAUTE
+Row 19: 7 | CCM_SEGMENTATION_MEMBER | ccm_segmentation_member | Appartenance d’un client à un segment | customer_segmentation_members | identifier (UUID) | FK → CCM_PARTY + FK → CCM_SEGMENTATION | 🟠 HAUTE
+Row 20: 8 | CCM_SEGMENTATION | ccm_segmentation | Référentiel des segments (79 segments, noms codes) | customer_segmentation | identifier (UUID) | Table de référence segment | 🟡 MOYENNE
+Row 21: 9 | CCM_CONTEXT | ccm_context | Contexte de création : agence, opérateur, date, action | customer_creation_context | identifier (UUID) | FK → CCM_PARTY | 🟡 MOYENNE
+Row 22: e_params | E_PARAMS_OPERATIONAL_POST | operational_post (e_params) | Référentiel postes opérationnels — résoudre codes gestionnaires | operational_posts (staging-e_params) | operational_post_code | Référentiel utilisé pour décoder portfolio.code | 🟡 MOYENNE
+Row 23: ⚠️ Script Sqoop RAW pour e_params non tracé dans matrice SOP_RAW — DAG probable : eParam_ingestion — à confirmer avec équipe DE
+Row 25: ━━  3. COUCHE STAGING — staging_nova_referentieltiers
+Row 26: DAG Airflow | referentieltiers_ingestion | Script Spark | scripts/spark_jobs/spark/staging_novareferentieltiersclients.sh | Base cible | staging_nova_referentieltiers | Mode | OW — Quotidien
+Row 28: # | TABLE STAGING | TABLE RAW SOURCE | RÔLE | COLONNES CLÉS | NB COLS | TRANSFO PRINCIPALE | VUE DREMIO
+Row 29: 1 | customers | ccm_party + ccm_customer | Client avec numéro client, type, marché, statut, KYC | identifier, customer_number, customer_type, market, bank, state, printing_kyc_date | 14 | Dédup sur identifier, cast dates | v.Customers
+Row 30: 2 | natural_person | ccm_naturalperson | Flag personne physique (collective = 0) | identifier, collective | 4 | Simple projection | v.natural_person
+Row 31: 3 | natural_person_description | ccm_naturalperson_description | Identité complète : 41 colonnes | name, first_name, civility, gender, birthdate, birth_country, nationality_country, family_situation, fatca_identification_number | 41 | UPPER(name), UPPER(first_name), cast dates, NULL → '' pour champs texte | v.natural_person_description
+Row 32: 4 | customer_job | ccm_professional | Emploi principal (main=1), secteur, CSP, employeur, PEP | professional_sector, occupation, socioprofessional_category, employer, professional_situation, politically_exposed, main | 18 | Filtre main=1 pour emploi principal, UPPER(employer) | v.customer_job
+Row 33: 5 | customer_party | ccm_customer (liaison) | Lien entre entité party et personne physique | identifier, state, integration_date, foreign_key_person_identifier | 6 | FK join person → party | v.customer_party
+Row 34: 6 | portfolio | ccm_portfolio | Gestionnaire assigné, code agence, nature | code (gestionnaire), nature, foreign_key_party_identifier, restricted | 7 | Jointure sur operational_post pour résoudre nom gestionnaire | v.portfolio
+Row 35: 7 | customer_segmentation_members | ccm_segmentation_member | Appartenance client à un segment actif | foreign_key_person_identifier, foreign_key_segmentation_identifier, beging_date, ordnum | 9 | Filtre dernier segment actif par client | v.customer_segmentation_members
+Row 36: 8 | customer_segmentation | ccm_segmentation | Référentiel 79 segments (code + nom + type) | identifier, segment_name, segment_number, state, segment_type | 10 | Référentiel statique — OW complet | v.customer_segmentation
+Row 37: 9 | customer_creation_context | ccm_context | Contexte de création : opérateur, agence, date, action | structure_element_identifier (agence), user_identifier, treatment_date, action, ordnum | 11 | Filtre ordnum=0 pour contexte initial | v.customer_creation_context
+Row 38: e_p | operational_posts | e_params (source séparée) | 4 618 postes opérationnels — décodage codes gestionnaires de portfolio | operational_post_type, operational_post_code, operational_post_name, branch_code | 4 | Table de référence pure — JOIN sur portfolio.code | v.operational_posts
+Row 40: ━━  4. OUTPUT FINAL — 28 COLONNES CIHONE (PP_Client.xlsx)
+Row 41: # | COLONNE CIHONE | VUE DREMIO SOURCE | COLONNE SOURCE | TYPE | VALEURS OBSERVÉES (5k PP) | DQ ALERTE
+Row 42: 1 | radical | customers | customer_number | INT | Ex: 5999557, 438630 | NULL = client invalide
+Row 43: 2 | nom | natural_person_description | name | TEXT | Ex: AIT BELKACEM, RAHIB | NULL ou vide → alerte critique
+Row 44: 3 | prenom | natural_person_description | first_name | TEXT | Ex: WADIA, AHMED | NULL ou vide → alerte critique
+Row 45: 4 | code_gestionnaire | portfolio + operational_posts | portfolio.code → JOIN operational_post_name | TEXT | Ex: 125D_FDCC, 012CCLI2_FDCC | Code non résolu = JOIN raté e_params
+Row 46: 5 | code_agence | portfolio | branch_code (via operational_posts) | INT | Ex: 125, 12, 38 | 0 ou NULL = agence inconnue
+Row 47: 6 | date_creation | customers | creation_date | DATE | Ex: 2013-03-06, 1990-01-01 | Dates 01/01/xxxx = approximatives
+Row 48: 7 | code_banque | customers | bank | TEXT | BPP uniquement observé
+Row 49: 8 | code_marche | customers | market | INT | 1 ou 8 | Autre valeur = anomalie
+Row 50: 9 | date_de_naissance | natural_person_description | birthdate | DATE | 1956-01-01, 1972-02-06 | 01/01/xxxx = date approx. — flagger
+Row 51: 10 | civilite | natural_person_description | civility | TEXT | M. / MME / MLLE | Incohérence civilité ≠ genre → alerte
+Row 52: 11 | genre | natural_person_description | gender | TEXT | M / F | NULL ou valeur hors (M,F) → alerte
+Row 53: 12 | pays_de_naissance | natural_person_description | birth_country | TEXT | MA (majoritaire)
+Row 54: 13 | ville_de_naissance | natural_person_description | birth_city | INT (code) | 480, 621, 570... | ⚠️ Code numérique sans libellé — référentiel villes manquant
+Row 55: 14 | code_pays_de_nationalite | natural_person_description | nationality_country | TEXT | MA (majoritaire)
+Row 56: 15 | code_pays_de_residence | natural_person_description | residence_country | TEXT | MA (majoritaire)
+Row 57: 16 | situation_familiale | natural_person_description | family_situation | INT | 1, 2, 3, 4 | NULL ou hors [1-5] → alerte
+Row 58: 17 | nombre_d_enfants | natural_person_description | number_of_child | INT | 0, 1, 2, 6
+Row 59: 18 | date_derniere_modification | customers | last_modification_date | DATE | Ex: 2021-05-21
+Row 60: 19 | type_client | customers | customer_type | INT | 1 uniquement observé | Autre valeur → à investiguer
+Row 61: 20 | code_secteur_professionel | customer_job | professional_sector | INT | Ex: 46, 5, 6, 52, 33 | NULL si emploi non renseigné
+Row 62: 21 | code_profession | customer_job | occupation | INT | Ex: 139, 140
+Row 63: 22 | code_categorie_socio_professionelle | customer_job | socioprofessional_category | INT | Ex: 29, 30
+Row 64: 23 | situation_professionelle | customer_job | professional_situation | TEXT | SAL, FON, AUT, EMP, TRI, NDE | NULL = situation inconnue
+Row 65: 24 | employeur | customer_job | employer | TEXT | COSUMAR, AUTRE, LUI MEME... | ⚠️ Champ libre — valeurs parasites (AUTRE, LUI MEME)
+Row 66: 25 | code_segment | customer_segmentation_members + customer_segmentation | segment_number | INT | 33, 41, 43, 46, 47 | Client sans segment → alerte
+Row 67: 26 | lieu_creation | customer_creation_context | structure_element_identifier | TEXT | Agence, REPRISE, En ligne
+Row 68: 27 | date_deces | natural_person_description | date_of_death | DATE | NULL (quasi-totalité) | Non NULL → client décédé — à exclure des analyses actives
+Row 69: 28 | identifiant_fatca | natural_person_description | fatca_identification_number | TEXT | NULL (quasi-totalité) | Non NULL = personne US — contrôle FATCA obligatoire
+Row 71: ━━  5. SPÉCIFICATIONS DQ — SODA CORE (checks.yml)
+Row 72: Déclenchement : après nova_referentieltiers_clients.sh dans DAG nova_referentieltiers_clients  |  Output : dq_results_YYYYMMDD.csv → HDFS + Dremio
+Row 74: # | TABLE | CHECK SODA | COLONNE(S) | TYPE CHECK | SEUIL / RÈGLE | PRIORITÉ
+Row 75: 1 | customers | row_count > 0 | * | completeness | Count > 0 (table non vide) | 🔴
+Row 76: 2 | customers | missing_count(identifier) = 0 | identifier | validity | 0 NULL sur clé UUID | 🔴
+Row 77: 3 | customers | duplicate_count(identifier) = 0 | identifier | uniqueness | 0 doublons sur UUID | 🔴
+Row 78: 4 | customers | duplicate_count(customer_number) = 0 | customer_number | uniqueness | 0 doublons numéro client | 🔴
+Row 79: 5 | natural_person_description | missing_percent(name) < 1 | name | completeness | < 1% de noms NULL | 🔴
+Row 80: 6 | natural_person_description | missing_percent(first_name) < 1 | first_name | completeness | < 1% de prénoms NULL | 🔴
+Row 81: 7 | natural_person_description | invalid_count(gender) = 0 | gender | validity | Valeurs acceptables : M, F uniquement | 🔴
+Row 82: 8 | natural_person_description | invalid_count(civility) = 0 | civility | validity | Valeurs : M. / MME / MLLE  +  cohérence civility ↔ gender | 🔴
+Row 83: 9 | natural_person_description | missing_percent(birthdate) < 2 | birthdate | completeness | < 2% NULL  +  flag si jour=1 mois=1 (date approx.) | 🟠
+Row 84: 10 | natural_person_description | missing_percent(fatca_identification_number) ≤ 99 | fatca_identification_number | completeness | Taux remplissage historisé — non NULL = contrôle FATCA activé | 🟠
+Row 85: 11 | customer_job | missing_percent(professional_sector) < 10 | professional_sector | completeness | < 10% NULL secteur pro | 🟠
+Row 86: 12 | customer_job | duplicate_count(foreign_key_natural_person_identifier WHERE main=1) = 0 | foreign_key_natural_person_identifier | uniqueness | 1 seul emploi principal (main=1) par personne | 🟠
+Row 87: 13 | customer_segmentation_members | missing_count(foreign_key_segmentation_identifier) = 0 | foreign_key_segmentation_identifier | referential_integrity | Tout membre pointe vers un segment valide | 🟠
+Row 88: 14 | portfolio | missing_percent(code) < 1 | code | completeness | < 1% NULL code gestionnaire | 🟠
+Row 89: 15 | customers (freshness) | freshness(last_modification_date) < 2d | last_modification_date | freshness | Données à jour — fraicheur < 2 jours | 🔴
+Row 90: 16 | ALL TABLES | schema_check | * | schema | Colonnes attendues présentes — aucune suppression de colonne | 🔴
+
+=== SHEET: PP_CLIENT_DOC — Shape: (160, 10) ===
+Row 0: DOCUMENTATION PIPELINE — PERSONNES PHYSIQUES CLIENTS (PP_CLIENT)
+Row 1: Périmètre : NOVA (Oracle)  →  Sqoop/HDFS (RAW)  →  Dremio Virtualisation  →  Vue CIHONE  |  Banque CIH
+Row 2: Source : PP_Client.xlsx  —  5 000 PP Clients échantillon  |  10 vues virtualisées  |  28 colonnes sortie finale
+Row 4: 1. FICHE D'IDENTITÉ — PIPELINE PP CLIENTS
+Row 5: Paramètre | Valeur | Remarque
+Row 6: Objet métier | Personnes Physiques Clients (PP_CLIENT) | Clients banque CIH — marché PARTICULIERS (code_marche=1) et MAROCAINS RESIDANT A L'ETRANGER (code_marche=8)
+Row 7: Système source | NOVA — Core Banking CIH (Oracle) | Instance Oracle : dbcih10g — Schéma REFERENTIELTIERS
+Row 8: Tables sources (RAW) | CCM_PARTY, CCM_NATURALPERSON, CCM_NPDESCRIPTION, CCM_PERSON, CCM_JOB, CCM_PROFESSIONAL, CCM_PORTFOLIO, CCM_CONTEXT | 8 tables CCM_* principales + 2 tables de paramétrage
+Row 9: DAG d'ingéstion RAW | dailyow22  +  nova_referentieltiers_clients | DAG1 : nova_tiers.sh  →  novatiers  |  DAG2 : nova_referentieltiers_clients.sh  →  raw_nova_referentieltiers
+Row 10: Mode d'ingéstion | OW — Full OverWrite quotidien | Rechargement complet — pas d'incrémental — HDFS/ORC
+Row 11: Couche virtualisation (Dremio) | staging-nova-referentieltiers | 9 vues virtualisées PP + 1 vue paramétrage (staging-e_params.operational_posts)
+Row 12: Vue finale CIHONE | CIHONE_echantillon — 28 colonnes — 5 000 PP Clients | Requête de jointure sur 9 tables + 1 paramétrage → profil complet PP client
+Row 13: Champ clé de jointure principal | identifier (UUID 32 caractères) | Correspond à ID_PARTY dans CCM_PARTY. Ex: 8a8180c660b97c680161fb19752a2066
+Row 14: Champ batch technique | batch_datetime_* (présent dans chaque vue) | Timestamp d'ingéstion batch Dremio. Ex: 2026-05-21 05:25:59.656 — Permet traçabilité du chargement
+Row 15: Volume échantillon | 5 000 lignes PP Clients | Fichier PP_Client.xlsx — segments observés : 33, 41, 43, 46, 47
+Row 16: Marchés couverts | code_marche = 1 (Particuliers) / 8 (MRE) | MRE = Marocains Résidant à l'Étranger
+Row 17: Niveaux du pipeline | NOVA Oracle → Sqoop OW → HDFS/ORC → Dremio v.* → Vue CIHONE | 5 niveaux de traitement de bout en bout
+Row 19: 2. INVENTAIRE DES 10 TABLES VIRTUALISÉES (Dremio)
+Row 20: # | Vue Dremio (v.*) | Schéma Dremio | Table(s) CCM_* source | Nb colonnes | Clé primaire | Clé étrangère vers | Champ batch | Description métier | Priorité DQ
+Row 21: 1 | v.Customers | staging-nova-referentieltiers | CCM_PARTY | 14 | identifier (= ID_PARTY) | — | batch_datetime_eaac4 | Table principale client : numéro client (radical), type, marché, banque, dates création/clôture, KYC | CRITIQUE
+Row 22: 2 | v.natural_person | staging-nova-referentieltiers | CCM_NATURALPERSON | 4 | identifier | — | batch_datetime_e1e80 | Table pivot PP : flag collective (PP vs groupe). Liée à v.natural_person_description par identifier | CRITIQUE
+Row 23: 3 | v.natural_person_description | staging-nova-referentieltiers | CCM_NPDESCRIPTION + CCM_PERSON | 41 | identifier | foreign_key_natural_person_identifier
+→ v.natural_person | batch_datetime_45a96 | Table la plus riche (41 cols) : nom, prénom, civilité, genre, naissace, nationalité, famille, FATCA, décès, parents | CRITIQUE
+Row 24: 4 | v.customer_job | staging-nova-referentieltiers | CCM_PROFESSIONAL + CCM_JOB | 18 | identifier | foreign_key_natural_person_identifier
+→ v.natural_person | batch_datetime_22f75 | Données emploi/profession : secteur, profession, CSP, situation, employeur, CNSS, exposé politiquement | HAUTE
+Row 25: 5 | v.customer_party | staging-nova-referentieltiers | CCM_PARTY (lien Tiers↔Client) | 6 | identifier | foreign_key_person_identifier
+→ v.natural_person | batch_datetime_42de7 | Table de liaison Tiers/Client : état, date d'intégration. Pont entre identité et relation bancaire | HAUTE
+Row 26: 6 | v.portfolio | staging-nova-referentieltiers | CCM_PORTFOLIO | 7 | identifier | foreign_key_party_identifier
+→ v.customer_party | batch_datetime_cd7ac | Portefeuille gestionnaire : code gestionnaire (ex: 112CC_FDCC), nature COM, flag restricted | HAUTE
+Row 27: 7 | v.customer_segmentation_members | staging-nova-referentieltiers | CCM_CONTEXT (membres) | 9 | identifier | foreign_key_person_identifier
+→ v.natural_person
+foreign_key_segmentation_identifier
+→ v.customer_segmentation | batch_datetime_17c62 | Association client↔segment : date_début, company_code. Liée à la table de référence des segments | HAUTE
+Row 28: 8 | v.customer_segmentation | staging-nova-referentieltiers | CCM_CONTEXT (référentiel) | 10 | identifier | — (Table de référence) | batch_datetime_a989f | Référentiel des segments CIH (79 segments) : numéro, nom, état, type, date création. Segments 3,9,10,14,33,41,43,46,47... | MOYENNE
+Row 29: 9 | v.customer_creation_context | staging-nova-referentieltiers | CCM_CONTEXT (création) | 11 | identifier | foreign_key_person_identifier
+→ v.natural_person | batch_datetime_28dc5 | Contexte de création : agence créatrice, utilisateur, action (1=création). Hist. REPRISE = migration données | MOYENNE
+Row 30: 10 | v.operational_post | staging-e_params | Paramétrage (hors CCM_*) | 4 | operational_post_code | — (Table de référence) | Aucun (table paramètre) | Référentiel postes opérationnels (4618 lignes) : type (DEC_CIEL,...), code poste, nom, branch_code. Source : staging-e_params (HORS CCM_*). DAG non tracé dans matrice SOP_RAW → ACTION REQUISE | FAIBLE
+Row 32: 3. MAPPING COLONNES : CCM_* (Oracle NOVA) ↔ v.* (Dremio Virtualisation)
+Row 33: Vue Dremio | Colonne Dremio (v.*) | Table CCM_* source | Colonne CCM_* équivalente | Colonne CIHONE (sortie) | Type | Description / Valeurs observées
+Row 34: v.Customers | identifier | CCM_PARTY | ID_PARTY | — | UUID/VARCHAR | Clé primaire universelle du tiers. Ex: 8a8180c660b97c680161fb19752a2066
+Row 35: v.Customers | customer_number | CCM_PARTY | NUM_TIERS / RADICAL | radical | NUMBER | Numéro client (radical). Clé bancaire de référence
+Row 36: v.Customers | company_code | CCM_PARTY | CODE_BANQUE (entité) | — | NUMBER | Code entité bancaire (230 = CIH)
+Row 37: v.Customers | customer_type | CCM_PARTY | TYPE_CLIENT | type_client | NUMBER | 1 = Client PP. Valeur unique observée dans échantillon
+Row 38: v.Customers | creation_date | CCM_PARTY | DATE_CREATION | date_creation | DATE | Date d'entrée en relation bancaire
+Row 39: v.Customers | closing_date | CCM_PARTY | DATE_CLOTURE | — | DATE | Date clôture compte (NULL si actif)
+Row 40: v.Customers | last_modification_date | CCM_PARTY | DATE_MAJ | date_derniere_modification | DATE | Dernière modification du dossier
+Row 41: v.Customers | bank | CCM_PARTY | CODE_BANQUE | code_banque | VARCHAR | Code banque textuel. Ex: 'BPP'
+Row 42: v.Customers | market | CCM_PARTY | CODE_MARCHE | code_marche | NUMBER | 1 = Particuliers, 8 = MRE
+Row 43: v.Customers | state | CCM_PARTY | ETAT | — | NUMBER | État du dossier client
+Row 44: v.Customers | printing_kyc_date | CCM_PARTY | DATE_IMPRESSION_KYC | — | DATE | Date impression fiche KYC
+Row 45: v.Customers | importance | CCM_PARTY | IMPORTANCE | — | NUMBER | Importance/VIP flag
+Row 46: v.Customers | insertion_time | CCM_PARTY | (technique Dremio) | — | TIMESTAMP | Horodatage insertion dans Dremio
+Row 47: v.Customers | batch_datetime_eaac4 | CCM_PARTY | (technique batch) | — | TIMESTAMP | Timestamp batch chargement RAW→Dremio
+Row 48: v.natural_person_description | name | CCM_NPDESCRIPTION | NOM | nom | VARCHAR | Nom de famille. Ex: 'AIT BELKACEM'
+Row 49: v.natural_person_description | first_name | CCM_NPDESCRIPTION | PRENOM | prenom | VARCHAR | Prénom. Ex: 'WADIA'
+Row 50: v.natural_person_description | civility | CCM_NPDESCRIPTION | CIVILITE | civilite | VARCHAR | M., MME, MLLE
+Row 51: v.natural_person_description | gender | CCM_NPDESCRIPTION | GENRE | genre | VARCHAR | M ou F
+Row 52: v.natural_person_description | birthdate | CCM_NPDESCRIPTION | DATE_NAISSANCE | date_de_naissance | DATE | Date de naissance
+Row 53: v.natural_person_description | birth_country | CCM_NPDESCRIPTION | PAYS_NAISSANCE | pays_de_naissance | VARCHAR | Code pays naissance. Ex: 'MA'
+Row 54: v.natural_person_description | birth_city | CCM_NPDESCRIPTION | VILLE_NAISSANCE | ville_de_naissance | NUMBER/REF | Code ville naissance (référentiel villes)
+Row 55: v.natural_person_description | nationality_country | CCM_NPDESCRIPTION | CODE_NATIONALITE | code_pays_de_nationalite | VARCHAR | Ex: 'MA'
+Row 56: v.natural_person_description | residence_country | CCM_NPDESCRIPTION | CODE_PAYS_RESIDENCE | code_pays_de_residence | VARCHAR | Ex: 'MA' ou autre (MRE)
+Row 57: v.natural_person_description | family_situation | CCM_NPDESCRIPTION | SITUATION_FAMILIALE | situation_familiale | NUMBER | 1=Célibataire, 2=Marié, 3=Divorcé, 4=Veuf
+Row 58: v.natural_person_description | number_of_child | CCM_NPDESCRIPTION | NOMBRE_ENFANTS | nombre_d_enfants | NUMBER | Nombre d'enfants à charge
+Row 59: v.natural_person_description | date_of_death | CCM_NPDESCRIPTION | DATE_DECES | date_deces | DATE | NULL si vivant
+Row 60: v.natural_person_description | fatca_identification_number | CCM_NPDESCRIPTION | IDENTIFIANT_FATCA | identifiant_fatca | VARCHAR | Identifiant FATCA (NULL si non concerné)
+Row 61: v.natural_person_description | maidenname | CCM_NPDESCRIPTION | NOM_JEUNE_FILLE | — | VARCHAR | Nom de jeune fille (femmes mariées)
+Row 62: v.natural_person_description | secondary_nationality_country | CCM_NPDESCRIPTION | CODE_NATIONALITE_2 | — | VARCHAR | Double nationalité
+Row 63: v.natural_person_description | foreign_key_natural_person_identifier | CCM_NPDESCRIPTION | FK → CCM_NATURALPERSON | — | UUID | Clé étrangère vers v.natural_person
+Row 64: v.customer_job | professional_sector | CCM_JOB | CODE_SECTEUR_PRO | code_secteur_professionel | NUMBER | Code secteur professionnel (ex: 46=Agriculture, 52=Enseignement...)
+Row 65: v.customer_job | occupation | CCM_JOB | CODE_PROFESSION | code_profession | NUMBER | Code profession détaillée (ex: 139, 140)
+Row 66: v.customer_job | socioprofessional_category | CCM_JOB | CODE_CSP | code_categorie_socio_professionelle | NUMBER | Catégorie socio-professionnelle (ex: 29, 30)
+Row 67: v.customer_job | professional_situation | CCM_JOB | SITUATION_PRO | situation_professionelle | VARCHAR | SAL=Salarié, FON=Fonctionnaire, TRI=Travailleur indépendant, AUT, EMP, NDE
+Row 68: v.customer_job | employer | CCM_JOB | EMPLOYEUR | employeur | VARCHAR | Nom employeur. Ex: 'COSUMAR', 'LUI MEME', 'AUTRE'
+Row 69: v.customer_job | contract_nature | CCM_JOB | NATURE_CONTRAT | — | NUMBER | Nature contrat (10=CDI...)
+Row 70: v.customer_job | main | CCM_JOB | PRINCIPAL | — | BOOLEAN | Flag emploi principal (1=oui)
+Row 71: v.customer_job | politically_exposed | CCM_JOB | PPE | — | BOOLEAN | Personne Politiquement Exposée (0/1)
+Row 72: v.customer_job | cnss | CCM_JOB | NUM_CNSS | — | VARCHAR | Numéro CNSS (sécurité sociale)
+Row 73: v.customer_job | foreign_key_natural_person_identifier | CCM_JOB | FK → CCM_NATURALPERSON | — | UUID | Clé étrangère vers v.natural_person
+Row 74: v.portfolio | code | CCM_PORTFOLIO | CODE_GESTIONNAIRE | code_gestionnaire | VARCHAR | Code gestionnaire. Ex: '125D_FDCC', '012CCLI2_FDCC'
+Row 75: v.portfolio | nature | CCM_PORTFOLIO | NATURE_PORTEFEUILLE | — | VARCHAR | COM = Commercial
+Row 76: v.portfolio | restricted | CCM_PORTFOLIO | RESTREINT | — | BOOLEAN | Portefeuille restreint (0/1)
+Row 77: v.portfolio | foreign_key_party_identifier | CCM_PORTFOLIO | FK → CCM_PARTY | — | UUID | Clé étrangère vers v.customer_party
+Row 78: v.customer_creation_context | structure_element_identifier | CCM_CONTEXT | CODE_AGENCE | code_agence | VARCHAR/NUMBER | Agence de création. 'REPRISE' = données migrées
+Row 79: v.customer_creation_context | user_identifier | CCM_CONTEXT | CODE_UTILISATEUR | — | VARCHAR | Utilisateur créateur. 'REPRISE' = migration
+Row 80: v.customer_creation_context | treatment_date | CCM_CONTEXT | DATE_TRAITEMENT | — | DATE | Date traitement création
+Row 81: v.customer_creation_context | action | CCM_CONTEXT | ACTION | lieu_creation | NUMBER | 1=Création. Lieu: 'Agence', 'REPRISE'
+Row 82: v.customer_segmentation | segment_number | CCM_CONTEXT | CODE_SEGMENT | code_segment | NUMBER | Numéro segment. Valeurs obs: 33,41,43,46,47
+Row 83: v.customer_segmentation | segment_name | CCM_CONTEXT | NOM_SEGMENT | — | NUMBER | Identifiant nom segment dans référentiel
+Row 84: v.customer_segmentation | state | CCM_CONTEXT | ETAT_SEGMENT | — | NUMBER | État segment (1=actif)
+Row 85: v.operational_post | operational_post_code | Param. e_params | CODE_POSTE | — | VARCHAR | Clé poste. Ex: 'PO_CIEL_DECISION_27'
+Row 86: v.operational_post | operational_post_name | Param. e_params | NOM_POSTE | — | VARCHAR | Libellé poste. Ex: 'PO Decision pour Tiers CIEL'
+Row 87: v.operational_post | branch_code | Param. e_params | CODE_AGENCE | — | NUMBER | Code agence rattachement
+Row 88: v.operational_post | operational_post_type | Param. e_params | TYPE_POSTE | — | VARCHAR | Ex: DEC_CIEL
+Row 91: 4. SCHÉMA JOINTURES — VUE CIHONE_échantillon (28 colonnes)
+Row 92: Colonne CIHONE | Vue Dremio source | Colonne source | Type de jointure | Clé jointure | Valeurs observées (5 000 lignes) | Remarque métier
+Row 93: radical | v.Customers | customer_number | Table principale | — | Ex: 5999557, 8769267, 438630 | Clé bancaire principale. Identifiant unique client CIH
+Row 94: nom | v.natural_person_description | name | JOIN sur identifier | v.Customers.identifier
+= v.npd.foreign_key_natural_person_identifier | Ex: AIT BELKACEM, RAHIB, BOUHARBA | Nom en majuscules. Aucune normalisation observée
+Row 95: prenom | v.natural_person_description | first_name | JOIN sur identifier | idem | Ex: WADIA, AHMED, BOUZEKRI | Prénom en majuscules
+Row 96: code_gestionnaire | v.portfolio | code | JOIN via customer_party | customer_party.foreign_key_person_identifier
+= natural_person.identifier
+portfolio.foreign_key_party_identifier | Ex: 125D_FDCC, 012CCLI2_FDCC, 038CC_FDCC | Format: [num_agence][type]_[enseigne]. Gestionnaire commercial assigné
+Row 97: code_agence | v.customer_creation_context | structure_element_identifier | JOIN via person_identifier | customer_creation_context.foreign_key_person_identifier | 125, 12, 38, 33... | Code agence numérique de création du dossier
+Row 98: date_creation | v.Customers | creation_date | Table principale | — | Ex: 06/03/2013, 18/05/1994 | Date entrée en relation. Peut être très ancienne (REPRISE)
+Row 99: code_banque | v.Customers | bank | Table principale | — | BPP (unique dans échantillon) | Code entité bancaire
+Row 100: code_marche | v.Customers | market | Table principale | — | 1 = Particuliers, 8 = MRE | Marché commercial du client
+Row 101: date_de_naissance | v.natural_person_description | birthdate | JOIN sur identifier | idem v.natural_person_description | Plage: 1956–2001. Certains à 01/01 | ⚠ Présence de 01/01/XXXX = date approximative ou non saisie
+Row 102: civilite | v.natural_person_description | civility | JOIN sur identifier | idem | M., MME, MLLE | Aucune incohérence observée. MLLE/MME à monitorer selon genre
+Row 103: genre | v.natural_person_description | gender | JOIN sur identifier | idem | M / F | ⚠ Check croisé genre/civilité requis (M. doit avoir genre=M)
+Row 104: pays_de_naissance | v.natural_person_description | birth_country | JOIN sur identifier | idem | MA (dominant), autres à explorer | Code ISO 2 lettres
+Row 105: ville_de_naissance | v.natural_person_description | birth_city | JOIN sur identifier | idem | Codes numériques. Ex: 480, 621, 570 | ⚠ Code numérique (référentiel villes CIH) — pas de libellé textuel
+Row 106: code_pays_de_nationalite | v.natural_person_description | nationality_country | JOIN sur identifier | idem | MA | Nationalité principale. Double nationalité = secondary_nationality_country
+Row 107: code_pays_de_residence | v.natural_person_description | residence_country | JOIN sur identifier | idem | MA ou autre (MRE) | Présence pays étranger = client MRE probable
+Row 108: situation_familiale | v.natural_person_description | family_situation | JOIN sur identifier | idem | 1=Célibataire, 2=Marié, 3=Divorcé, 4=Veuf | ⚠ Cohérence avec nom_jeune_fille et nombre_enfants
+Row 109: nombre_d_enfants | v.natural_person_description | number_of_child | JOIN sur identifier | idem | 0 à 6 observé | Utilisé pour calcul allocations / scoring client
+Row 110: date_derniere_modification | v.Customers | last_modification_date | Table principale | — | Dates récentes: 2021, 2025 | Utile pour détecter les dossiers jamais mis à jour
+Row 111: type_client | v.Customers | customer_type | Table principale | — | 1 (valeur unique) | Filtre PP — PM/autres types exclus du périmètre CIHONE
+Row 112: code_secteur_professionel | v.customer_job | professional_sector | JOIN via natural_person_id | customer_job.foreign_key_natural_person_identifier
+= natural_person.identifier | 5=Commerce, 6=Industrie, 33=Finance, 46=Agr., 52=Ens. | ⚠ Plusieurs emplois possibles par tiers (ordnum > 0)
+Row 113: code_profession | v.customer_job | occupation | JOIN via natural_person_id | idem | 139, 140 (codes métier détaillé) | Référentiel métiers CIH (CCM_JOB_CODES ou similaire)
+Row 114: code_categorie_socio_professionelle | v.customer_job | socioprofessional_category | JOIN via natural_person_id | idem | 29, 30 observés | CSP. Référentiel INSEE / Haut Commissariat Maroc
+Row 115: situation_professionelle | v.customer_job | professional_situation | JOIN via natural_person_id | idem | SAL, FON, TRI, AUT, EMP, NDE | ⚠ SAL=Salarié, FON=Fonctionnaire, TRI=Indépendant, NDE=Non Déclaré, EMP=Employeur
+Row 116: employeur | v.customer_job | employer | JOIN via natural_person_id | idem | COSUMAR, AUTRE, LUI MEME, BIEN VU | ⚠ Champ libre — forte hétérogénéité. 'AUTRE' = non spécifié. 'LUI MEME' = auto-employé
+Row 117: code_segment | v.customer_segmentation_members
++ v.customer_segmentation | segment_number | JOIN double | segm_members.foreign_key_person_identifier
++ segm.identifier | 33, 41, 43, 46, 47 | Segment commercial CIH. 47=le plus fréquent dans échantillon. Mapping libellé à documenter
+Row 118: lieu_creation | v.customer_creation_context | action (ou structure_element) | JOIN via person_identifier | customer_creation_context.foreign_key_person_identifier | Agence, REPRISE | REPRISE = données migrées depuis ancien système avant NOVA
+Row 119: date_deces | v.natural_person_description | date_of_death | JOIN sur identifier | idem | NULL (dominant) | ⚠ NULL ≠ vivant. Champ peut être non renseigné même si clôturé
+Row 120: identifiant_fatca | v.natural_person_description | fatca_identification_number | JOIN sur identifier | idem | NULL (dominant) / ID FATCA si déclaré | FATCA = Foreign Account Tax Compliance Act — clients américains ou double-nationalité US
+Row 122: 5. DATA QUALITY CHECKS — COLONNES SOCIO-PROFESSIONNELLES + PIPELINE
+Row 123: # | Colonne(s) concernée(s) | Table / Vue source | Type de check | Criticaté | Règle HiveQL / SQL | Seuil d'alerte | Action corrective
+Row 124: 1 | genre + civilite | v.natural_person_description | Cohérence croisée | CRITIQUE | SELECT COUNT(*) FROM v WHERE (genre='M' AND civilite IN ('MME','MLLE')) OR (genre='F' AND civilite='M.') | 0 incohérence tolérée | Blocage saisie NOVA. Audit des dossiers incohérents + correction manuelle ou RAW fix
+Row 125: 2 | situation_professionelle + employeur | v.customer_job | Valeurs parasites / champ libre | HAUTE | SELECT employeur, COUNT(*) cnt FROM v GROUP BY employeur ORDER BY cnt DESC -- Détecter 'AUTRE','LUI MEME','BIEN VU'... | > 30% 'AUTRE' = alerte | Normaliser les valeurs parasites. Mapper 'LUI MEME' → TRI, 'AUTRE' → NULL si non disponible
+Row 126: 3 | date_de_naissance | v.natural_person_description | Dates approximatives (01/01) | HAUTE | SELECT COUNT(*) FROM v WHERE DAY(birthdate)=1 AND MONTH(birthdate)=1 | > 15% = alerte | Flag 'date_naissance_approx'. Ne pas utiliser pour calculs d'âge précis ou scoring risque
+Row 127: 4 | code_secteur_professionel
+code_profession
+code_categorie_socio_professionelle | v.customer_job | NULL / cohérence triple | HAUTE | SELECT COUNT(*) FROM v WHERE professional_sector IS NULL OR occupation IS NULL OR socioprofessional_category IS NULL | > 5% NULL = alerte | Compléter via NOVA. Vérifier cohérence secteur/CSP (ex: secteur Agriculture ≠ CSP cadre supérieur)
+Row 128: 5 | ordnum (v.customer_job) | v.customer_job | Multi-emplois / doublons | HAUTE | SELECT identifier, COUNT(*) n FROM v GROUP BY identifier HAVING COUNT(*)>1 -- Tiers avec plusieurs emplois | Présent = normal si ordnum≥1 | Sélectionner emploi principal (main=1). Vue CIHONE doit préférer main=1 dans la jointure
+Row 129: 6 | code_segment | v.customer_segmentation_members + v.customer_segmentation | Client sans segment / segment invalide | HAUTE | SELECT COUNT(*) FROM v.Customers c LEFT JOIN v.csm ON ... WHERE csm.identifier IS NULL | 0 client sans segment | Assigner segment par défaut selon code_marche. Alerter équipe commerciale
+Row 130: 7 | identifiant_fatca | v.natural_person_description | Exhaustivité FATCA | CRITIQUE | SELECT COUNT(*) FROM v WHERE nationality_country='US' OR secondary_nationality_country='US' AND fatca_identification_number IS NULL | 0 client US sans FATCA ID | Risque de conformité réglementaire. Remonter immédiatement à la Conformité CIH
+Row 131: 8 | DAG dailyow22 (79 tables) + nova_referentieltiers_clients (29 tables) — même 9 tables CCM_* chargées vers 2 bases RAW différentes | HDFS — CCM_* (RAW) | Double base RAW — quelle base Dremio lit ? | CRITIQUE | HDFS: hdfs dfs -ls /data/raw/novatiers/ccm_party | awk '{print $8}' -- Comparer timestamps des 2 dags | 0 conflit de timestamp | Confirmer : Dremio lit raw_nova_referentieltiers (DAG2). Le DAG1 → novatiers est pour d'autres consommateurs. Documenter l'usage de chaque base RAW
+Row 132: 9 | ville_de_naissance (code numérique) | v.natural_person_description | Jointure référentiel villes manquante | MOYENNE | SELECT DISTINCT birth_city FROM v.npd ORDER BY 1 -- Comparer avec référentiel villes MA | 100% des codes résolus | Mapper codes numériques vers libellés via table référentiel villes CIH ou BAM
+Row 133: 10 | batch_datetime_* (toutes vues) | Toutes v.* Dremio | Fraîcheur / retard batch | HAUTE | SELECT MAX(batch_datetime_eaac4) AS last_load FROM v.Customers -- Comparer à CURRENT_TIMESTAMP | < 26h depuis dernière exec | Alerte si batch_datetime dépasse 26h. Vérifier DAG Airflow et logs Sqoop
+Row 135: 6. FLUX TECHNIQUE COMPLET — DE BOUT EN BOUT (PIPELINE PP CLIENTS)
+Row 136: [ÉTAPE 1 — SYSTÈME OPÉRANT] | NOVA Core Banking (Oracle)  →  Schéma REFERENTIELTIERS  →  Tables CCM_PARTY, CCM_NATURALPERSON, CCM_NPDESCRIPTION, CCM_JOB, CCM_PROFESSIONAL, CCM_PORTFOLIO, CCM_CONTEXT
+Row 137: [ÉTAPE 2 — INGESTION RAW] | DAG Airflow 'dailyow22'  →  Script nova_tiers.sh  →  Sqoop Import OW  →  HDFS chemin /data/raw/novatiers/  →  Format ORC  →  Base Hive 'novatiers'
+Row 138: [ÉTAPE 2b — INGESTION RAW BIS] | ⚠ DAG Airflow 'nova_referentieltiers_clients'  →  Script nova_referentieltiers_clients.sh  →  Sqoop OW  →  Base Hive 'raw_nova_referentieltiers'  →  DOUBLON POTENTIEL sur certaines tables CCM_*
+Row 139: [ÉTAPE 3 — VIRTUALISATION DREMIO] | HDFS/ORC  →  Dremio connector  →  Schéma 'staging-nova-referentieltiers'  →  10 vues : v.Customers, v.natural_person, v.natural_person_description, v.customer_job, v.customer_party, v.portfolio, v.customer_segmentation_members, v.customer_segmentation, v.customer_creation_context + 'staging-e_params'.v.operational_post
+Row 140: [ÉTAPE 4b — VIRTUALISATION e_params] | Source Oracle paramétrage (hors NOVA)  →  Script Sqoop ⚠️ NON IDENTIFIÉ  →  HDFS base RAW ⚠️ NON IDENTIFIÉE  →  Dremio schéma 'staging-e_params'  →  vue 'operational_posts' (4 cols, 4618 lignes)
+Row 141: [ÉTAPE 5 — VUE FINALE CIHONE] | Jointure Dremio : 9 vues staging-nova-referentieltiers + 1 vue staging-e_params  →  Filtre customer_type=1, code_marche IN(1,8)  →  28 colonnes  →  CIHONE_echantillon  →  Export Excel/BI
+Row 142: [ÉTAPE 6 — DQ & MONITORING] | batch_datetime monitoring  →  Checks cohérence (genre/civilité, FATCA, NULL socio-pro)  →  Alertes Airflow  →  Dashboard qualité  →  Corrections NOVA si anomalie
+Row 143: LÉGENDE DQ | 🔴 CRITIQUE | Impact réglementaire ou perte de données garantie
+Row 144: 🟠 HAUTE | Dégrade la qualité du scoring / segmentation client
+Row 145: 🔵 MOYENNE | Impact métier limité, à corriger sur prochain sprint
+Row 146: 🟢 FAIBLE | Information manquante mais sans impact fonctionnel immédiat
+Row 147: 7. PIPELINE staging-e_params — v.operational_post (HORS PÉRIMÈTRE CCM_*)
+Row 148: Paramètre | Valeur connue | Source / Remarque
+Row 149: Schéma Dremio | staging-e_params | Schéma différent de staging-nova-referentieltiers — source complètement distincte
+Row 150: Vue Dremio | operational_posts | Confirmé dans VIRTUALISATIONS (ligne 10 du fichier PP_Client.xlsx)
+Row 151: Colonnes vue | operational_post_type | operational_post_code | operational_post_name | branch_code | 4 colonnes — 4618 lignes dans l'échantillon. Ex type: DEC_CIEL
+Row 152: Table source Oracle | ⚠️ NON TRACÉE dans la matrice SOP_RAW | La matrice ne couvre pas ce pipeline. Nom probable : E_PARAMS ou E_OPERATIONALPOST (schéma Oracle dédié paramétrage CIH)
+Row 153: Système source Oracle | Base Oracle de paramétrage CIH (hors NOVA/REFERENTIELTIERS) | Probablement dbcih10g ou schéma dédié — à confirmer avec l'équipe Data Engineering
+Row 154: DAG Airflow | ⚠️ NON IDENTIFIÉ dans la matrice SOP_RAW | Le DAG eParam_ingestion de la matrice concerne les ENGAGEMENTS (GTAB_*), pas les postes opérationnels. DAG e_params PP_Client = à identifier
+Row 155: Script Sqoop | ⚠️ NON IDENTIFIÉ | Probablement sqoop/ow/eparam/ ou sqoop/ow/nova/e_params.sh — à confirmer
+Row 156: Mode d'ingestion | OW — Full OverWrite (supposé) | Cohérent avec les autres pipelines NOVA. Pas de timestamp dans la vue — confirme OW
+Row 157: Base RAW HDFS | ⚠️ NON IDENTIFIÉE — probablement raw_eparam ou raw_dbcih10g_eparam | À confirmer avec l'équipe. Chercher dans HDFS : hdfs dfs -ls /data/raw/ | grep param
+Row 158: Rôle dans CIHONE | Table de référence postes opérationnels — jointure sur code_gestionnaire / branch_code | Sert à résoudre les codes postes des gestionnaires commerciaux. Clé : operational_post_code ↔ code_gestionnaire de v.portfolio
+Row 159: ACTION REQUISE | Demander à l'équipe DE : nom exact table Oracle + DAG + script + base RAW pour staging-e_params | Sans ces infos, la reproduction du pipeline est incomplète sur ce composant
+
+=== SHEET: SCRIPTS_INDEX — Shape: (10, 7) ===
+Row 0: SCRIPTS DU PIPELINE — PP CLIENTS / RÉFÉRENTIEL TIERS
+Row 1: Uniquement les scripts nécessaires à reproduire le pipeline de bout en bout
+Row 3: ÉTAPE | DAG AIRFLOW | SCRIPT | CHEMIN COMPLET | BASE HDFS / HIVE CIBLE | MODE | NOTES
+Row 4: 1 — RAW (Sqoop) | dailyow22 | nova_tiers.sh | sqoop/ow/nova/nova_tiers.sh | novatiers | OW | 44 tables CCM_* — pipeline principal
+Row 5: 1 — RAW (Sqoop) | nova_referentieltiers_clients | nova_referentieltiers_clients.sh | sqoop/ow/nova/nova_referentieltiers_clients.sh | raw_nova_referentieltiers | OW | ⚠️ 29 tables CCM_* — doublon sur 9 tables avec dailyow22 — Dremio lit CETTE base
+Row 6: 2 — STAGING (Spark) | referentieltiers_ingestion | staging_novareferentieltiersclients.sh | scripts/spark_jobs/spark/staging_novareferentieltiersclients.sh | staging_nova_referentieltiers | OW | 26 tables staging — source du pipeline Dremio PP Clients
+Row 7: 3 — VIRTUALISATION (Dremio) | — | (vue Dremio — pas de script) | staging-nova-referentieltiers  +  staging-e_params | staging_nova_referentieltiers | VIEW | 10 vues — source directe de la requête CIHONE (PP_Client.xlsx)
+Row 9: SCRIPT e_params (à confirmer) | eParam_ingestion | staging_gtab.sh | scripts/spark_jobs/spark/staging_gtab.sh | staging_dbcih10g_gtab | OW | ⚠️ Alimente staging-e_params (operational_posts) — DAG/chemin RAW Sqoop NON TRACÉ dans matrice

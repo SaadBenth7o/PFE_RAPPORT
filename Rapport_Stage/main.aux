@@ -16,7 +16,7 @@
 \gdef \LT@i {\LT@entry 
     {1}{82.03844pt}\LT@entry 
     {1}{353.43306pt}}
-\@writefile{toc}{\contentsline {chapter}{Liste des abréviations}{viii}{chapter*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Liste des abréviations}{x}{chapter*.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{Introduction Générale}{1}{chapter*.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Présentation de l'organisme d'accueil}{2}{chapter.1}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
@@ -42,4 +42,117 @@
 \newlabel{fig:organigramme}{{1.3}{6}{Organigramme de CIH BANK}{figure.caption.13}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.9.1}Structure hiérarchique de CIH BANK}{6}{subsection.1.9.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {1.10}Data Office}{8}{section.1.10}\protected@file@percent }
-\gdef \@abspage@last{17}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Contexte, Problématique et Solution Proposée}{9}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Contexte général : la donnée au cœur de la banque digitale}{9}{section.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}La transformation digitale du secteur bancaire}{9}{subsection.2.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}La qualité des données : un enjeu stratégique et réglementaire}{9}{subsection.2.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Le domaine Tiers : périmètre métier du projet}{10}{section.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Définition du Référentiel Tiers}{10}{subsection.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Les colonnes KYC et CSP : données critiques du Référentiel Tiers}{10}{subsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Données KYC (\textit  {Know Your Customer})}{10}{subsubsection*.14}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Colonnes KYC du Référentiel Tiers PP}}{11}{table.caption.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Données CSP (\textit  {Catégorie Socio-Professionnelle})}{11}{subsubsection*.16}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2.2}{\ignorespaces Colonnes CSP du Référentiel Tiers PP}}{11}{table.caption.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Le pipeline de données existant : de NOVA à Tableau}{11}{section.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Vue d'ensemble de l'architecture}{11}{subsection.2.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Architecture du pipeline de données Référentiel Tiers PP Clients}}{12}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:pipeline_existant}{{2.1}{12}{Architecture du pipeline de données Référentiel Tiers PP Clients}{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}Étape 1 — Système opérant : Oracle NOVA}{12}{subsection.2.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}Étape 2 — Ingestion RAW vers HDFS/Hive}{12}{subsection.2.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.4}Étape 3 — Transformation STAGING}{13}{subsection.2.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.5}Étape 4 — Virtualisation Dremio}{13}{subsection.2.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.6}Étape 5 — Vue finale CIHONE (28 colonnes)}{13}{subsection.2.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Problématique}{13}{section.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Absence de contrôle qualité automatisé sur le pipeline}{13}{subsection.2.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}Absence d'historisation et de traçabilité}{14}{subsection.2.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.3}Absence d'outillage pour les Data Stewards}{14}{subsection.2.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.5}Solution proposée}{14}{section.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.1}Vue d'ensemble de la solution}{14}{subsection.2.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.2}Soda Core : bibliothèque Python de Data Quality}{14}{subsection.2.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.3}Périmètre des contrôles : la zone RAW uniquement}{15}{subsection.2.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.4}Déclenchement automatique post-ingestion}{15}{subsection.2.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.5}Historisation et traçabilité quotidienne}{15}{subsection.2.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Conception de la Solution}{17}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Architecture globale de la solution}{17}{section.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Vue d'ensemble}{17}{subsection.3.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Architecture globale de la solution de Data Quality}}{18}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:architecture_dq}{{3.1}{18}{Architecture globale de la solution de Data Quality}{figure.caption.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Outils et technologies}{18}{subsection.3.1.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Outils et technologies de la solution DQ Tiers}}{19}{table.caption.20}\protected@file@percent }
+\newlabel{tab:outils}{{3.1}{19}{Outils et technologies de la solution DQ Tiers}{table.caption.20}{}}
+\gdef \LT@ii {\LT@entry 
+    {1}{93.9406pt}\LT@entry 
+    {1}{75.73389pt}\LT@entry 
+    {1}{112.15425pt}\LT@entry 
+    {1}{75.73389pt}\LT@entry 
+    {1}{134.91785pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Catalogue des règles de Data Quality}{20}{section.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Principes de conception des règles}{20}{subsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Règles DQ sur les colonnes KYC}{20}{subsection.3.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Règles DQ — Colonnes KYC}}{20}{table.3.2}\protected@file@percent }
+\newlabel{tab:regles_kyc}{{3.2}{20}{Règles DQ — Colonnes KYC}{table.3.2}{}}
+\gdef \LT@iii {\LT@entry 
+    {1}{93.9406pt}\LT@entry 
+    {1}{75.73389pt}\LT@entry 
+    {1}{112.15425pt}\LT@entry 
+    {1}{75.73389pt}\LT@entry 
+    {1}{134.91785pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Règles DQ sur les colonnes CSP}{21}{subsection.3.2.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces Règles DQ — Colonnes CSP}}{21}{table.3.3}\protected@file@percent }
+\newlabel{tab:regles_csp}{{3.3}{21}{Règles DQ — Colonnes CSP}{table.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}Règles DQ Pipeline (Fraîcheur)}{22}{subsection.3.2.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.4}{\ignorespaces Règles DQ — Fraîcheur et Pipeline}}{22}{table.caption.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Modèle de données DQ (Persistance)}{22}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Base Hive \texttt  {dq\_results}}{22}{subsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Table \texttt  {dq\_tiers\_scores} — Historique des scores}{22}{subsection.3.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.5}{\ignorespaces Modèle de la table \texttt  {dq\_results.dq\_tiers\_scores}}}{23}{table.caption.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Table \texttt  {dq\_tiers\_anomalies} — Détail des anomalies}{23}{subsection.3.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.6}{\ignorespaces Modèle de la table \texttt  {dq\_results.dq\_tiers\_anomalies}}}{23}{table.caption.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Partitionnement et format de stockage}{23}{subsection.3.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Conception du moteur DQ — Soda Core}{24}{section.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Architecture du script \texttt  {dq\_tiers\_checks.py}}{24}{subsection.3.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Fichiers de configuration YAML}{24}{subsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Conception de l'orchestration Airflow}{24}{section.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Intégration dans le DAG \texttt  {dailyow22}}{24}{subsection.3.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Positionnement de la tâche DQ dans le DAG dailyow22}}{24}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:dag_design}{{3.2}{24}{Positionnement de la tâche DQ dans le DAG dailyow22}{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Conception des vues Dremio DQ}{24}{section.3.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.7}{\ignorespaces Vues Dremio du schéma \texttt  {dq-tiers}}}{25}{table.caption.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Conception du dashboard Tableau}{25}{section.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Réalisation de la Solution}{26}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Environnement technique de développement}{26}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Environnement Hadoop et cluster}{26}{subsection.4.1.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Versions des composants de l'environnement technique}}{26}{table.caption.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Installation de Soda Core}{27}{subsection.4.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Implémentation du moteur DQ — Soda Core}{27}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Structure des fichiers du projet DQ}{27}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Fichier de configuration YAML — Règles KYC (\texttt  {checks\_kyc.yml})}{27}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Fichier de configuration YAML — Règles CSP (\texttt  {checks\_csp.yml})}{28}{subsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Script Python principal (\texttt  {dq\_tiers\_checks.py})}{29}{subsection.4.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Création des tables Hive de persistance}{31}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Intégration dans le DAG Airflow \texttt  {dailyow22}}{32}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Ajout de la tâche DQ}{32}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Planification et monitoring}{32}{subsection.4.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Création des vues Dremio}{32}{section.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Vue \texttt  {v.dq\_scores\_history}}{33}{subsection.4.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}Vue \texttt  {v.dq\_kpis\_summary}}{33}{subsection.4.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}Vue \texttt  {v.dq\_anomalies\_detail}}{33}{subsection.4.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}Réalisation du dashboard Tableau}{34}{section.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Connexion Tableau à Dremio}{34}{subsection.4.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Onglet 1 — Vue Exécutive}{34}{subsection.4.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}}{34}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:dashboard_exec}{{4.1}{34}{Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}Onglet 2 — Détail KYC}{35}{subsection.4.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Dashboard Tableau — Détail KYC : score par colonne et dimension DQ}}{35}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:dashboard_kyc}{{4.2}{35}{Dashboard Tableau — Détail KYC : score par colonne et dimension DQ}{figure.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.4}Onglet 3 — Détail CSP}{35}{subsection.4.6.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}}{35}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:dashboard_csp}{{4.3}{35}{Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}{figure.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.5}Onglet 4 — Anomalies et Remédiation}{35}{subsection.4.6.5}\protected@file@percent }
+\gdef \@abspage@last{47}

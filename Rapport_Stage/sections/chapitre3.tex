@@ -222,7 +222,7 @@ Les règles de Data Quality ont été définies selon les principes suivants :
 
 Les règles KYC portent sur les données d'état civil et de conformité réglementaire. La table RAW cible est \textbf{\texttt{raw\_nova\_referentieltiers.ccm\_npdescription}}.
 
-\begin{longtable}{|p{2.8cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2.5cm}|}
+\begin{longtable}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
 \caption{Règles DQ — Colonnes KYC} \label{tab:regles_kyc} \\
 \hline
 \textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -238,7 +238,7 @@ Les règles KYC portent sur les données d'état civil et de conformité réglem
 \hline
 \texttt{birthdate} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Compléter via NOVA avec pièce d'identité \\
 \hline
-\texttt{birthdate} & Validité & Taux dates au 01/01 < 15\% & HAUTE & Flagger \texttt{date\_naissance\_approx} — ne pas utiliser pour le scoring \\
+\texttt{birthdate} & Validité & Taux dates au 01/01 < 15\% & HAUTE & Flagger \texttt{date\_}\allowbreak\texttt{naissance\_}\allowbreak\texttt{approx} — ne pas utiliser pour le scoring \\
 \hline
 \texttt{civility} & Validité & Valeurs IN (M., MME, MLLE) uniquement & HAUTE & Corriger valeurs hors référentiel dans NOVA \\
 \hline
@@ -246,9 +246,9 @@ Les règles KYC portent sur les données d'état civil et de conformité réglem
 \hline
 \texttt{gender} + \texttt{civility} & Cohérence & Genre M $\neq$ MME/MLLE ; Genre F $\neq$ M. & CRITIQUE & Audit croisé — correction manuelle dans NOVA \\
 \hline
-\texttt{nationality\_country} & Complétude & 0 valeur nulle tolérée & HAUTE & Compléter via NOVA avec pièce d'identité \\
+\texttt{nationality\_}\allowbreak\texttt{country} & Complétude & 0 valeur nulle tolérée & HAUTE & Compléter via NOVA avec pièce d'identité \\
 \hline
-\texttt{fatca\_identification\_number} & Conformité & Clients US ou double-nationalité US : 0 FATCA null & CRITIQUE & Remonter immédiatement à la Conformité CIH \\
+\texttt{fatca\_}\allowbreak\texttt{identification\_}\allowbreak\texttt{number} & Conformité & Clients US ou double-nationalité US : 0 FATCA null & CRITIQUE & Remonter immédiatement à la Conformité CIH \\
 \hline
 \texttt{birth\_city} & Validité & 100\% des codes résolus dans le référentiel villes & MOYENNE & Mapper codes numériques vers libellés via table référentiel villes BAM/CIH \\
 \hline
@@ -258,7 +258,7 @@ Les règles KYC portent sur les données d'état civil et de conformité réglem
 
 Les règles CSP portent sur les données socio-professionnelles. La table RAW cible est \textbf{\texttt{raw\_nova\_referentieltiers.ccm\_job}}.
 
-\begin{longtable}{|p{2.8cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2.5cm}|}
+\begin{longtable}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
 \caption{Règles DQ — Colonnes CSP} \label{tab:regles_csp} \\
 \hline
 \textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -268,13 +268,13 @@ Les règles CSP portent sur les données socio-professionnelles. La table RAW ci
 \textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-\texttt{professional\_sector} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA — agences prioritaires \\
+\texttt{professional\_}\allowbreak\texttt{sector} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA — agences prioritaires \\
 \hline
 \texttt{occupation} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA \\
 \hline
-\texttt{socioprofessional\_category} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA \\
+\texttt{socioprofessional\_}\allowbreak\texttt{category} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA \\
 \hline
-\texttt{professional\_situation} & Validité & Valeurs IN (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Corriger valeurs hors référentiel \\
+\texttt{professional\_}\allowbreak\texttt{situation} & Validité & Valeurs IN (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Corriger valeurs hors référentiel \\
 \hline
 \texttt{employer} & Validité & Taux valeurs parasites (AUTRE, LUI MEME...) < 30\% & HAUTE & Normaliser : mapper 'LUI MEME' → TRI, 'AUTRE' → NULL \\
 \hline
@@ -282,7 +282,7 @@ Triple CSP & Cohérence & Secteur + Profession + CSP non contradictoires & HAUTE
 \hline
 \texttt{ordnum} (multi-emplois) & Unicité & Doublons avec \texttt{main=0} documentés & MOYENNE & Sélectionner emploi principal (main=1) dans la jointure CIHONE \\
 \hline
-\texttt{politically\_exposed} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Demander déclaration PPE à l'agence \\
+\texttt{politically\_}\allowbreak\texttt{exposed} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Demander déclaration PPE à l'agence \\
 \hline
 \end{longtable}
 
@@ -290,11 +290,11 @@ Triple CSP & Cohérence & Secteur + Profession + CSP non contradictoires & HAUTE
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|p{3cm}|l|p{3cm}|}
+\begin{tabular}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
 \hline
 \textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
-\texttt{batch\_datetime\_eaac4} & Fraîcheur & Retard < 26h depuis dernière exécution & HAUTE & Vérifier DAG Airflow et logs Sqoop \\
+\texttt{batch\_}\allowbreak\texttt{datetime\_}\allowbreak\texttt{eaac4} & Fraîcheur & Retard < 26h depuis dernière exécution & HAUTE & Vérifier DAG Airflow et logs Sqoop \\
 \hline
 \texttt{code\_segment} & Cohérence & 0 client sans segment valide & HAUTE & Assigner segment par défaut selon code\_marche \\
 \hline

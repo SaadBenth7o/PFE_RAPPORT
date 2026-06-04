@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  4 JUN 2026 10:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  4 JUN 2026 15:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -675,50 +675,84 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 24.
 
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
+\lst@mode=\count337
+\lst@gtempboxa=\box72
+\lst@token=\toks38
+\lst@length=\count338
+\lst@currlwidth=\dimen293
+\lst@column=\count339
+\lst@pos=\count340
+\lst@lostspace=\dimen294
+\lst@width=\dimen295
+\lst@newlines=\count341
+\lst@lineno=\count342
+\lst@maxwidth=\dimen296
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstpatch.sty
+File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
+\c@lstnumber=\count343
+\lst@skipnumbers=\count344
+\lst@framebox=\box73
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
+File: listings.cfg 2025/11/14 1.11b listings configuration
+))
+Package: listings 2025/11/14 1.11b (Carsten Heinz)
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count337
+\l__color_backend_stack_int=\count345
 ) (main.aux
 Package babel Info: 'french' activates 'french' shorthands.
 (babel)             Reported on input line 11.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Info: Redefining \degres on input line 29.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Info: Redefining \degres on input line 83.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count338
-\scratchdimen=\dimen293
-\scratchbox=\box72
-\nofMPsegments=\count339
-\nofMParguments=\count340
-\everyMPshowfont=\toks38
-\MPscratchCnt=\count341
-\MPscratchDim=\dimen294
-\MPnumerator=\count342
-\makeMPintoPDFobject=\count343
-\everyMPtoPDFconversion=\toks39
+\scratchcounter=\count346
+\scratchdimen=\dimen297
+\scratchbox=\box74
+\nofMPsegments=\count347
+\nofMParguments=\count348
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count349
+\MPscratchDim=\dimen298
+\MPnumerator=\count350
+\makeMPintoPDFobject=\count351
+\everyMPtoPDFconversion=\toks40
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -767,45 +801,47 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 29.
+Package hyperref Info: Link coloring ON on input line 83.
 
 (main.out) (main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-<logos/unica.png, id=78, 707.64375pt x 180.675pt>
+\c@lstlisting=\count352
+<logos/unica.png, id=358, 707.64375pt x 180.675pt>
 File: logos/unica.png Graphic file (type png)
 <use logos/unica.png>
-Package pdftex.def Info: logos/unica.png  used on input line 38.
+Package pdftex.def Info: logos/unica.png  used on input line 92.
 (pdftex.def)             Requested size: 127.46756pt x 32.5449pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 40.
+(Font)              <12> on input line 94.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 40.
+(Font)              <8> on input line 94.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 40.
-<logos/cih.png, id=80, 321.2pt x 321.2pt>
+(Font)              <6> on input line 94.
+<logos/cih.png, id=360, 321.2pt x 321.2pt>
 File: logos/cih.png Graphic file (type png)
 <use logos/cih.png>
-Package pdftex.def Info: logos/cih.png  used on input line 44.
+Package pdftex.def Info: logos/cih.png  used on input line 98.
 (pdftex.def)             Requested size: 127.4681pt x 127.4681pt.
-<logos/emsi.png, id=81, 863.225pt x 863.225pt>
+<logos/emsi.png, id=361, 863.225pt x 863.225pt>
 File: logos/emsi.png Graphic file (type png)
 <use logos/emsi.png>
-Package pdftex.def Info: logos/emsi.png  used on input line 49.
+Package pdftex.def Info: logos/emsi.png  used on input line 103.
 (pdftex.def)             Requested size: 127.46289pt x 127.46289pt.
 
-Overfull \hbox (1.0pt too wide) in paragraph at lines 60--61
+Overfull \hbox (1.0pt too wide) in paragraph at lines 114--115
  [][] 
  []
 
 
-Overfull \hbox (1.0pt too wide) in paragraph at lines 68--69
+Overfull \hbox (1.0pt too wide) in paragraph at lines 122--123
  [][] 
  []
 
@@ -822,26 +858,25 @@ a.png> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
 
 ]) [4
 
-] (main.toc)
+] (main.toc [5
+
+] [6])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [5
-
-] (main.lof)
+ [7] (main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
- [6
+ [8
 
 ] (main.lot)
 \tf@lot=\write7
 \openout7 = `main.lot'.
 
+ [9
 
-[7
-
-] (sections/abbreviations.tex) [8
+] (sections/abbreviations.tex) [10
 
 ] (sections/introduction.tex)
 (sections/chapitre1.tex
@@ -857,91 +892,580 @@ Chapitre 1.
 [2
 
 ]
-
-LaTeX Warning: Reference `fig:chiffres' on page 3 undefined on input line 90.
-
-<figures/chiffresCles.png, id=170, 1466.47874pt x 1080.035pt>
+<figures/chiffresCles.png, id=561, 1466.47874pt x 1080.035pt>
 File: figures/chiffresCles.png Graphic file (type png)
 <use figures/chiffresCles.png>
 Package pdftex.def Info: figures/chiffresCles.png  used on input line 94.
 (pdftex.def)             Requested size: 364.19667pt x 268.21176pt.
 
+
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [3] [4 <./figures/chiffresCles.png (PNG copy)>]
-
-LaTeX Warning: Reference `fig:gouvernance' on page 5 undefined on input line 12
-9.
-
-<figures/Gouvernance.png, id=180, 1186.4325pt x 1335.99126pt>
+<figures/Gouvernance.png, id=571, 1186.4325pt x 1335.99126pt>
 File: figures/Gouvernance.png Graphic file (type png)
 <use figures/Gouvernance.png>
 Package pdftex.def Info: figures/Gouvernance.png  used on input line 140.
 (pdftex.def)             Requested size: 409.71692pt x 461.36597pt.
-[5 <./figures/Gouvernance.png (PNG copy)>]
-
-LaTeX Warning: Reference `fig:organigramme' on page 6 undefined on input line 1
-48.
-
-<figures/Organigramme.png, id=186, 1504.62125pt x 1052.93375pt>
+ [5 <./figures/Gouvernance.png (PNG copy)>]
+<figures/Organigramme.png, id=577, 1504.62125pt x 1052.93375pt>
 File: figures/Organigramme.png Graphic file (type png)
 <use figures/Organigramme.png>
 Package pdftex.def Info: figures/Organigramme.png  used on input line 152.
 (pdftex.def)             Requested size: 1504.61758pt x 1052.93118pt.
-[6 <./figures/Organigramme.png (PNG copy)>] [7]) (sections/chapitre2.tex)
-(sections/chapitre3.tex) (sections/chapitre4.tex) (sections/chapitre5.tex)
-(sections/conclusion.tex) [8] (main.aux)
+ [6 <./figures/Organigramme.png (PNG copy)>] [7])
+(sections/chapitre2.tex [8]
+Chapitre 2.
+[9
+
+]
+Underfull \hbox (badness 7814) in paragraph at lines 73--74
+[]\T1/cmr/m/n/12 Numéro FATCA (clients
+ []
+
+
+Overfull \hbox (15.75081pt too wide) in paragraph at lines 55--78
+ [][] 
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
+[]\T1/cmr/m/n/12 Catégorie socio-
+ []
+
+
+Underfull \hbox (badness 5519) in paragraph at lines 97--98
+[]\T1/cmr/m/n/12 SAL, FON, TRI, AUT,
+ []
+
+
+Overfull \hbox (47.38469pt too wide) in paragraph at lines 87--106
+ [][] 
+ []
+
+[11]
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 181.
+ [12]
+Overfull \hbox (152.71303pt too wide) in paragraph at lines 187--188
+[]\T1/cmr/m/n/12 Un job \T1/cmr/bx/n/12 Apache Spark \T1/cmr/m/n/12 (DAG \T1/cm
+tt/m/n/12 referentieltiers_ingestion\T1/cmr/m/n/12 , script \T1/cmtt/m/n/12 sta
+ging_novareferentieltiersclients.sh\T1/cmr/m/n/12 )
+ []
+
+
+Overfull \hbox (139.95352pt too wide) in paragraph at lines 191--192
+[]\T1/cmr/bx/n/12 Dremio \T1/cmr/m/n/12 ex-pose les don-nées de sta-ging via \T
+1/cmr/bx/n/12 10 vues vir-tuelles \T1/cmr/m/n/12 dans le schéma \T1/cmtt/m/n/12
+ staging-nova-referentieltiers \T1/cmr/m/n/12 : 
+ []
+
+
+Overfull \hbox (36.38551pt too wide) in paragraph at lines 218--219
+[]\T1/cmr/bx/n/12 Données CSP mas-si-ve-ment nulles ou pa-ra-sites \T1/cmr/m/n/
+12 : les co-lonnes \T1/cmtt/m/n/12 professional_sector\T1/cmr/m/n/12 ,
+ []
+
+
+Overfull \hbox (1.88457pt too wide) in paragraph at lines 218--219
+\T1/cmtt/m/n/12 occupation \T1/cmr/m/n/12 et \T1/cmtt/m/n/12 socioprofessional_
+category \T1/cmr/m/n/12 pré-sentent des taux de va-leurs nulles
+ []
+
+[13] [14]
+Overfull \hbox (0.52931pt too wide) in paragraph at lines 279--280
+[]\T1/cmtt/m/n/12 dq_tiers_anomalies \T1/cmr/m/n/12 : en-re-gistre le dé-tail d
+es en-re-gis-tre-ments clients (\T1/cmtt/m/n/12 identifier\T1/cmr/m/n/12 ,
+ []
+
+) (sections/chapitre3.tex [15] [16]
+Chapitre 3.
+[17
+
+]
+Underfull \hbox (badness 5908) in paragraph at lines 90--91
+[]\T1/cmr/m/n/12 Open source, com-pa-tible
+ []
+
+
+Underfull \hbox (badness 5022) in paragraph at lines 92--93
+[]\T1/cmr/m/n/12 Data Vir-tua-li-za-tion exis-
+ []
+
+
+Overfull \hbox (1.30574pt too wide) in paragraph at lines 76--97
+ [][] 
+ []
+
+[18]
+<figures/logos/logo_oracle.png, id=646, 501.875pt x 501.875pt>
+File: figures/logos/logo_oracle.png Graphic file (type png)
+<use figures/logos/logo_oracle.png>
+Package pdftex.def Info: figures/logos/logo_oracle.png  used on input line 106.
+
+(pdftex.def)             Requested size: 45.51906pt x 45.52458pt.
+<figures/logos/logo_sqoop.png, id=647, 262.9825pt x 262.9825pt>
+File: figures/logos/logo_sqoop.png Graphic file (type png)
+<use figures/logos/logo_sqoop.png>
+Package pdftex.def Info: figures/logos/logo_sqoop.png  used on input line 119.
+(pdftex.def)             Requested size: 45.52103pt x 45.52458pt.
+<figures/logos/logo_airflow.png, id=648, 1204.5pt x 1204.5pt>
+File: figures/logos/logo_airflow.png Graphic file (type png)
+<use figures/logos/logo_airflow.png>
+Package pdftex.def Info: figures/logos/logo_airflow.png  used on input line 132
+.
+(pdftex.def)             Requested size: 45.5068pt x 45.52458pt.
+<figures/logos/logo_hadoop.png, id=649, 501.875pt x 501.875pt>
+File: figures/logos/logo_hadoop.png Graphic file (type png)
+<use figures/logos/logo_hadoop.png>
+Package pdftex.def Info: figures/logos/logo_hadoop.png  used on input line 145.
+
+(pdftex.def)             Requested size: 45.51906pt x 45.52458pt.
+<figures/logos/logo_spark.png, id=650, 80.3pt x 80.3pt>
+File: figures/logos/logo_spark.png Graphic file (type png)
+<use figures/logos/logo_spark.png>
+Package pdftex.def Info: figures/logos/logo_spark.png  used on input line 158.
+(pdftex.def)             Requested size: 45.52518pt x 45.52458pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 162--164
+\T1/cmr/m/n/10.95 Mo-teur de trai-te-ment dis-tri-bué en mé-moire. Trans-forme 
+et
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 162--164
+\T1/cmr/m/n/10.95 charge les don-nées de la zone RAW vers la zone STA-GING
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 162--164
+\T1/cmr/m/n/10.95 (\T1/cmtt/m/n/10.95 staging_nova_referentieltiers\T1/cmr/m/n/
+10.95 ). Mo-bi-lisé éga-le-ment par Soda
+ []
+
+<figures/logos/logo_soda.png, id=651, 338.26375pt x 338.26375pt>
+File: figures/logos/logo_soda.png Graphic file (type png)
+<use figures/logos/logo_soda.png>
+Package pdftex.def Info: figures/logos/logo_soda.png  used on input line 171.
+(pdftex.def)             Requested size: 45.52426pt x 45.52458pt.
+[19 <./figures/logos/logo_oracle.png> <./figures/logos/logo_sqoop.png> <./figur
+es/logos/logo_airflow.png> <./figures/logos/logo_hadoop.png> <./figures/logos/l
+ogo_spark.png>]
+<figures/logos/logo_dremio.png, id=665, 513.92pt x 513.92pt>
+File: figures/logos/logo_dremio.png Graphic file (type png)
+<use figures/logos/logo_dremio.png>
+Package pdftex.def Info: figures/logos/logo_dremio.png  used on input line 184.
+
+(pdftex.def)             Requested size: 45.52151pt x 45.52458pt.
+<figures/logos/logo_tableau.png, id=666, 341.275pt x 341.275pt>
+File: figures/logos/logo_tableau.png Graphic file (type png)
+<use figures/logos/logo_tableau.png>
+Package pdftex.def Info: figures/logos/logo_tableau.png  used on input line 197
+.
+(pdftex.def)             Requested size: 45.52335pt x 45.52458pt.
+
+Overfull \hbox (37.23636pt too wide) in alignment at lines 225--230
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (37.23636pt too wide) in alignment at lines 230--234
+ [] [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 3098) in paragraph at lines 239--240
+[]|\T1/cmr/m/n/12 Compléter via NOVA
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--241
+[]|\T1/cmr/m/n/12 Taux dates au
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--242
+[]|\T1/cmr/m/n/12 Flagger \T1/cmtt/m/n/12 date_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--242
+\T1/cmtt/m/n/12 naissance_approx
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--243
+[]|\T1/cmr/m/n/12 Valeurs IN (M.,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--243
+\T1/cmr/m/n/12 MME, MLLE)
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 247--247
+[]|\T1/cmtt/m/n/12 gender \T1/cmr/m/n/12 +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 247--247
+[]|\T1/cmr/m/n/12 Genre M $\OMS/cmsy/m/n/12 6\OT1/cmr/m/n/12 =$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 247--247
+\T1/cmr/m/n/12 MME/MLLE ;
+ []
+
+
+Underfull \hbox (badness 4805) in paragraph at lines 247--248
+[]|\T1/cmr/m/n/12 Audit croisé ^^V cor-
+ []
+
+
+Underfull \hbox (badness 2165) in paragraph at lines 247--248
+\T1/cmr/m/n/12 rec-tion ma-nuelle dans
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 249--249
+[]|\T1/cmtt/m/n/12 nationality_
+ []
+
+
+Underfull \hbox (badness 3098) in paragraph at lines 249--250
+[]|\T1/cmr/m/n/12 Compléter via NOVA
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
+[]|\T1/cmtt/m/n/12 fatca_
+ []
+
+
+Overfull \hbox (10.66179pt too wide) in paragraph at lines 251--251
+\T1/cmtt/m/n/12 identification_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
+[]|\T1/cmr/m/n/12 Clients US ou
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
+\T1/cmr/m/n/12 double-nationalité
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--252
+[]|\T1/cmr/m/n/12 Remonter im-mé-dia-te-
+ []
+
+
+Underfull \hbox (badness 6592) in paragraph at lines 253--254
+[]|\T1/cmr/m/n/12 Mapper codes nu-mé-
+ []
+
+
+Underfull \hbox (badness 3557) in paragraph at lines 253--254
+\T1/cmr/m/n/12 table ré-fé-ren-tiel villes
+ []
+
+
+Overfull \hbox (37.23636pt too wide) in alignment at lines 234--255
+ [] [] [] [] [] 
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [20 <./figures/
+logos/logo_soda.png> <./figures/logos/logo_dremio.png> <./figures/logos/logo_ta
+bleau.png>]
+Overfull \hbox (37.23636pt too wide) in alignment at lines 261--266
+ [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (37.23636pt too wide) in alignment at lines 266--270
+ [] [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 271--271
+[]|\T1/cmtt/m/n/12 professional_
+ []
+
+
+Overfull \hbox (29.18227pt too wide) in paragraph at lines 275--275
+[]|\T1/cmtt/m/n/12 socioprofessional_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 277--277
+[]|\T1/cmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 2134) in paragraph at lines 277--277
+[]|\T1/cmr/m/n/12 Valeurs IN (SAL,
+ []
+
+
+Underfull \hbox (badness 1721) in paragraph at lines 277--277
+\T1/cmr/m/n/12 FON, TRI, AUT,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 279--280
+[]|\T1/cmr/m/n/12 Normaliser : map-per
+ []
+
+
+Underfull \hbox (badness 1442) in paragraph at lines 281--281
+[]|\T1/cmr/m/n/12 Secteur + Pro-fes-
+ []
+
+
+Underfull \hbox (badness 2443) in paragraph at lines 281--281
+\T1/cmr/m/n/12 sion + CSP non
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 281--282
+[]|\T1/cmr/m/n/12 Vérifier co-hé-rence et
+ []
+
+
+Underfull \hbox (badness 2111) in paragraph at lines 283--283
+[]|\T1/cmtt/m/n/12 ordnum \T1/cmr/m/n/12 (multi-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--283
+[]|\T1/cmr/m/n/12 Doublons avec
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--283
+\T1/cmtt/m/n/12 main=0 \T1/cmr/m/n/12 do-cu-men-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--284
+[]|\T1/cmr/m/n/12 Sélectionner em-ploi
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--284
+\T1/cmr/m/n/12 prin-ci-pal (main=1)
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 283--284
+\T1/cmr/m/n/12 dans la join-ture CI-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--285
+[]|\T1/cmtt/m/n/12 politically_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+[]|\T1/cmr/m/n/12 Demander dé-cla-ra-tion
+ []
+
+
+Overfull \hbox (37.23636pt too wide) in alignment at lines 270--287
+ [] [] [] [] [] 
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [21]
+Underfull \hbox (badness 10000) in paragraph at lines 297--297
+[]\T1/cmtt/m/n/12 batch_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 297--297
+\T1/cmtt/m/n/12 datetime_
+ []
+
+
+Underfull \hbox (badness 1205) in paragraph at lines 299--299
+[]\T1/cmr/m/n/12 0 client sans seg-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 299--300
+[]\T1/cmr/m/n/12 Assigner seg-ment
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 299--300
+\T1/cmr/m/n/12 par dé-faut se-lon
+ []
+
+
+Overfull \hbox (37.23636pt too wide) in paragraph at lines 293--302
+ [][] 
+ []
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 308.
+
+Underfull \hbox (badness 10000) in paragraph at lines 324--325
+[]\T1/cmr/m/n/12 Nom du DAG dé-clen-cheur
+ []
+
+
+Underfull \hbox (badness 1231) in paragraph at lines 332--333
+[]\T1/cmr/m/n/12 Dimension DQ : com-ple-te-ness,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 334--335
+[]\T1/cmr/m/n/12 CRITIQUE / HAUTE /
+ []
+
+[22] [23]
+Overfull \hbox (76.79408pt too wide) in paragraph at lines 419--420
+\T1/cmr/m/n/12 d'in-ges-tion des tables \T1/cmtt/m/n/12 CCM_*\T1/cmr/m/n/12 . E
+lle ne bloque pas le pi-pe-line en cas d'er-reur (mode \T1/cmtt/m/n/12 TriggerR
+ule.ALL_DONE\T1/cmr/m/n/12 )
+ []
+
+<figures/architecture_dq_pipeline.png, id=691, 803.0pt x 200.75pt>
+File: figures/architecture_dq_pipeline.png Graphic file (type png)
+<use figures/architecture_dq_pipeline.png>
+Package pdftex.def Info: figures/architecture_dq_pipeline.png  used on input li
+ne 425.
+(pdftex.def)             Requested size: 386.96027pt x 96.74179pt.
+
+Underfull \hbox (badness 3547) in paragraph at lines 441--442
+[]\T1/cmr/m/n/12 Historique des scores ^^V
+ []
+
+
+Underfull \hbox (badness 2376) in paragraph at lines 441--442
+\T1/cmr/m/n/12 courbes de ten-dance Ta-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 443--443
+[]\T1/cmtt/m/n/12 dq_tiers_scores
+ []
+
+
+Underfull \hbox (badness 3657) in paragraph at lines 443--444
+[]\T1/cmr/m/n/12 KPIs glo-baux KYC/CSP
+ []
+
+[24 <./figures/architecture_dq_pipeline.png (PNG copy)>])
+(sections/chapitre4.tex [25]
+Chapitre 4.
+[26
+
+]
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+Overfull \hbox (30.54568pt too wide) in paragraph at lines 67--67
+|[]\T1/cmr/bx/n/14.4 Fichier de confi-gu-ra-tion YAML ^^V Règles KYC (\T1/cmtt/
+m/n/14.4 checks_kyc.yml\T1/cmr/bx/n/14.4 )| 
+ []
+
+[27]
+Overfull \hbox (25.8101pt too wide) in paragraph at lines 139--139
+|[]\T1/cmr/bx/n/14.4 Fichier de confi-gu-ra-tion YAML ^^V Règles CSP (\T1/cmtt/
+m/n/14.4 checks_csp.yml\T1/cmr/bx/n/14.4 )| 
+ []
+
+[28]
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+[29]
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 204.
+ [30]
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 302.
+
+[31]
+Overfull \hbox (33.84505pt too wide) in paragraph at lines 342--343
+[]\T1/cmr/m/n/12 Le DAG \T1/cmtt/m/n/12 dailyow22 \T1/cmr/m/n/12 s'exé-cute quo
+-ti-dien-ne-ment à \T1/cmr/bx/n/12 22h00\T1/cmr/m/n/12 . La tâche DQ \T1/cmtt/m
+/n/12 run_dq_tiers_checks
+ []
+
+[32] [33]
+<figures/dashboard_vue_exec.png, id=1045, 803.0pt x 401.5pt>
+File: figures/dashboard_vue_exec.png Graphic file (type png)
+<use figures/dashboard_vue_exec.png>
+Package pdftex.def Info: figures/dashboard_vue_exec.png  used on input line 428
+.
+(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
+<figures/dashboard_kyc.png, id=1047, 803.0pt x 401.5pt>
+File: figures/dashboard_kyc.png Graphic file (type png)
+<use figures/dashboard_kyc.png>
+Package pdftex.def Info: figures/dashboard_kyc.png  used on input line 447.
+(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
+ [34 <./figures/dashboard_vue_exec.png (PNG copy)>]
+<figures/dashboard_csp.png, id=1063, 803.0pt x 401.5pt>
+File: figures/dashboard_csp.png Graphic file (type png)
+<use figures/dashboard_csp.png>
+Package pdftex.def Info: figures/dashboard_csp.png  used on input line 458.
+(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
+ [35 <./figures/dashboard_kyc.png (PNG copy)> <./figures/dashboard_csp.png (PNG
+ copy)>])
+(sections/chapitre5.tex) (sections/conclusion.tex) [36] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 702937B56365758891E6138A88DADFD0;2876
-(rerunfilecheck)             After:  10F7DCFC95680F185BFD6E2F88A8DD8E;3079.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 2D2A930FCCE9B1B9CDC637A305E0FA85;20306.
  ) 
 Here is how much of TeX's memory you used:
- 23588 strings out of 467871
- 446423 string characters out of 5418377
- 843578 words of memory out of 5000000
- 52017 multiletter control sequences out of 15000+600000
- 637306 words of font info for 58 fonts, out of 8000000 for 9000
+ 26447 strings out of 467871
+ 486811 string characters out of 5418377
+ 1461743 words of memory out of 5000000
+ 54403 multiletter control sequences out of 15000+600000
+ 643895 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,8n,94p,928b,601s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{table.caption.8} has been referenced but does not e
-xist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.10} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.9} has been referenced but does not 
-exist, replaced by a fixed one
-
- <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc12
-00.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
-ecbx1728.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/d
-pi600\ecbx1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappe
-n/ec/dpi600\ecrm1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/j
-knappen/ec/dpi600\ecbx2488.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/lj
-four/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts
-/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk>
-Output written on main.pdf (17 pages, 2176900 bytes).
+ 84i,10n,94p,928b,2145s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt
+1728.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
+0\ecit1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
+/dpi600\ecrm0600.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknap
+pen/ec/dpi600\ectt1440.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour
+/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/
+ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fon
+ts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\benda\AppData\Local\MiKT
+eX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\benda\AppData\Loca
+l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk> <C:\Users\benda\AppDat
+a\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1200.pk> <C:\Users\benda\
+AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\
+benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\
+Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk
+> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1
+200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600
+\ecrm1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/
+dpi600\ecti1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknapp
+en/ec/dpi600\ecbx2488.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/
+jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/l
+jfour/jknappen/ec/dpi600\ecbx1440.pk><C:/Users/benda/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/benda/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on main.pdf (47 pages, 3027846 bytes).
 PDF statistics:
- 553 PDF objects out of 1000 (max. 8388607)
- 48 named destinations out of 1000 (max. 500000)
- 187 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2134 PDF objects out of 2487 (max. 8388607)
+ 487 named destinations out of 1000 (max. 500000)
+ 807 words of extra memory for PDF output out of 10000 (max. 10000000)
 

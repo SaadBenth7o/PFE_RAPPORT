@@ -3,3 +3,12 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Chiffres clés de CIH BANK (31/12/2024)}}{4}{figure.caption.11}%
 \contentsline {figure}{\numberline {1.2}{\ignorespaces Gouvernance de CIH BANK}}{5}{figure.caption.12}%
 \contentsline {figure}{\numberline {1.3}{\ignorespaces Organigramme de CIH BANK}}{6}{figure.caption.13}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Architecture du pipeline de données Référentiel Tiers PP Clients}}{12}{figure.caption.18}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Architecture globale de la solution de Data Quality}}{18}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Positionnement de la tâche DQ dans le DAG dailyow22}}{24}{figure.caption.24}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}}{34}{figure.caption.27}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Dashboard Tableau — Détail KYC : score par colonne et dimension DQ}}{35}{figure.caption.28}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}}{35}{figure.caption.29}%
