@@ -12,40 +12,45 @@ La solution de Data Quality s'insère dans le pipeline existant du domaine Tiers
 
 \begin{figure}[H]
 \centering
-\begin{minipage}{0.95\textwidth}
+\begin{minipage}{0.9\textwidth}
+\centering
+\footnotesize
 \begin{verbatim}
-                                 [ FLUX EXISTANT ]
-+-------------------+      [Sqoop]       +-------------------+      [Spark]       +-------------------+
-|  Oracle NOVA (SO) | -----------------> |  Zone RAW (Hive)  | -----------------> | Zone STAGING (HV) |
-+-------------------+      (Daily 22h)   +-------------------+                    +-------------------+
-                                                   |
-                                                   |
-                                                   | [Soda Core Spark Engine]
-                                                   v
-                                         +-------------------+
-                                         | MOTEUR DQ SODA    | <--- Regles YAML
-                                         +-------------------+
-                                                   |
-                                                   | (Insertion / Append)
-                                                   v
-                                         +-------------------+
-                                         | Base HIVE         |
-                                         | "dq_results"      | <--- Scores & Anomalies
-                                         +-------------------+
-                                                   |
-                                                   | [Exposition]
-                                                   v
-                                         +-------------------+
-                                         | Vues DREMIO       |
-                                         +-------------------+
-                                                   |
-                                                   | [Visualisation ODBC]
-                                                   v
-                                         +-------------------+
-                                         | Dashboards        |
-                                         | TABLEAU           | <--- Suivi par Data Stewards
-                                         +-------------------+
-                                  [ COUCHE DQ TRANSVERSALE ]
+                      [ FLUX EXISTANT ]
+                    +-------------------+
+                    |  Oracle NOVA (SO) |
+                    +-------------------+
+                              |
+                              | [Sqoop] (Daily 22h)
+                              v
+                    +-------------------+
+                    |  Zone RAW (Hive)  |
+                    +-------------------+
+                      |               |
+                      | [Spark]       | [Soda Core Engine]
+                      v               v
+            +-----------+   +-------------------+
+            |  STAGING  |   |  MOTEUR DQ SODA   | <--- Règles YAML
+            +-----------+   +-------------------+
+                                      |
+                                      v
+                            +-------------------+
+                            |     Base HIVE     |
+                            |   "dq_results"    | <--- Scores & Anomalies
+                            +-------------------+
+                                      |
+                                      | [Exposition]
+                                      v
+                            +-------------------+
+                            |    Vues DREMIO    |
+                            +-------------------+
+                                      |
+                                      | [SQL / ODBC]
+                                      v
+                            +-------------------+
+                            |    TABLEAU (BI)   | <--- Suivi Data Stewards
+                            +-------------------+
+                         [ COUCHE DQ TRANSVERSALE ]
 \end{verbatim}
 \end{minipage}
 \caption{Architecture globale de la solution de Data Quality}

@@ -115,46 +115,48 @@ Les données du Référentiel Tiers suivent un parcours en plusieurs étapes, de
 
 \begin{figure}[H]
 \centering
-\begin{minipage}{0.95\textwidth}
+\begin{minipage}{0.9\textwidth}
+\centering
+\footnotesize
 \begin{verbatim}
-+------------------------------------------------------------------------+
-|                      ORACLE NOVA (Core Banking)                        |
-|             (Tables CCM_PARTY, CCM_NPDESCRIPTION, CCM_JOB...)          |
-+------------------------------------------------------------------------+
-                                    |
-                                    | [Apache Sqoop]
-                                    | Ingestion quotidienne (22h00)
-                                    v
-+------------------------------------------------------------------------+
-|                      DATA LAKE (HDFS / Apache Hive)                    |
-|             Base: raw_nova_referentieltiers (Format ORC)               |
-+------------------------------------------------------------------------+
-                                    |
-            +-----------------------+-----------------------+
-            |                                               |
-            | [Apache Spark]                                | [Soda Core]
-            | Transformation RAW -> STAGING                 | Contrôles DQ quotidiens
-            v                                               v
-+-------------------------------+               +------------------------+
-|      ZONE STAGING (Hive)      |               |  HISTORISATION DQ      |
-|     Format Parquet / ORC      |               |  Tables de scores/anom.|
-+-------------------------------+               +------------------------+
-            |                                               |
-            |                                               |
-            +-----------------------+-----------------------+
-                                    |
-                                    v
-+------------------------------------------------------------------------+
-|                    DREMIO (Virtualisation de Données)                  |
-|                 Exposition SQL des tables Hive / DQ Tiers              |
-+------------------------------------------------------------------------+
-                                    |
-                                    | [SQL Direct / ODBC]
-                                    v
-+------------------------------------------------------------------------+
-|                   TABLEAU (Visualisation / BI)                         |
-|             Dashboards de Suivi DQ (KYC & CSP Tiers)                   |
-+------------------------------------------------------------------------+
++-------------------------------------------------------------+
+|                 ORACLE NOVA (Core Banking)                  |
+|      (Tables CCM_PARTY, CCM_NPDESCRIPTION, CCM_JOB...)      |
++-------------------------------------------------------------+
+                               |
+                               | [Apache Sqoop]
+                               | Ingestion quotidienne (22h00)
+                               v
++-------------------------------------------------------------+
+|                DATA LAKE (HDFS / Apache Hive)               |
+|         Base: raw_nova_referentieltiers (Format ORC)        |
++-------------------------------------------------------------+
+                               |
+            +------------------+------------------+
+            |                                     |
+            | [Apache Spark]                      | [Soda Core]
+            | Transfo RAW -> STAGING              | Contrôles DQ
+            v                                     v
++-----------------------------+     +-------------------------+
+|     ZONE STAGING (Hive)     |     |    HISTORISATION DQ     |
+|    Format Parquet / ORC     |     |  Tables de scores/anom. |
++-----------------------------+     +-------------------------+
+            |                                     |
+            |                                     |
+            +------------------+------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|              DREMIO (Virtualisation de Données)             |
+|           Exposition SQL des tables Hive / DQ Tiers         |
++-------------------------------------------------------------+
+                               |
+                               | [SQL Direct / ODBC]
+                               v
++-------------------------------------------------------------+
+|                 TABLEAU (Visualisation / BI)                |
+|           Dashboards de Suivi DQ (KYC & CSP Tiers)          |
++-------------------------------------------------------------+
 \end{verbatim}
 \end{minipage}
 \caption{Architecture du pipeline de données Référentiel Tiers PP Clients}
