@@ -1,4 +1,4 @@
-﻿\chapter{Conception de la Solution}
+\chapter{Conception de la Solution}
 
 \section*{Introduction}
 Ce chapitre présente la conception détaillée du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Les contrôles de qualité s'appliquent \textbf{exclusivement à la zone RAW} du Data Lake, qui constitue la copie exacte et fidèle des tables \texttt{CCM\_*} issues du système opérant Oracle NOVA. Nous définirons l'architecture globale de la solution, le modèle de données pour la persistance des résultats DQ, le catalogue complet des règles de contrôle, ainsi que la conception des composants d'orchestration, d'exposition et de visualisation.
@@ -8,13 +8,48 @@ Ce chapitre présente la conception détaillée du pipeline de Data Quality sur 
 
 \subsection{Vue d'ensemble}
 
-La solution de Data Quality s'insère dans le pipeline existant du domaine Tiers comme une \textbf{couche transversale de contrôle} ciblant exclusivement la \textbf{zone RAW}. La logique est simple : la zone RAW est la copie conforme du système opérant Oracle NOVA. Y détecter des anomalies équivaut à mesurer la qualité réelle des données à la source, avant toute transformation. La figure \ref{fig:architecture_dq} illustre l'architecture globale de bout en bout.
+La solution de Data Quality s'insère dans le pipeline existant du domaine Tiers comme une \textbf{couche transversale de contrôle} ciblant exclusivement la \textbf{zone RAW}. La logique est simple : la zone RAW est la copie conforme du système opérant Oracle NOVA. Y détecter des anomalies équivaut à mesurer la qualité réelle des données à la source, avant toute transformation. Le schéma ci-dessous illustre l'architecture globale de bout en bout.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/architecture_dq_pipeline.png}
-    \caption{Architecture du pipeline de Data Quality — Référentiel Tiers PP Clients}
-    \label{fig:architecture_dq}
+\centering
+\begin{minipage}{0.95\textwidth}
+\begin{verbatim}
+                                 [ FLUX EXISTANT ]
++-------------------+      [Sqoop]       +-------------------+      [Spark]       +-------------------+
+|  Oracle NOVA (SO) | -----------------> |  Zone RAW (Hive)  | -----------------> | Zone STAGING (HV) |
++-------------------+      (Daily 22h)   +-------------------+                    +-------------------+
+                                                   |
+                                                   |
+                                                   | [Soda Core Spark Engine]
+                                                   v
+                                         +-------------------+
+                                         | MOTEUR DQ SODA    | <--- Regles YAML
+                                         +-------------------+
+                                                   |
+                                                   | (Insertion / Append)
+                                                   v
+                                         +-------------------+
+                                         | Base HIVE         |
+                                         | "dq_results"      | <--- Scores & Anomalies
+                                         +-------------------+
+                                                   |
+                                                   | [Exposition]
+                                                   v
+                                         +-------------------+
+                                         | Vues DREMIO       |
+                                         +-------------------+
+                                                   |
+                                                   | [Visualisation ODBC]
+                                                   v
+                                         +-------------------+
+                                         | Dashboards        |
+                                         | TABLEAU           | <--- Suivi par Data Stewards
+                                         +-------------------+
+                                  [ COUCHE DQ TRANSVERSALE ]
+\end{verbatim}
+\end{minipage}
+\caption{Architecture globale de la solution de Data Quality}
+\label{fig:architecture_dq}
 \end{figure}
 
 La solution comprend \textbf{cinq composantes principales} :
