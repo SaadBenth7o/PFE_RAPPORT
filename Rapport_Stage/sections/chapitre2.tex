@@ -1,286 +1,151 @@
-\chapter{Contexte, Problématique et Solution Proposée}
+\chapter{Analyse des Besoins et Spécification}
 
 \section*{Introduction}
-Ce chapitre présente le contexte général dans lequel s'inscrit ce projet de fin d'études, les enjeux de la qualité des données dans le secteur bancaire, ainsi que la problématique spécifique rencontrée au sein de CIH Bank. Nous décrirons ensuite l'architecture du pipeline de données existant avant de présenter la solution retenue et les outils mobilisés.
-
-\textbf{Note de périmètre :} les contrôles de Data Quality développés dans ce projet s'appliquent exclusivement à la \textbf{zone RAW} du Data Lake. Cette zone est la copie exacte et non transformée des données issues du système opérant Oracle NOVA. Contrôler la qualité à ce niveau revient à mesurer directement la qualité des données à la source, avant toute transformation.
+Après avoir décrit le cadre général du projet et analysé le fonctionnement de la solution existante au sein de CIH BANK, ce chapitre se focalise sur la définition claire et rigoureuse des besoins. Nous y détaillons d'une part les besoins fonctionnels, c'est-à-dire les fonctionnalités attendues du pipeline de Data Quality, et d'autre part les besoins non fonctionnels, liés aux exigences techniques, de performance et de sécurité. Enfin, nous présentons la modélisation fonctionnelle à travers la spécification des cas d'utilisation (Use Cases) et de leurs acteurs, conformément aux standards académiques.
 
 % =========================
-\section{Contexte général : la donnée au cœur de la banque digitale}
+\section{Besoins fonctionnels}
 
-\subsection{La transformation digitale du secteur bancaire}
+Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le Référentiel Tiers. Ils se répartissent en quatre fonctionnalités majeures :
 
-Le secteur bancaire connaît depuis plusieurs années une transformation profonde, portée par la digitalisation des services, l'essor du big data et l'émergence de l'intelligence artificielle. Dans ce contexte, les institutions financières s'appuient de plus en plus sur leurs systèmes d'information pour analyser les comportements clients, optimiser leurs processus internes et piloter leurs activités de manière efficace.
-
-La donnée est ainsi devenue un actif stratégique de premier plan. Pour CIH Bank, les données clients constituent le socle de nombreuses activités critiques : l'octroi de crédit, la segmentation commerciale, la conformité réglementaire (KYC, FATCA, LAB-FT) et le pilotage de la performance. La fiabilité de ces décisions dépend directement de la qualité des données sur lesquelles elles reposent.
-
-\subsection{La qualité des données : un enjeu stratégique et réglementaire}
-
-La qualité des données (\textit{Data Quality}) est la mesure dans laquelle les données sont aptes à satisfaire les besoins pour lesquels elles sont utilisées. Elle s'évalue selon plusieurs dimensions reconnues par le standard DAMA (Data Management Association) [REF] :
-
+\subsection{Automatisation et planification des contrôles}
 \begin{itemize}
-    \item \textbf{Complétude} : les champs obligatoires sont-ils renseignés ?
-    \item \textbf{Validité} : les valeurs respectent-elles les formats et référentiels autorisés ?
-    \item \textbf{Cohérence} : les informations inter-colonnes sont-elles logiquement compatibles ?
-    \item \textbf{Fraîcheur} : les données sont-elles à jour après chaque cycle de chargement ?
-    \item \textbf{Unicité} : existe-t-il des doublons sur les identifiants ou les enregistrements ?
+    \item \textbf{Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (DAG Airflow \texttt{dailyow22} s'exécutant chaque soir à 22h00).
+    \item \textbf{Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
 \end{itemize}
 
-Dans le domaine bancaire, une mauvaise qualité des données peut avoir des conséquences graves :
+\subsection{Configuration déclarative des règles de qualité}
 \begin{itemize}
-    \item \textbf{Risques réglementaires} : des données KYC incomplètes ou incohérentes exposent la banque à des sanctions de Bank Al-Maghrib (BAM) et des organismes de conformité internationaux.
-    \item \textbf{Risques métiers} : des données socio-professionnelles (CSP) erronées faussent les modèles de scoring crédit et la segmentation commerciale.
-    \item \textbf{Risques opérationnels} : des anomalies non détectées se propagent dans l'ensemble du système d'information, contaminating les rapports de reporting et les tableaux de bord décisionnels.
+    \item \textbf{Moteur de règles dynamique} : Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source.
+    \item \textbf{Graduation des seuils et des alertes} : Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (ex : taux de valeurs manquantes inférieur à 5\%) et générer un statut de warning ou d'error selon la gravité de l'écart.
+    \item \textbf{Gestion des métadonnées} : Chaque règle doit être documentée avec des attributs métier (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité, etc.).
+\end{itemize}
+
+\subsection{Historisation et traçabilité des indicateurs}
+\begin{itemize}
+    \item \textbf{Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans une table d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution.
+    \item \textbf{Identification des anomalies (Remédiation)} : Le système doit capturer de manière détaillée la liste des enregistrements clients en anomalie en stockant leur identifiant technique (UUID) et leur radical (numéro client), ainsi que le libellé du contrôle en échec et sa criticité. Ces informations doivent être stockées dans une table d'anomalies pour actions correctives.
+\end{itemize}
+
+\subsection{Restitution visuelle et aide à la décision}
+\begin{itemize}
+    \item \textbf{Exposition des données} : Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels.
+    \item \textbf{Suivi de l'évolution temporelle} : Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (30 derniers jours).
+    \item \textbf{Priorisation des remédiations} : Le tableau de bord doit fournir une liste opérationnelle des clients en anomalie triée par criticité décroissante, exportable par les Data Stewards pour traitement correctif dans le système source NOVA.
 \end{itemize}
 
 % =========================
-\section{Le domaine Tiers : périmètre métier du projet}
+\section{Besoins non fonctionnels}
 
-\subsection{Définition du Référentiel Tiers}
+Les besoins non fonctionnels expriment les exigences qualitatives, opérationnelles et techniques que la solution doit respecter pour être viable et performante dans l'environnement de production de CIH BANK :
 
-Le \textbf{Référentiel Tiers} constitue le référentiel central de CIH Bank regroupant l'ensemble des informations relatives aux personnes physiques (PP) et morales (PM) en relation avec la banque. Ce référentiel est la source de vérité pour toutes les applications métiers : les crédits, la comptabilité, le reporting réglementaire et les outils de CRM.
+\subsection{Performance et passage à l'échelle (Scalabilité)}
+Le Référentiel Tiers de la banque regroupe \textbf{plusieurs millions} de dossiers clients (personnes physiques). Les règles de cohérence inter-colonnes ou de doublons nécessitent des jointures lourdes. Le moteur DQ doit être capable d'interroger et d'évaluer ce volume massif de données en un temps minimal (moins de 15 minutes) sans dégrader les ressources du Data Lake. Cela justifie l'utilisation d'un moteur de calcul distribué (Apache Spark) pour le traitement.
 
-Notre projet se concentre sur le périmètre des \textbf{Personnes Physiques (PP) Clients}, qui regroupe l'ensemble des clients particuliers et MRE (Marocains Résidant à l'Étranger) actifs de CIH Bank, soit plus de 1,15 million de clients. Le filtre appliqué en production est : \texttt{customer\_type = 1} et \texttt{code\_marche IN (1, 8)}.
+\subsection{Robustesse et découplage (Tolérance aux pannes)}
+L'exécution des contrôles de qualité ne doit pas bloquer la disponibilité des données pour les outils de reporting en cas d'anomalie. Si un seuil de qualité est franchi ou si le scan échoue, le pipeline d'exposition (Dremio/Tableau) doit continuer à fonctionner en mode dégradé en signalant l'alerte. De plus, la tâche DQ doit s'exécuter même si certaines tables d'ingestion n'ont été chargées que partiellement.
 
-\subsection{Les colonnes KYC et CSP : données critiques du Référentiel Tiers}
+\subsection{Maintenabilité et extensibilité}
+L'ajout de nouvelles règles ou l'intégration de nouvelles colonnes du Référentiel Tiers (par exemple pour de nouveaux critères réglementaires ou pour les personnes morales) doit se faire sans modification du code Python principal de la solution. Les fichiers de configuration YAML et la structure des tables Hive de résultats doivent être conçus de manière générique pour supporter l'extensibilité.
 
-Les colonnes ciblées par notre projet de Data Quality sont réparties en deux grands domaines :
-
-\subsubsection{Données KYC (\textit{Know Your Customer})}
-
-Les données KYC sont les informations d'identification réglementaires obligatoires pour chaque client. Elles sont issues de la table \texttt{CCM\_NPDESCRIPTION} du système Oracle NOVA et comprennent notamment :
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{5cm}|}
-\hline
-\textbf{Colonne NOVA} & \textbf{Colonne CIHONE} & \textbf{Rôle métier} \\
-\hline
-NOM & nom & Nom de famille du client \\
-\hline
-PRENOM & prenom & Prénom du client \\
-\hline
-DATE\_NAISSANCE & date\_de\_naissance & Date de naissance \\
-\hline
-CIVILITE & civilite & Civilité : M., MME, MLLE \\
-\hline
-GENRE & genre & Genre : M ou F \\
-\hline
-CODE\_NATIONALITE & code\_pays\_de\_nationalite & Code pays de nationalité \\
-\hline
-CODE\_PAYS\_RESIDENCE & code\_pays\_de\_residence & Pays de résidence \\
-\hline
-IDENTIFIANT\_FATCA & identifiant\_fatca & Numéro FATCA (clients US) \\
-\hline
-DATE\_IMPRESSION\_KYC & --- & Date impression fiche KYC \\
-\hline
-\end{tabular}
-\caption{Colonnes KYC du Référentiel Tiers PP}
-\end{table}
-
-\subsubsection{Données CSP (\textit{Catégorie Socio-Professionnelle})}
-
-Les données CSP décrivent la situation professionnelle du client. Elles proviennent de la table \texttt{CCM\_JOB} et comprennent :
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{5cm}|}
-\hline
-\textbf{Colonne NOVA} & \textbf{Colonne CIHONE} & \textbf{Rôle métier} \\
-\hline
-CODE\_SECTEUR\_PRO & code\_secteur\_professionel & Code secteur (ex : 46=Agriculture) \\
-\hline
-CODE\_PROFESSION & code\_profession & Code profession détaillée \\
-\hline
-CODE\_CSP & code\_categorie\_socio\_professionelle & Catégorie socio-professionnelle \\
-\hline
-SITUATION\_PRO & situation\_professionelle & SAL, FON, TRI, AUT, EMP, NDE \\
-\hline
-EMPLOYEUR & employeur & Nom de l'employeur \\
-\hline
-PPE & --- & Personne Politiquement Exposée \\
-\hline
-NUM\_CNSS & --- & Numéro de sécurité sociale \\
-\hline
-\end{tabular}
-\caption{Colonnes CSP du Référentiel Tiers PP}
-\end{table}
+\subsection{Sécurité et gouvernance}
+Les détails d'anomalies de qualité des données contiennent des informations clients sensibles (noms, prénoms, radicaux). Seuls les collaborateurs habilités du Data Office (Data Stewards, Data Project) et les Data Owners des départements concernés doivent être autorisés à accéder aux détails des anomalies. La solution doit ainsi s'appuyer sur la gestion des droits d'accès existante de Dremio et de Tableau.
 
 % =========================
-\section{Le pipeline de données existant : de NOVA à Tableau}
+\section{Modélisation des cas d'utilisation}
 
-\subsection{Vue d'ensemble de l'architecture}
+Afin de représenter formellement les interactions entre les utilisateurs et la solution de Data Quality, nous présentons ci-dessous les acteurs identifiés ainsi que la modélisation globale des cas d'utilisation.
 
-Les données du Référentiel Tiers suivent un parcours en plusieurs étapes, depuis le système opérant Oracle NOVA jusqu'aux outils de visualisation, en passant par un Data Lake Hadoop. Le schéma ci-dessous décrit l'architecture globale de ce flux de bout en bout.
+\subsection{Acteurs du système}
+Nous identifions trois acteurs principaux interagissant avec le système :
+\begin{itemize}
+    \item \textbf{Data Steward / Data Owner (Acteur humain)} : Il s'agit des gestionnaires de la donnée. Ils définissent les règles de qualité dans les fichiers YAML, consultent les dashboards Tableau pour suivre les indicateurs globaux, et exportent les anomalies pour lancer des chantiers de correction.
+    \item \textbf{Système d'Orchestration Airflow (Acteur système)} : Il s'agit du planificateur automatique. Il déclenche le pipeline de contrôles chaque soir après l'ingestion et remonte le statut d'exécution.
+    \item \textbf{Système Source (Oracle NOVA) (Acteur externe)} : C'est le récepteur final des corrections de données opérées manuellement par les gestionnaires ou les agences suite aux alertes DQ.
+\end{itemize}
+
+\subsection{Diagramme global des cas d'utilisation}
+
+Le diagramme ci-dessous synthétise graphiquement les cas d'utilisation de la solution et leurs acteurs associés.
 
 \begin{figure}[H]
 \centering
 \begin{minipage}{0.9\textwidth}
 \centering
-\footnotesize
+\small
 \begin{verbatim}
-+-------------------------------------------------------------+
-|                 ORACLE NOVA (Core Banking)                  |
-|      (Tables CCM_PARTY, CCM_NPDESCRIPTION, CCM_JOB...)      |
-+-------------------------------------------------------------+
-                               |
-                               | [Apache Sqoop]
-                               | Ingestion quotidienne (22h00)
-                               v
-+-------------------------------------------------------------+
-|                DATA LAKE (HDFS / Apache Hive)               |
-|         Base: raw_nova_referentieltiers (Format ORC)        |
-+-------------------------------------------------------------+
-                               |
-            +------------------+------------------+
-            |                                     |
-            | [Apache Spark]                      | [Soda Core]
-            | Transfo RAW -> STAGING              | Contrôles DQ
-            v                                     v
-+-----------------------------+     +-------------------------+
-|     ZONE STAGING (Hive)     |     |    HISTORISATION DQ     |
-|    Format Parquet / ORC     |     |  Tables de scores/anom. |
-+-----------------------------+     +-------------------------+
-            |                                     |
-            |                                     |
-            +------------------+------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|              DREMIO (Virtualisation de Données)             |
-|           Exposition SQL des tables Hive / DQ Tiers         |
-+-------------------------------------------------------------+
-                               |
-                               | [SQL Direct / ODBC]
-                               v
-+-------------------------------------------------------------+
-|                 TABLEAU (Visualisation / BI)                |
-|           Dashboards de Suivi DQ (KYC & CSP Tiers)          |
-+-------------------------------------------------------------+
+                      +---------------------------------------+
+                      |         SYSTEME DATA QUALITY          |
+                      |                                       |
+ +----------------+   |      [UC01 : Configurer regles]       |
+ |                | --+---> (Fichiers YAML de controle)       |
+ |  Data Steward  |   |                                       |
+ |  / Data Owner  | --+---> [UC02 : Visualiser dashboards]    |
+ |                |   |        (Suivi des indicateurs/KPIs)   |
+ +----------------+   |                                       |
+                      |     [UC03 : Consulter anomalies]      |
+                      |        (Exportation pour correction)  |
+                      |                      ^                |
+                      |                      |                |
+ +----------------+   |                      | (persistance)  |
+ |                |   |                      |                |
+ |  Orchestrateur | --+---> [UC04 : Executer scan DQ]         |
+ |    Airflow     |   |        (Traitement Spark sur RAW)     |
+ |                |   |                                       |
+ +----------------+   +---------------------------------------+
 \end{verbatim}
 \end{minipage}
-\caption{Architecture du pipeline de données Référentiel Tiers PP Clients}
-\label{fig:pipeline_existant}
+\caption{Diagramme global des cas d'utilisation de la solution DQ}
+\label{fig:usecase_dq}
 \end{figure}
 
-\subsection{Étape 1 — Système opérant : Oracle NOVA}
+\subsection{Description textuelle des cas d'utilisation principaux}
 
-La source de données est le système de \textit{Core Banking} \textbf{Oracle NOVA}, qui héberge le schéma \texttt{REFERENTIELTIERS}. Les tables sources principales utilisées sont :
+Nous détaillons ci-dessous le fonctionnement interne des trois cas d'utilisation principaux de notre système :
 
+\subsubsection{Cas d'utilisation 01 : Configurer les règles de qualité}
 \begin{itemize}
-    \item \texttt{CCM\_PARTY} : informations générales du tiers (identifiant, numéro client, marché, état)
-    \item \texttt{CCM\_NATURALPERSON} : lien entre le tiers et sa description de personne physique
-    \item \texttt{CCM\_NPDESCRIPTION} : données d'état civil et KYC (nom, prénom, date de naissance, nationalité, FATCA)
-    \item \texttt{CCM\_JOB} : données socio-professionnelles CSP (secteur, profession, CSP, employeur)
-    \item \texttt{CCM\_PORTFOLIO} : portefeuille commercial (gestionnaire associé)
-    \item \texttt{CCM\_CONTEXT} : contexte de création du dossier client (agence, utilisateur)
+    \item \textbf{Acteur principal} : Data Steward.
+    \item \textbf{Préconditions} : Accès aux spécifications métier (critères KYC et CSP).
+    \item \textbf{Scénario nominal} :
+    \begin{enumerate}
+        \item Le Data Steward ouvre ou crée un fichier de configuration YAML (\texttt{checks\_kyc.yml} ou \texttt{checks\_csp.yml}).
+        \item Il y déclare les contrôles pour chaque colonne concernée (ex : \texttt{missing\_count}, \texttt{valid values}).
+        \item Il associe à chaque règle ses attributs métier (criticité, domaine, dimension).
+        \item Il sauvegarde le fichier et le déploie sur le serveur d'exécution.
+    \end{enumerate}
+    \item \textbf{Postconditions} : Les nouvelles règles sont prêtes à être exécutées lors du prochain scan automatique.
 \end{itemize}
 
-\subsection{Étape 2 — Ingestion RAW vers HDFS/Hive}
-
-Le transfert quotidien des données depuis Oracle NOVA vers le Data Lake est orchestré par \textbf{Apache Airflow}. Le DAG principal du domaine Tiers est \textbf{\texttt{dailyow22}}, qui s'exécute chaque soir à \textbf{22h00}. Il utilise \textbf{Apache Sqoop} en mode \textit{OverWrite} (OW) Full pour importer l'ensemble des tables \texttt{CCM\_*} vers la base Hive \texttt{novatiers}, dans le répertoire HDFS \texttt{/data/raw/novatiers/}, au format ORC.
-
-Un second DAG, \textbf{\texttt{nova\_referentieltiers\_clients}}, alimente en parallèle la base Hive \texttt{raw\_nova\_referentieltiers}, qui est la base \textbf{directement consommée par Dremio} pour la construction des vues analytiques.
-
-\subsection{Étape 3 — Transformation STAGING}
-
-Un job \textbf{Apache Spark} (DAG \texttt{referentieltiers\_ingestion}, script \texttt{staging\_novareferentieltiersclients.sh}) transforme et charge les données depuis la zone RAW vers la zone STAGING, dans la base Hive \texttt{staging\_nova\_referentieltiers}, au format Parquet/ORC.
-
-\subsection{Étape 4 — Virtualisation Dremio}
-
-\textbf{Dremio} expose les données de staging via \textbf{10 vues virtuelles} dans le schéma \texttt{staging-nova-referentieltiers} :
-
+\subsubsection{Cas d'utilisation 02 : Exécuter le scan de qualité des données}
 \begin{itemize}
-    \item \texttt{v.Customers} (source : \texttt{CCM\_PARTY})
-    \item \texttt{v.natural\_person\_description} (source : \texttt{CCM\_NPDESCRIPTION})
-    \item \texttt{v.customer\_job} (source : \texttt{CCM\_JOB})
-    \item \texttt{v.portfolio} (source : \texttt{CCM\_PORTFOLIO})
-    \item \texttt{v.customer\_creation\_context} (source : \texttt{CCM\_CONTEXT})
-    \item \texttt{v.customer\_segmentation} et \texttt{v.customer\_segmentation\_members}
-    \item \texttt{v.operational\_posts} (source : schéma \texttt{staging-e\_params})
+    \item \textbf{Acteur principal} : Orchestrateur Airflow (Système).
+    \item \textbf{Préconditions} : Ingestion dailyow22 terminée, fichiers YAML configurés.
+    \item \textbf{Scénario nominal} :
+    \begin{enumerate}
+        \item Airflow déclenche la tâche \texttt{run\_dq\_tiers\_checks} suite à la fin du chargement Sqoop.
+        \item Le moteur DQ initialise une SparkSession et charge les règles YAML.
+        \item Le moteur applique les contrôles sur la zone RAW Hive de manière distribuée.
+        \item Les anomalies et scores calculés sont stockés dans la base \texttt{dq\_results} de Hive.
+        \item Airflow marque la tâche comme terminée et envoie les logs d'exécution.
+    \end{enumerate}
+    \item \textbf{Postconditions} : Les données de qualité sont prêtes à être consultées dans Dremio.
 \end{itemize}
 
-\subsection{Étape 5 — Vue finale CIHONE (28 colonnes)}
-
-La vue analytique finale \textbf{CIHONE} résulte d'une jointure entre les 10 vues Dremio, filtrée sur \texttt{customer\_type=1} et \texttt{code\_marche IN (1,8)}, pour produire 28 colonnes décrivant chaque client PP actif de CIH Bank. Cette vue alimente les outils de reporting (Tableau) et les analyses métiers.
-
-% =========================
-\section{Problématique}
-
-\subsection{Absence de contrôle qualité automatisé sur le pipeline}
-
-Bien que ce pipeline de données soit robuste et opérationnel, il ne dispose d'aucun mécanisme automatisé de contrôle de la qualité des données. Les données transitent quotidiennement depuis Oracle NOVA vers Dremio \textbf{sans aucune validation intermédiaire} sur les colonnes critiques KYC et CSP.
-
-Cette absence de contrôle génère plusieurs problèmes identifiés dans le domaine Tiers :
-
+\subsubsection{Cas d'utilisation 03 : Consulter les anomalies et remédier}
 \begin{itemize}
-    \item \textbf{Incohérences genre / civilité} : des clients de genre masculin associés à une civilité féminine (MME, MLLE) ou inversement, signalant une saisie erronée dans NOVA.
-    \item \textbf{Données CSP massivement nulles ou parasites} : les colonnes \texttt{professional\_sector}, \texttt{occupation} et \texttt{socioprofessional\_category} présentent des taux de valeurs nulles significatifs. Le champ \texttt{employer} contient de nombreuses valeurs parasites non normalisées telles que « AUTRE », « LUI MEME » ou « BIEN VU ».
-    \item \textbf{Dates de naissance approximatives} : une proportion notable de clients enregistre une date de naissance au 1er janvier, signalant une saisie par défaut faute d'information précise.
-    \item \textbf{Non-conformité FATCA} : des clients de nationalité américaine ne disposent d'aucun identifiant FATCA, exposant la banque à un risque réglementaire critique.
-    \item \textbf{Risque de fraîcheur} : aucune alerte ne se déclenche si le batch \texttt{dailyow22} échoue ou se termine en retard, laissant Dremio exposer des données potentiellement obsolètes.
+    \item \textbf{Acteurs} : Data Steward, Data Owner.
+    \item \textbf{Préconditions} : Exécution du scan DQ finalisée avec succès.
+    \item \textbf{Scénario nominal} :
+    \begin{enumerate}
+        \item Le Data Steward se connecte au dashboard Tableau de qualité des données.
+        \item Il consulte l'onglet « Anomalies et Remédiation » pour voir la liste des enregistrements non conformes.
+        \item Il filtre les anomalies par criticité (ex: CRITIQUE) et par domaine (ex: KYC).
+        \item Il exporte la liste contenant les radicaux clients concernés.
+        \item Il transmet la liste aux agences pour correction des données erronées directement dans Oracle NOVA.
+    \end{enumerate}
+    \item \textbf{Postconditions} : Les données corrigées dans NOVA seront ré-ingérées le lendemain soir à 22h, et le score DQ s'améliorera automatiquement.
 \end{itemize}
-
-\subsection{Absence d'historisation et de traçabilité}
-
-Les anomalies détectées manuellement ne sont ni tracées ni historisées. Il est donc impossible de mesurer l'évolution de la qualité des données dans le temps, d'identifier des tendances dégradantes ou de prouver une amélioration après une action corrective menée par les Data Stewards dans NOVA.
-
-\subsection{Absence d'outillage pour les Data Stewards}
-
-Les \textbf{Data Stewards} et \textbf{Data Owners} du domaine Tiers n'ont pas accès à un outil centralisé leur permettant de visualiser les anomalies, de les prioriser par criticité et de suivre l'avancement des corrections. La remédiation est aujourd'hui réactive et non structurée.
-
-% =========================
-\section{Solution proposée}
-
-\subsection{Vue d'ensemble de la solution}
-
-Pour répondre à ces problématiques, nous proposons de concevoir et de mettre en œuvre un \textbf{pipeline automatisé de Data Quality (DQ)} déclenché quotidiennement après chaque exécution du DAG \texttt{dailyow22}, basé sur la bibliothèque Python \textbf{Soda Core}. La solution s'articule autour de quatre composantes majeures :
-
-\begin{enumerate}
-    \item \textbf{Moteur de contrôle DQ (Soda Core)} : un script Python exécutant des règles de qualité paramétrables sur les tables Hive des zones RAW et STAGING du domaine Tiers.
-    \item \textbf{Couche de persistance (HDFS/Hive)} : des tables Hive dédiées pour historiser quotidiennement les scores DQ et le détail des anomalies détectées.
-    \item \textbf{Exposition analytique (Dremio)} : des vues virtuelles Dremio exposant les résultats DQ historisés pour les outils de consommation.
-    \item \textbf{Dashboard de suivi (Tableau)} : un tableau de bord interactif permettant aux Data Stewards et Data Owners de visualiser les KPIs de qualité, l'évolution temporelle des scores et la liste priorisée des anomalies à corriger.
-\end{enumerate}
-
-\subsection{Soda Core : bibliothèque Python de Data Quality}
-
-\textbf{Soda Core} est une bibliothèque Python open source dédiée au contrôle de la qualité des données. Elle permet de définir des règles de qualité (appelées \textit{checks}) dans des fichiers de configuration YAML, de les exécuter sur différentes sources de données (Hive, Spark, PostgreSQL, Snowflake, etc.) et de collecter les résultats de manière programmatique. [REF]
-
-Les avantages de Soda Core pour notre contexte sont les suivants :
-
-\begin{itemize}
-    \item \textbf{Compatibilité Hive / Spark} : Soda Core dispose d'un connecteur natif compatible avec l'environnement Hadoop de CIH Bank (\texttt{soda-core-spark}).
-    \item \textbf{Configuration déclarative} : les règles DQ sont définies en YAML, ce qui facilite leur maintenance et leur évolution sans modifier le code Python.
-    \item \textbf{Intégration Airflow} : Soda Core s'intègre nativement dans les DAGs Airflow via un opérateur Python, permettant de le déclencher automatiquement après chaque ingestion.
-    \item \textbf{Résultats programmatiques} : les résultats des checks (valeur calculée, seuil, statut) sont accessibles en Python, ce qui permet de les persister facilement dans des tables Hive.
-\end{itemize}
-
-\subsection{Périmètre des contrôles : la zone RAW uniquement}
-
-Le choix de cibler la \textbf{zone RAW} du Data Lake comme unique point de contrôle est délibéré et justifié par plusieurs raisons :
-
-\begin{itemize}
-    \item \textbf{Fidélité à la source} : la zone RAW (base Hive \texttt{raw\_nova\_referentieltiers}, chemin HDFS \texttt{/data/raw/novatiers/}) est la copie exacte et non transformée des tables \texttt{CCM\_*} issues d'Oracle NOVA. Contrôler la qualité sur RAW revient à mesurer directement la qualité du système opérant.
-    \item \textbf{Isolation des responsabilités} : en contrôlant avant la transformation STAGING, on distingue clairement les anomalies issues du système source (responsabilité des Data Stewards Tiers) des éventuels artefacts introduits par les scripts de transformation.
-    \item \textbf{Remédiation à la source} : les anomalies détectées sur RAW peuvent être remontées directement aux équipes saisie des agences pour correction dans NOVA, sans ambiguïté sur leur origine.
-\end{itemize}
-
-\subsection{Déclenchement automatique post-ingestion}
-
-La solution s'insère dans le workflow Airflow existant. Une \textbf{tâche Python dédiée} (\texttt{run\_dq\_tiers\_checks}) est ajoutée dans le DAG \texttt{dailyow22}, en dépendance de toutes les tâches d'ingestion Sqoop des tables \texttt{CCM\_*}. Ainsi, les contrôles DQ se lancent \textbf{automatiquement chaque soir à 22h}, dès que les données RAW sont disponibles, sans intervention manuelle.
-
-\subsection{Historisation et traçabilité quotidienne}
-
-Les résultats de chaque exécution sont persistés dans deux tables Hive partitionnées par date (\texttt{run\_date}) dans une base dédiée \texttt{dq\_results} :
-
-\begin{itemize}
-    \item \textbf{\texttt{dq\_tiers\_scores}} : enregistre, pour chaque combinaison table/colonne/règle, la valeur calculée, le seuil configuré, le statut (OK/KO) et le score DQ normalisé sur 100.
-    \item \textbf{\texttt{dq\_tiers\_anomalies}} : enregistre le détail des enregistrements clients (\texttt{identifier}, \texttt{radical}) en situation d'anomalie, avec la description de la règle violée et la criticité associée.
-\end{itemize}
-
-Cette historisation permet de mesurer l'\textbf{évolution temporelle} de la qualité des données à la source et de quantifier l'impact des corrections effectuées dans NOVA par les Data Stewards.
 
 \section*{Conclusion}
-
-Ce chapitre a présenté le contexte bancaire dans lequel s'inscrit ce projet, les enjeux critiques de la qualité des données KYC et CSP sur le Référentiel Tiers de CIH Bank, ainsi que les limites du pipeline de données actuel en matière de contrôle DQ. La solution proposée — un pipeline automatisé basé sur Soda Core, orchestré par Airflow, avec persistance dans Hive et restitution dans Tableau — répond directement à ces problématiques. Le chapitre suivant détaille la conception de cette solution.
+Ce chapitre a permis de formaliser les besoins fonctionnels et non fonctionnels, définissant de manière précise les objectifs techniques et opérationnels du pipeline de qualité des données. La modélisation des acteurs et des cas d'utilisation à l'aide d'UML (Usecases) clarifie les frontières et le comportement de notre système. Fort de ces spécifications, le chapitre suivant présente la conception globale et détaillée de la solution.
