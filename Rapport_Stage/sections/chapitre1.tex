@@ -175,6 +175,44 @@ Les données sont collectées à partir des différents systèmes opérationnels
 
 Dans ce cadre, le Data Office joue un rôle central dans la mise en place des pratiques de gestion de la qualité des données.
 
+
+% =========================
+\section{Contexte et enjeux de la qualité des données bancaires}
+
+Dans l'écosystème financier contemporain, la transition vers une économie numérique a redéfini la nature des institutions bancaires. La donnée n'est plus un simple sous-produit de l'activité transactionnelle, mais s'impose comme une infrastructure essentielle sur laquelle reposent l'évaluation des risques, la conformité réglementaire et les décisions stratégiques. La qualité des données n'est pas un simple défi technique isolé, mais une discipline fondamentale ayant des répercussions directes sur la viabilité économique et la stabilité des institutions financières.
+
+\subsection{Cadre réglementaire prudentiel : BCBS 239 et guide RDARR}
+
+La crise financière de 2007-2008 a révélé l'incapacité de nombreuses institutions bancaires à agréger rapidement leurs expositions aux risques. C'est dans ce contexte que le Comité de Bâle a introduit la directive \textbf{BCBS 239} (\textit{Principles for effective risk data aggregation and risk reporting}), devenue le standard international de gestion des données financières. 
+
+Ce cadre réglementaire impose des exigences strictes en matière de gouvernance et de contrôle de la qualité :
+\begin{itemize}
+    \item \textbf{Exactitude et intégrité (Principe 3) :} Les banques doivent implémenter des contrôles automatisés capables de valider les données de risque et de réduire au minimum les ajustements manuels.
+    \item \textbf{Exhaustivité (Principe 4) :} L'institution doit être en mesure d'agréger l'ensemble de ses positions de risque, un seuil d'exhaustivité de 95 \% étant généralement exigé.
+    \item \textbf{Promptitude (Principe 5) :} Les rapports de risques doivent être produits dans des délais très courts pour permettre des décisions rapides en cas de crise.
+\end{itemize}
+
+Face aux progrès d'implémentation jugés insatisfaisants par les autorités, la Banque Centrale Européenne (BCE) a intensifié sa surveillance en publiant en mai 2024 son guide définitif sur l'agrégation efficace des données sur les risques (\textbf{RDARR}), introduisant des exigences renforcées et des sanctions accrues (majorations d'exigences de fonds propres) en cas de non-conformité.
+
+\subsection{Le coût économique de la non-qualité et la \textit{Rule of Ten}}
+
+Sur le plan économique, l'impact d'une mauvaise qualité des données se propage à travers l'ensemble des processus métiers. Selon les recherches du cabinet Gartner, les grandes organisations perdent en moyenne entre 12,9 et 15 millions de dollars par an en raison d'une mauvaise qualité des données. 
+
+Ce coût de la non-qualité s'explique principalement par deux phénomènes documentés en recherche académique :
+\begin{itemize}
+    \item \textbf{Les usines à données fantômes (\textit{hidden data factories}) :} Les collaborateurs consacrent une part significative de leur temps de travail à corriger manuellement les anomalies avant de pouvoir exploiter l'information, masquant le coût réel de l'inefficacité opérationnelle.
+    \item \textbf{La règle de dix (\textit{Rule of Ten}) :} Ce principe de modélisation stipule qu'il coûte environ dix fois plus cher de corriger une donnée en aval (lorsqu'elle a déjà été intégrée dans les rapports ou consommée par les métiers) que de la valider et de la corriger directement en amont lors de sa saisie ou de son ingestion.
+\end{itemize}
+
+\subsection{Bénéfices et création de valeur d'un programme de Data Quality}
+
+À l'inverse des coûts générés par la non-qualité, la mise en place d'un contrôle automatique et d'une gouvernance proactive apporte une valeur mesurable :
+\begin{itemize}
+    \item \textbf{Optimisation des fonds propres :} L'amélioration de la qualité des données permet d'éliminer les marges de prudence excessives appliquées aux modèles internes de risque de crédit, optimisant ainsi l'allocation du capital.
+    \item \textbf{Efficacité opérationnelle :} L'automatisation des contrôles réduit de près de 50 \% les effectifs et le temps dédiés aux ajustements manuels de fin de mois.
+    \item \textbf{Sécurisation des décisions :} À l'ère de l'intelligence artificielle et de l'automatisation, des données propres garantissent la fiabilité des modèles décisionnels et préviennent les dérives algorithmiques.
+\end{itemize}
+
 % =========================
 \section{Étude de l'existant}
 
@@ -263,7 +301,7 @@ Les données du Référentiel Tiers suivent un parcours en plusieurs étapes, de
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/diagramme.png}
+\includegraphics[width=0.95\textwidth]{figures/description_de_lexistant.png}
 \caption{Architecture du pipeline de données Référentiel Tiers PP Clients}
 \label{fig:pipeline_existant}
 \end{figure}
@@ -448,19 +486,28 @@ La figure \ref{fig:gantt} ci-dessous illustre le diagramme de Gantt représentan
         hgrid,
         time slot format=isodate-yearmonth,
         time slot unit=month,
-        x unit=1.8cm,
-        y unit title=0.6cm,
-        y unit chart=0.7cm,
+        x unit=1.5cm,
+        y unit title=0.5cm,
+        y unit chart=0.6cm,
         title label font=\bfseries\small,
         bar label font=\small,
         bar/.append style={fill=codeblue!80, rounded corners=2pt},
+        group/.append style={draw=black, fill=black!30},
         bar height=0.6
     ]{2026-02}{2026-08}
         \gantttitlecalendar{year, month=shortname} \\
-        \ganttbar{Étude \& Cadrage}{2026-02}{2026-03} \\
-        \ganttbar{Conception}{2026-03}{2026-04} \\
-        \ganttbar{Réalisation}{2026-04}{2026-07} \\
-        \ganttbar{Tests \& Déploiement}{2026-07}{2026-08}
+        \ganttgroup{Phase 1 : Étude \& Cadrage}{2026-02}{2026-03} \\
+        \ganttbar{Imprégnation \& Cadrage}{2026-02}{2026-02} \\
+        \ganttbar{Spécification des besoins}{2026-02}{2026-03} \\
+        \ganttgroup{Phase 2 : Conception}{2026-03}{2026-04} \\
+        \ganttbar{Modélisation des règles DQ}{2026-03}{2026-03} \\
+        \ganttbar{Architecture du pipeline}{2026-03}{2026-04} \\
+        \ganttgroup{Phase 3 : Réalisation}{2026-04}{2026-07} \\
+        \ganttbar{Développement (Python/Soda)}{2026-04}{2026-06} \\
+        \ganttbar{Intégration Hive \& Airflow}{2026-06}{2026-07} \\
+        \ganttgroup{Phase 4 : Tests \& Déploiement}{2026-07}{2026-08} \\
+        \ganttbar{Tests de bout en bout}{2026-07}{2026-07} \\
+        \ganttbar{Restitution (Tableau)}{2026-07}{2026-08}
     \end{ganttchart}
     \caption{Diagramme de Gantt du planning prévisionnel du projet}
     \label{fig:gantt}
