@@ -198,10 +198,10 @@ checks for ccm_job:
 # Pipeline de Data Quality - Referentiel Tiers PP Clients - Zone RAW
 # CIH Bank - Data Office
 # Auteur : Saad BENDAHOU
-# Perimetre : base raw_nova_referentieltiers (HDFS /data/raw/novatiers/)
 # Declenchement : post-ingestion DAG dailyow22 (22h00)
 
 import argparse
+import datetime
 from datetime import date
 from pyspark.sql import SparkSession
 from soda.scan import Scan
@@ -220,14 +220,6 @@ def run_dq_checks(run_date: str):
     # --- 2. Initialisation du scan Soda Core ---
     scan = Scan()
     scan.set_data_source_name("hive_raw")
-
-    # Connexion Soda --> Hive RAW via Spark
-    # Base cible : raw_nova_referentieltiers (copie exacte NOVA)
-    from soda.core.spark_df_data_source import SparkDfDataSource
-    spark_source = SparkDfDataSource(
-        data_source_name="hive_raw",
-        spark_session=spark
-    )
     scan.add_spark_session(spark, "hive_raw")
 
     # --- 3. Chargement des fichiers de regles YAML ---
@@ -238,19 +230,52 @@ def run_dq_checks(run_date: str):
     # --- 4. Execution des checks ---
     scan.execute()
 
-    # --- 5. Collecte et persistance des resultats ---
-    results = scan.get_scan_results()
-    from utils.hive_writer import write_scores, write_anomalies
-    write_scores(spark, results, run_date, dag_name="dailyow22")
-    write_anomalies(spark, results, run_date)
+    # --- 5. Collecte et persistance des resultats de faits ---
+    run_timestamp = datetime.datetime.now()
+    results_data = []
+
+    for check in scan.get_checks_self():
+        passed = check.outcome == "pass"
+        score = 100.0 if passed else (50.0 if check.outcome == "warn" else 0.0)
+        
+        # Recupere le total des lignes et le nombre d'anomalies
+        total_rows = spark.table(f"raw_nova_referentieltiers.{check.dataset_name}").count()
+        invalid_rows = int(check.check_value or 0) if not passed else 0
+        valid_rows = total_rows - invalid_rows
+        percentage = (valid_rows / total_rows) * 100.0 if total_rows > 0 else 100.0
+
+        results_data.append((
+            run_timestamp,
+            "dailyow22",
+            check.dataset_name,
+            check.column_name or "TRANSVERSE",
+            check.name,
+            check.attributes.get('dimension', 'completeness'),
+            check.attributes.get('criticite', 'HAUTE'),
+            check.attributes.get('domaine', 'Tiers'),
+            total_rows,
+            valid_rows,
+            invalid_rows,
+            percentage,
+            passed,
+            score,
+            run_date
+        ))
+
+    if results_data:
+        df = spark.createDataFrame(results_data, [
+            "run_timestamp", "dag_name", "table_name", "column_name", "check_name",
+            "dimension", "criticite", "domaine", "total_rows", "valid_rows",
+            "invalid_rows", "percentage", "passed", "score_dq", "run_date"
+        ])
+        df.write.mode("append").partitionBy("run_date").saveAsTable("dq_results.dq_tiers_results_fact")
 
     spark.stop()
     print(f"[DQ Tiers] Controles termines pour la date {run_date}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--run_date", type=str,
-                        default=str(date.today()))
+    parser.add_argument("--run_date", type=str, default=str(date.today()))
     args = parser.parse_args()
     run_dq_checks(args.run_date)
 \end{lstlisting}
@@ -265,8 +290,9 @@ Les tables de persistance DQ sont créées dans la base Hive \texttt{dq\_results
 CREATE DATABASE IF NOT EXISTS dq_results
 COMMENT 'Base de resultats Data Quality - CIH Bank Data Office';
 
--- Table des scores DQ historises
-CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_scores (
+-- Table de faits unique pour la Data Quality
+CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_results_fact (
+    run_timestamp   TIMESTAMP,
     dag_name        STRING,
     table_name      STRING,
     column_name     STRING,
@@ -274,24 +300,12 @@ CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_scores (
     dimension       STRING,
     criticite       STRING,
     domaine         STRING,
-    metric_value    DOUBLE,
-    threshold       DOUBLE,
+    total_rows      BIGINT,
+    valid_rows      BIGINT,
+    invalid_rows    BIGINT,
+    percentage      DOUBLE,
     passed          BOOLEAN,
     score_dq        DOUBLE
-)
-PARTITIONED BY (run_date DATE)
-STORED AS ORC
-TBLPROPERTIES ('orc.compress'='SNAPPY');
-
--- Table du detail des anomalies
-CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_anomalies (
-    table_name      STRING,
-    column_name     STRING,
-    check_name      STRING,
-    identifier      STRING,
-    radical         STRING,
-    anomaly_detail  STRING,
-    criticite       STRING
 )
 PARTITIONED BY (run_date DATE)
 STORED AS ORC
@@ -353,6 +367,7 @@ Trois vues SQL sont créées dans Dremio, dans le nouveau schéma \texttt{dq-tie
 CREATE OR REPLACE VIEW "dq-tiers"."v.dq_scores_history" AS
 SELECT
     run_date,
+    run_timestamp,
     dag_name,
     table_name,
     column_name,
@@ -360,11 +375,13 @@ SELECT
     dimension,
     criticite,
     domaine,
-    metric_value,
-    threshold,
+    total_rows,
+    valid_rows,
+    invalid_rows,
+    percentage,
     passed,
     score_dq
-FROM hive.dq_results.dq_tiers_scores
+FROM hive.dq_results.dq_tiers_results_fact
 ORDER BY run_date DESC, criticite ASC;
 \end{lstlisting}
 
@@ -383,26 +400,29 @@ SELECT
              ELSE 0 END)           AS nb_checks_ok,
     AVG(score_dq)                  AS score_moyen,
     MIN(score_dq)                  AS score_min
-FROM hive.dq_results.dq_tiers_scores
+FROM hive.dq_results.dq_tiers_results_fact
 GROUP BY run_date, domaine, dimension, criticite
 ORDER BY run_date DESC, domaine, criticite;
 \end{lstlisting}
 
-\subsection{Vue \texttt{v.dq\_anomalies\_detail}}
+\subsection{Vue \texttt{v.dq\_anomalies\_summary}}
 
 \begin{lstlisting}[language=SQL]
--- Vue Dremio : detail des anomalies pour Data Stewards
-CREATE OR REPLACE VIEW "dq-tiers"."v.dq_anomalies_detail" AS
+-- Vue Dremio : regles en anomalie (filtree sur passed = false)
+CREATE OR REPLACE VIEW "dq-tiers"."v.dq_anomalies_summary" AS
 SELECT
     run_date,
     table_name,
     column_name,
     check_name,
-    identifier,
-    radical,
-    anomaly_detail,
-    criticite
-FROM hive.dq_results.dq_tiers_anomalies
+    total_rows,
+    valid_rows,
+    invalid_rows,
+    percentage,
+    criticite,
+    score_dq
+FROM hive.dq_results.dq_tiers_results_fact
+WHERE passed = FALSE
 ORDER BY run_date DESC,
          CASE criticite
              WHEN 'CRITIQUE' THEN 1
@@ -417,7 +437,7 @@ ORDER BY run_date DESC,
 
 \subsection{Connexion Tableau à Dremio}
 
-Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC Dremio. Les trois vues du schéma \texttt{dq-tiers} sont importées comme sources de données dans Tableau : \texttt{v.dq\_scores\_history}, \texttt{v.dq\_kpis\_summary} et \texttt{v.dq\_anomalies\_detail}.
+Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC Dremio. Les trois vues du schéma \texttt{dq-tiers} sont importées comme sources de données dans Tableau : \texttt{v.dq\_scores\_history}, \texttt{v.dq\_kpis\_summary} et \texttt{v.dq\_anomalies\_summary}.
 
 \subsection{Onglet 1 — Vue Exécutive}
 
@@ -451,8 +471,6 @@ La figure \ref{fig:dashboard_kyc} présente l'onglet « Détail KYC ».
 
 \subsection{Onglet 3 — Détail CSP}
 
-La figure \ref{fig:dashboard_csp} présente l'onglet « Détail CSP ».
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/dashboard_csp.png}
@@ -462,7 +480,7 @@ La figure \ref{fig:dashboard_csp} présente l'onglet « Détail CSP ».
 
 \subsection{Onglet 4 — Anomalies et Remédiation}
 
-Le quatrième onglet présente la liste paginée des enregistrements clients en anomalie, triée par criticité décroissante. Elle est directement exportable en Excel par les Data Stewards pour engagement d'actions correctives dans NOVA. Les colonnes affichées sont : \texttt{radical} (numéro client CIH), \texttt{table\_name}, \texttt{column\_name}, \texttt{anomaly\_detail}, \texttt{criticite}, \texttt{run\_date}.
+Le quatrième onglet présente le résumé des règles de qualité en échec (triée par criticité décroissante). Elle permet aux Data Stewards de cibler directement les colonnes et les règles de gestion présentant des taux d'anomalies élevés pour engager des actions de correction collectives dans NOVA. Les colonnes affichées sont : \texttt{table\_name}, \texttt{column\_name}, \texttt{check\_name}, \texttt{total\_rows}, \texttt{invalid\_rows}, \texttt{percentage}, \texttt{criticite}, \texttt{run\_date}.
 
 \section*{Conclusion}
 

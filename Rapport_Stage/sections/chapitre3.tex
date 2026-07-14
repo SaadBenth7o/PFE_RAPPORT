@@ -114,83 +114,63 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
 La modélisation statique définit la structure fixe du système, ses composants de données, le schéma relationnel de stockage de l'historique de qualité, ainsi que le dictionnaire des métadonnées associées.
 
 \subsection{Diagramme de classes}
-Le diagramme de classes de la figure \ref{fig:class_dq} représente les entités logiques et logicielles qui encapsulent les configurations des règles de contrôle, l'historique d'évaluation et les métadonnées d'anomalies.
+Le diagramme de classes de la figure \ref{fig:class_dq} représente l'entité logique unique qui encapsule l'ensemble des résultats d'évaluation de la qualité des données (table de faits dénormalisée). Cette modélisation unifiée simplifie l'architecture logique en regroupant les informations sur les règles, les volumes de lignes vérifiées et non conformes, les scores et le temps d'exécution.
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{
-    \begin{tikzpicture}[every node/.style={font=\small}, classbox/.style={draw, rectangle split, rectangle split parts=3, fill=blue!5, rounded corners, text width=5cm, align=left}]
-        % Classes
-        \node (dqrule) [classbox] {
-            \textbf{DQ\_Rule}
-            \nodepart{second}
-            + check\_name : String \\
-            + column\_name : String \\
-            + dimension : String \\
-            + threshold : Double \\
-            + criticite : String \\
-            + domaine : String
-            \nodepart{third}
-            + evaluate() : Boolean
-        };
-
-        \node (dqscore) [classbox, below left=of dqrule, xshift=-0.5cm, yshift=-0.5cm] {
-            \textbf{DQ\_Score}
+    \begin{tikzpicture}[every node/.style={font=\small}, classbox/.style={draw, rectangle split, rectangle split parts=3, fill=blue!5, rounded corners, text width=6cm, align=left}]
+        % Single Fact Class
+        \node (dqfact) [classbox] {
+            \textbf{DQ\_Result\_Fact}
             \nodepart{second}
             + run\_date : Date \\
-            + metric\_value : Double \\
+            + run\_timestamp : Timestamp \\
+            + table\_name : String \\
+            + column\_name : String \\
+            + check\_name : String \\
+            + dimension : String \\
+            + criticite : String \\
+            + domaine : String \\
+            + total\_rows : Long \\
+            + valid\_rows : Long \\
+            + invalid\_rows : Long \\
+            + percentage : Double \\
             + passed : Boolean \\
             + score\_dq : Double
             \nodepart{third}
-            + saveScore() : Void
+            + evaluate() : Boolean \\
+            + saveResult() : Void
         };
-
-        \node (dqanomaly) [classbox, below right=of dqrule, xshift=0.5cm, yshift=-0.5cm] {
-            \textbf{DQ\_Anomaly}
-            \nodepart{second}
-            + run\_date : Date \\
-            + radical : String \\
-            + anomaly\_detail : String
-            \nodepart{third}
-            + saveAnomaly() : Void
-        };
-
-        % Relations (Inheritance-like or association)
-        \draw [->, >=stealth, line width=0.8pt] (dqscore) -- node[above left, font=\scriptsize] {évalué par} (dqrule);
-        \draw [->, >=stealth, line width=0.8pt] (dqanomaly) -- node[above right, font=\scriptsize] {généré par} (dqrule);
     \end{tikzpicture}
-    }
-    \caption{Diagramme de classes des métadonnées de qualité de données}
+    \caption{Diagramme de classes unifié de la table de faits DQ}
     \label{fig:class_dq}
 \end{figure}
 
 \subsection{Modèle relationnel}
-Pour persister les résultats d'évaluation de la qualité des données de manière quotidienne, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive. Ce schéma convertit les structures de classes de modélisation en deux tables distinctes :
+Pour persister les résultats d'évaluation de la qualité des données de manière quotidienne, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive. Ce schéma convertit la classe de modélisation logique en une unique table de faits dénormalisée :
 \begin{itemize}
-    \item \textbf{dq\_tiers\_scores} : Table d'historisation des indicateurs et scores agrégés par date, table et règle ,
-    \item \textbf{dq\_tiers\_anomalies} : Table de stockage détaillée des dossiers clients non conformes (identifiés par leur radical) pour action de correction.
+    \item \textbf{dq\_tiers\_results\_fact} : Table unique d'historisation consolidée des indicateurs et scores de qualité par exécution, par table et par règle.
 \end{itemize}
 
 Le passage du modèle logique au modèle physique relationnel s'opère selon les règles classiques de traduction :
 \begin{itemize}
-    \item Chaque classe du modèle se traduit par une table relationnelle ,
+    \item La classe unique se traduit par une table de faits relationnelle dénormalisée ,
     \item Les attributs se traduisent par des colonnes typées avec gestion de la nullité ,
-    \item Le partitionnement est appliqué sur la colonne de date (\texttt{run\_date}) pour optimiser les performances de requêtage temporel.
+    \item Le partitionnement est appliqué sur la colonne de date (\texttt{run\_date}) pour optimiser les performances de requêtage temporel et simplifier le chargement quotidien.
 \end{itemize}
 
 Le schéma relationnel textuel s'établit comme suit :
 \begin{itemize}
-    \item \textbf{dq\_tiers\_scores} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], dag\_name, dimension, criticite, domaine, metric\_value, threshold, passed, score\_dq) ,
-    \item \textbf{dq\_tiers\_anomalies} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}, \underline{radical}], identifier, anomaly\_detail, criticite).
+    \item \textbf{dq\_tiers\_results\_fact} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], run\_timestamp, dag\_name, dimension, criticite, domaine, total\_rows, valid\_rows, invalid\_rows, percentage, passed, score\_dq).
 \end{itemize}
 
 \subsection{Dictionnaire de données}
-Nous détaillons ci-dessous la structure physique et le dictionnaire de données des deux tables relationnelles de persistance.
+Nous détaillons ci-dessous la structure physique et le dictionnaire de données de la table de faits consolidée de persistance.
 
 \begin{table}[H]
 \centering
-\caption{Dictionnaire de la table \texttt{dq\_tiers\_scores}}
-\label{tab:dict_scores}
+\caption{Dictionnaire de la table de faits unique \texttt{dq\_tiers\_results\_fact}}
+\label{tab:dict_results_fact}
 \renewcommand{\arraystretch}{1.3}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{|l|l|c|p{8cm}|}
@@ -200,6 +180,8 @@ Nous détaillons ci-dessous la structure physique et le dictionnaire de données
 \hline
 \texttt{run\_date} & DATE & PK (Part.) & Date d'exécution du contrôle de qualité. \\
 \hline
+\texttt{run\_timestamp} & TIMESTAMP & - & Horodatage précis de l'exécution (autour de minuit). \\
+\hline
 \texttt{table\_name} & STRING & PK & Table Hive contrôlée en zone RAW. \\
 \hline
 \texttt{column\_name} & STRING & PK & Nom de la colonne soumise à la règle de qualité. \\
@@ -208,50 +190,23 @@ Nous détaillons ci-dessous la structure physique et le dictionnaire de données
 \hline
 \texttt{dag\_name} & STRING & - & Nom du DAG Airflow d'orchestration (\texttt{dailyow22}). \\
 \hline
-\texttt{dimension} & STRING & - & Dimension DQ (\texttt{completeness}, \texttt{validity}, \texttt{consistency}, \texttt{freshness}). \\
+\texttt{dimension} & STRING & - & Dimension DQ (\texttt{completeness}, \texttt{validity}, \texttt{consistency}, \texttt{uniqueness}, \texttt{freshness}). \\
 \hline
 \texttt{criticite} & STRING & - & Niveau de criticité du contrôle (\texttt{CRITIQUE}, \texttt{HAUTE}, \texttt{MOYENNE}). \\
 \hline
 \texttt{domaine} & STRING & - & Domaine métier visé (\texttt{KYC} ou \texttt{CSP}). \\
 \hline
-\texttt{metric\_value} & DOUBLE & - & Valeur numérique calculée par le test (ex. : taux de nuls). \\
+\texttt{total\_rows} & BIGINT & - & Nombre total d'enregistrements clients vérifiés lors du scan. \\
 \hline
-\texttt{threshold} & DOUBLE & - & Seuil d'alerte configuré en YAML (ex. : 0.05). \\
+\texttt{valid\_rows} & BIGINT & - & Nombre d'enregistrements conformes validant la règle. \\
 \hline
-\texttt{passed} & BOOLEAN & - & Booléen indiquant si la règle a été respectée (\texttt{TRUE} ou \texttt{FALSE}). \\
+\texttt{invalid\_rows} & BIGINT & - & Nombre d'enregistrements non conformes (anomalies). \\
 \hline
-\texttt{score\_dq} & DOUBLE & - & Score normalisé (de 0 à 100) pour affichage dashboard. \\
+\texttt{percentage} & DOUBLE & - & Taux de conformité en pourcentage (calculé par : \texttt{valid\_rows} / \texttt{total\_rows} * 100). \\
 \hline
-\end{tabular}
-}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Dictionnaire de la table \texttt{dq\_tiers\_anomalies}}
-\label{tab:dict_anomalies}
-\renewcommand{\arraystretch}{1.3}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{|l|l|c|p{8cm}|}
+\texttt{passed} & BOOLEAN & - & Indique si le test a été validé (\texttt{TRUE} ou \texttt{FALSE}). \\
 \hline
-\rowcolor{gray!20}
-\textbf{Colonne} & \textbf{Type} & \textbf{Clé} & \textbf{Description / Rôle} \\
-\hline
-\texttt{run\_date} & DATE & PK (Part.) & Date d'exécution du scan de qualité. \\
-\hline
-\texttt{table\_name} & STRING & PK & Table source de l'anomalie détectée. \\
-\hline
-\texttt{column\_name} & STRING & PK & Colonne contenant la donnée non conforme. \\
-\hline
-\texttt{check\_name} & STRING & PK & Nom de la règle DQ violée. \\
-\hline
-\texttt{radical} & STRING & PK & Identifiant bancaire client (radical) sous 7 chiffres. \\
-\hline
-\texttt{identifier} & STRING & - & UUID technique de l'enregistrement en zone RAW. \\
-\hline
-\texttt{anomaly\_detail} & STRING & - & Message décrivant le problème (ex. : \texttt{Valeur 'LUI MEME' invalide}). \\
-\hline
-\texttt{criticite} & STRING & - & Niveau de criticité du contrôle violé. \\
+\texttt{score\_dq} & DOUBLE & - & Score de qualité normalisé (entre 0.0 et 100.0). \\
 \hline
 \end{tabular}
 }
