@@ -1,37 +1,37 @@
 \chapter{Analyse des Besoins et Spécification}
 
-\section*{Introduction}
-Après avoir décrit le cadre général du projet et analysé le fonctionnement de la solution existante au sein de CIH BANK, ce chapitre se focalise sur la définition claire et rigoureuse des besoins. Nous y détaillons d'une part les besoins fonctionnels, c'est-à-dire les fonctionnalités attendues du pipeline de Data Quality, et d'autre part les besoins non fonctionnels, liés aux exigences techniques, de performance et de sécurité. Enfin, nous présentons la modélisation fonctionnelle à travers la spécification des cas d'utilisation (Use Cases) et de leurs acteurs, conformément aux standards académiques.
+\section*{Introduction du chapitre}
+Après avoir décrit le cadre général du projet et analysé le fonctionnement de la solution existante au sein de CIH BANK, ce chapitre se focalise sur la définition claire et rigoureuse des besoins. Nous y détaillons d'une part les besoins fonctionnels, c'est-à-dire les fonctionnalités attendues du pipeline de Data Quality, et d'autre part les besoins non fonctionnels, liés aux exigences techniques, de performance et de sécurité. Enfin, nous présentons la modélisation fonctionnelle à travers la spécification des cas d'utilisation et de leurs acteurs.
 
 % =========================
 \section{Besoins fonctionnels}
 
-Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le Référentiel Tiers. Ils se répartissent en quatre fonctionnalités majeures :
+Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le domaine Tiers. Ces problématiques, transverses à l'ensemble des tables du référentiel, seront illustrées par la table \texttt{np\_description} et ses 40 colonnes (\texttt{name}, \texttt{firstname}, \texttt{civility}, \texttt{sex}, \texttt{birthdate}, \texttt{nationalitycountry}, \texttt{fatcaidentificationnumber}, etc.). Les besoins se répartissent en quatre fonctionnalités majeures :
 
 \subsection{Automatisation et planification des contrôles}
 \begin{itemize}
-    \item \textbf{Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (DAG Airflow \texttt{dailyow22} s'exécutant chaque soir à 22h00).
-    \item \textbf{Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
+    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (DAG Airflow \texttt{dailyow22} s'exécutant chaque soir à 22h00) ,
+    \item \textbf{Sous-besoin 1.2 : Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
 \end{itemize}
 
 \subsection{Configuration déclarative des règles de qualité}
 \begin{itemize}
-    \item \textbf{Moteur de règles dynamique} : Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source.
-    \item \textbf{Graduation des seuils et des alertes} : Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (ex : taux de valeurs manquantes inférieur à 5\%) et générer un statut de warning ou d'error selon la gravité de l'écart.
-    \item \textbf{Gestion des métadonnées} : Chaque règle doit être documentée avec des attributs métier (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité, etc.).
+    \item \textbf{Sous-besoin 2.1 : Moteur de règles dynamique} : Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source ,
+    \item \textbf{Sous-besoin 2.2 : Graduation des seuils et des alertes} : Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (ex : taux de valeurs manquantes inférieur à 5\%) et générer un statut de warning ou d'error selon la gravité de l'écart ,
+    \item \textbf{Sous-besoin 2.3 : Gestion des métadonnées} : Chaque règle doit être documentée avec des attributs métier (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité, etc.).
 \end{itemize}
 
 \subsection{Historisation et traçabilité des indicateurs}
 \begin{itemize}
-    \item \textbf{Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans une table d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution.
-    \item \textbf{Identification des anomalies (Remédiation)} : Le système doit capturer de manière détaillée la liste des enregistrements clients en anomalie en stockant leur identifiant technique (UUID) et leur radical (numéro client), ainsi que le libellé du contrôle en échec et sa criticité. Ces informations doivent être stockées dans une table d'anomalies pour actions correctives.
+    \item \textbf{Sous-besoin 3.1 : Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans une table d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution ,
+    \item \textbf{Sous-besoin 3.2 : Identification des anomalies (Remédiation)} : Le système doit capturer de manière détaillée la liste des enregistrements clients en anomalie en stockant leur identifiant technique (UUID) et leur radical (numéro client), ainsi que le libellé du contrôle en échec et sa criticité. Ces informations doivent être stockées dans une table d'anomalies pour actions correctives.
 \end{itemize}
 
 \subsection{Restitution visuelle et aide à la décision}
 \begin{itemize}
-    \item \textbf{Exposition des données} : Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels.
-    \item \textbf{Suivi de l'évolution temporelle} : Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (30 derniers jours).
-    \item \textbf{Priorisation des remédiations} : Le tableau de bord doit fournir une liste opérationnelle des clients en anomalie triée par criticité décroissante, exportable par les Data Stewards pour traitement correctif dans le système source NOVA.
+    \item \textbf{Sous-besoin 4.1 : Exposition des données} : Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels ,
+    \item \textbf{Sous-besoin 4.2 : Suivi de l'évolution temporelle} : Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (30 derniers jours) ,
+    \item \textbf{Sous-besoin 4.3 : Priorisation des remédiations} : Le tableau de bord doit fournir une liste opérationnelle des clients en anomalie triée par criticité décroissante, exportable par les Data Stewards pour traitement correctif dans le système source NOVA.
 \end{itemize}
 
 % =========================
@@ -39,113 +39,152 @@ Les besoins fonctionnels décrivent les actions que le système doit être capab
 
 Les besoins non fonctionnels expriment les exigences qualitatives, opérationnelles et techniques que la solution doit respecter pour être viable et performante dans l'environnement de production de CIH BANK :
 
-\subsection{Performance et passage à l'échelle (Scalabilité)}
+\subsection{Performance}
 Le Référentiel Tiers de la banque regroupe \textbf{plusieurs millions} de dossiers clients (personnes physiques). Les règles de cohérence inter-colonnes ou de doublons nécessitent des jointures lourdes. Le moteur DQ doit être capable d'interroger et d'évaluer ce volume massif de données en un temps minimal (moins de 15 minutes) sans dégrader les ressources du Data Lake. Cela justifie l'utilisation d'un moteur de calcul distribué (Apache Spark) pour le traitement.
 
-\subsection{Robustesse et découplage (Tolérance aux pannes)}
+\subsection{Disponibilité}
 L'exécution des contrôles de qualité ne doit pas bloquer la disponibilité des données pour les outils de reporting en cas d'anomalie. Si un seuil de qualité est franchi ou si le scan échoue, le pipeline d'exposition (Dremio/Tableau) doit continuer à fonctionner en mode dégradé en signalant l'alerte. De plus, la tâche DQ doit s'exécuter même si certaines tables d'ingestion n'ont été chargées que partiellement.
 
-\subsection{Maintenabilité et extensibilité}
+\subsection{Maintenabilité}
 L'ajout de nouvelles règles ou l'intégration de nouvelles colonnes du Référentiel Tiers (par exemple pour de nouveaux critères réglementaires ou pour les personnes morales) doit se faire sans modification du code Python principal de la solution. Les fichiers de configuration YAML et la structure des tables Hive de résultats doivent être conçus de manière générique pour supporter l'extensibilité.
 
-\subsection{Sécurité et gouvernance}
-Les détails d'anomalies de qualité des données contiennent des informations clients sensibles (noms, prénoms, radicaux). Seuls les collaborateurs habilités du Data Office (Data Stewards, Data Project) et les Data Owners des départements concernés doivent être autorisés à accéder aux détails des anomalies. La solution doit ainsi s'appuyer sur la gestion des droits d'accès existante de Dremio et de Tableau.
+\subsection{Sécurité}
+Les détails d'anomalies de qualité des données contiennent des informations clients sensibles (\texttt{name}, \texttt{firstname}, radicaux). Seuls les collaborateurs habilités du Data Office (Data Stewards, Data Project) et les Data Owners des départements concernés doivent être autorisés à accéder aux détails des anomalies. La solution s'appuie sur les mécanismes de sécurité existants de la plateforme :
+\begin{itemize}
+    \item \textbf{Authentification Kerberos} : L'ensemble des composants du cluster Cloudera (HDFS, Hive, Spark) sont sécurisés par Kerberos, garantissant l'identité de chaque service et utilisateur ,
+    \item \textbf{Autorisation Apache Ranger} : Les politiques d'accès aux tables Hive et aux espaces HDFS sont gérées de manière centralisée via Ranger, permettant un contrôle fin par rôle ,
+    \item \textbf{Annuaire LDAP / Active Directory} : L'authentification des utilisateurs Dremio et Tableau est déléguée à l'annuaire d'entreprise, assurant une gestion unifiée des identités.
+\end{itemize}
 
 % =========================
 \section{Modélisation des cas d'utilisation}
 
-Afin de représenter formellement les interactions entre les utilisateurs et la solution de Data Quality, nous présentons ci-dessous les acteurs identifiés ainsi que la modélisation globale des cas d'utilisation.
-
 \subsection{Acteurs du système}
-Nous identifions trois acteurs principaux interagissant avec le système :
-\begin{itemize}
-    \item \textbf{Data Steward / Data Owner (Acteur humain)} : Il s'agit des gestionnaires de la donnée. Ils définissent les règles de qualité dans les fichiers YAML, consultent les dashboards Tableau pour suivre les indicateurs globaux, et exportent les anomalies pour lancer des chantiers de correction.
-    \item \textbf{Système d'Orchestration Airflow (Acteur système)} : Il s'agit du planificateur automatique. Il déclenche le pipeline de contrôles chaque soir après l'ingestion et remonte le statut d'exécution.
-    \item \textbf{Système Source (Oracle NOVA) (Acteur externe)} : C'est le récepteur final des corrections de données opérées manuellement par les gestionnaires ou les agences suite aux alertes DQ.
-\end{itemize}
+L'intégration de la solution de Data Quality au sein de CIH BANK repose sur une étroite collaboration entre les experts métier, l'équipe technique et les systèmes d'information. Le tableau \ref{tab:acteurs_dq} présente les cinq acteurs clés du système.
+
+\begin{table}[H]
+\centering
+\caption{Acteurs du système de Data Quality}
+\label{tab:acteurs_dq}
+\renewcommand{\arraystretch}{1.4}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|l|p{9cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Acteur} & \textbf{Type} & \textbf{Rôle dans le système DQ} \\
+\hline
+Équipe Data (DE / Data Steward) & Interne & Organise les ateliers d'alignement, formalise les règles dans les fichiers YAML Soda Core et implémente les flux techniques. \\
+\hline
+Métiers (Data Owners) & Humain & Experts fonctionnels qui définissent et valident les règles de qualité, consultent le dashboard et remédient aux anomalies. \\
+\hline
+Équipe SI & Appui & Valide la faisabilité technique des règles vis-à-vis du modèle physique Oracle NOVA. \\
+\hline
+Airflow (Orchestrateur) & Système & Déclenche automatiquement le scan DQ chaque soir après l'ingestion (DAG \texttt{dailyow22}). \\
+\hline
+Oracle NOVA (Système source) & Externe & Récepteur final des corrections de données opérées par les gestionnaires suite aux alertes DQ. \\
+\hline
+\end{tabular}
+}
+\end{table}
 
 \subsection{Diagramme global des cas d'utilisation}
-
-Le diagramme ci-dessous synthétise graphiquement les cas d'utilisation de la solution et leurs acteurs associés.
+Le diagramme ci-dessous synthétise graphiquement les cas d'utilisation du système de Data Quality et les interactions avec les différents acteurs impliqués dans ce cycle de gouvernance.
 
 \begin{figure}[H]
 \centering
-\begin{minipage}{0.9\textwidth}
-\centering
-\small
-\begin{verbatim}
-                      +---------------------------------------+
-                      |         SYSTEME DATA QUALITY          |
-                      |                                       |
- +----------------+   |      [UC01 : Configurer regles]       |
- |                | --+---> (Fichiers YAML de controle)       |
- |  Data Steward  |   |                                       |
- |  / Data Owner  | --+---> [UC02 : Visualiser dashboards]    |
- |                |   |        (Suivi des indicateurs/KPIs)   |
- +----------------+   |                                       |
-                      |     [UC03 : Consulter anomalies]      |
-                      |        (Exportation pour correction)  |
-                      |                      ^                |
-                      |                      |                |
- +----------------+   |                      | (persistance)  |
- |                |   |                      |                |
- |  Orchestrateur | --+---> [UC04 : Executer scan DQ]         |
- |    Airflow     |   |        (Traitement Spark sur RAW)     |
- |                |   |                                       |
- +----------------+   +---------------------------------------+
-\end{verbatim}
-\end{minipage}
-\caption{Diagramme global des cas d'utilisation de la solution DQ}
+\includegraphics[width=0.95\textwidth]{figures/usecaseGeneral.png}
+\caption{Diagramme global des cas d'utilisation de la solution DQ Tiers}
 \label{fig:usecase_dq}
 \end{figure}
 
 \subsection{Description textuelle des cas d'utilisation principaux}
+Nous détaillons ci-dessous le déroulement des trois phases principales constituant le cycle de vie de la qualité des données de notre solution.
 
-Nous détaillons ci-dessous le fonctionnement interne des trois cas d'utilisation principaux de notre système :
+\subsubsection{Cas d'utilisation 01 : Définir et formaliser les règles de qualité}
 
-\subsubsection{Cas d'utilisation 01 : Configurer les règles de qualité}
-\begin{itemize}
-    \item \textbf{Acteur principal} : Data Steward.
-    \item \textbf{Préconditions} : Accès aux spécifications métier (critères KYC et CSP).
-    \item \textbf{Scénario nominal} :
-    \begin{enumerate}
-        \item Le Data Steward ouvre ou crée un fichier de configuration YAML (\texttt{checks\_kyc.yml} ou \texttt{checks\_csp.yml}).
-        \item Il y déclare les contrôles pour chaque colonne concernée (ex : \texttt{missing\_count}, \texttt{valid values}).
-        \item Il associe à chaque règle ses attributs métier (criticité, domaine, dimension).
-        \item Il sauvegarde le fichier et le déploie sur le serveur d'exécution.
-    \end{enumerate}
-    \item \textbf{Postconditions} : Les nouvelles règles sont prêtes à être exécutées lors du prochain scan automatique.
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Description du cas d'utilisation 01}
+\label{tab:uc01}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Champ} & \textbf{Description} \\
+\hline
+\textbf{Titre} & Définir et formaliser les règles de qualité \\
+\hline
+\textbf{Acteurs} & Équipe Data (Steward / DE), Métiers (Data Owners), Équipe SI \\
+\hline
+\textbf{Préconditions} & Cadrage fonctionnel du domaine Tiers défini \\
+\hline
+\textbf{Scénario nominal} &
+1. L'équipe Data organise des ateliers d'alignement avec les experts Métier et l'équipe SI. \newline
+2. Les parties s'accordent sur le catalogue des contrôles (complétude KYC, cohérence CSP) et les seuils de tolérance. \newline
+3. L'équipe Data consigne les spécifications dans un document de cadrage. \newline
+4. Le Data Engineer implémente les règles dans les fichiers YAML Soda Core. \\
+\hline
+\textbf{Postconditions} & Les règles de qualité sont formalisées et déployées dans le moteur Soda. \\
+\hline
+\end{tabular}
+\end{table}
 
-\subsubsection{Cas d'utilisation 02 : Exécuter le scan de qualité des données}
-\begin{itemize}
-    \item \textbf{Acteur principal} : Orchestrateur Airflow (Système).
-    \item \textbf{Préconditions} : Ingestion dailyow22 terminée, fichiers YAML configurés.
-    \item \textbf{Scénario nominal} :
-    \begin{enumerate}
-        \item Airflow déclenche la tâche \texttt{run\_dq\_tiers\_checks} suite à la fin du chargement Sqoop.
-        \item Le moteur DQ initialise une SparkSession et charge les règles YAML.
-        \item Le moteur applique les contrôles sur la zone RAW Hive de manière distribuée.
-        \item Les anomalies et scores calculés sont stockés dans la base \texttt{dq\_results} de Hive.
-        \item Airflow marque la tâche comme terminée et envoie les logs d'exécution.
-    \end{enumerate}
-    \item \textbf{Postconditions} : Les données de qualité sont prêtes à être consultées dans Dremio.
-\end{itemize}
+\subsubsection{Cas d'utilisation 02 : Exécuter le scan de qualité (automatique)}
 
-\subsubsection{Cas d'utilisation 03 : Consulter les anomalies et remédier}
-\begin{itemize}
-    \item \textbf{Acteurs} : Data Steward, Data Owner.
-    \item \textbf{Préconditions} : Exécution du scan DQ finalisée avec succès.
-    \item \textbf{Scénario nominal} :
-    \begin{enumerate}
-        \item Le Data Steward se connecte au dashboard Tableau de qualité des données.
-        \item Il consulte l'onglet « Anomalies et Remédiation » pour voir la liste des enregistrements non conformes.
-        \item Il filtre les anomalies par criticité (ex: CRITIQUE) et par domaine (ex: KYC).
-        \item Il exporte la liste contenant les radicaux clients concernés.
-        \item Il transmet la liste aux agences pour correction des données erronées directement dans Oracle NOVA.
-    \end{enumerate}
-    \item \textbf{Postconditions} : Les données corrigées dans NOVA seront ré-ingérées le lendemain soir à 22h, et le score DQ s'améliorera automatiquement.
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Description du cas d'utilisation 02}
+\label{tab:uc02}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Champ} & \textbf{Description} \\
+\hline
+\textbf{Titre} & Exécuter le scan de qualité (automatique) \\
+\hline
+\textbf{Acteur principal} & Orchestrateur Airflow (Système) \\
+\hline
+\textbf{Préconditions} & Fin de l'ingestion quotidienne Sqoop des tables NOVA \\
+\hline
+\textbf{Scénario nominal} &
+1. Airflow lance automatiquement la tâche DQ de nuit. \newline
+2. Le moteur DQ Soda Core lit les fichiers YAML et exécute les requêtes sur Spark. \newline
+3. Les résultats agrégés et les détails des anomalies clients sont historisés dans la base Hive \texttt{dq\_results}. \\
+\hline
+\textbf{Postconditions} & Les indicateurs et anomalies du jour sont prêts à être exposés. \\
+\hline
+\end{tabular}
+\end{table}
 
-\section*{Conclusion}
-Ce chapitre a permis de formaliser les besoins fonctionnels et non fonctionnels, définissant de manière précise les objectifs techniques et opérationnels du pipeline de qualité des données. La modélisation des acteurs et des cas d'utilisation à l'aide d'UML (Usecases) clarifie les frontières et le comportement de notre système. Fort de ces spécifications, le chapitre suivant présente la conception globale et détaillée de la solution.
+\subsubsection{Cas d'utilisation 03 : Consulter le dashboard et remédier aux anomalies}
+
+\begin{table}[H]
+\centering
+\caption{Description du cas d'utilisation 03}
+\label{tab:uc03}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Champ} & \textbf{Description} \\
+\hline
+\textbf{Titre} & Consulter le dashboard et remédier aux anomalies \\
+\hline
+\textbf{Acteurs} & Métiers (Parties prenantes), Data Stewards \\
+\hline
+\textbf{Préconditions} & Le scan DQ s'est exécuté de manière conforme \\
+\hline
+\textbf{Scénario nominal} &
+1. Le dashboard Tableau se rafraîchit automatiquement chaque matin. \newline
+2. Chaque partie prenante consulte le dashboard depuis son poste de travail. \newline
+3. Chaque acteur filtre et exporte la liste des anomalies de son périmètre. \newline
+4. Les acteurs procèdent à la correction des anomalies dans Oracle NOVA. \\
+\hline
+\textbf{Postconditions} & Les données corrigées dans NOVA sont ré-ingérées lors du prochain batch et le score DQ s'améliore automatiquement. \\
+\hline
+\end{tabular}
+\end{table}
+
+\section*{Conclusion du chapitre}
+Ce chapitre a permis de formaliser les besoins fonctionnels et non fonctionnels, définissant de manière précise les objectifs techniques et opérationnels du pipeline de qualité des données. La modélisation des acteurs et des cas d'utilisation reflète fidèlement le cycle de gouvernance de CIH BANK, où chaque partie prenante collabore d'abord à la définition des contrôles, puis intervient individuellement sur son périmètre pour corriger les anomalies identifiées au quotidien. Fort de ces spécifications, le chapitre suivant présente la conception globale et détaillée de la solution.

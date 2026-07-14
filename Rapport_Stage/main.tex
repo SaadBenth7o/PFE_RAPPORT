@@ -5,9 +5,11 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{xcolor}
+\usepackage{colortbl}
 \usepackage{titlesec}
 \usepackage{setspace}
 \usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, shapes.multipart, arrows.meta, calc}
 \usepackage{pdflscape}
 \usepackage{caption}
 \usepackage{float}
@@ -83,6 +85,9 @@
   morestring=[b]"
 }
 
+
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
 
 \begin{document}
 

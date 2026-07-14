@@ -1,6 +1,6 @@
 \chapter{Présentation du cadre de projet}
 
-\section*{Introduction}
+\section*{Introduction du chapitre}
 Dans ce chapitre, nous présenterons une description générale de l’organisme d’accueil, CIH BANK, d’un point de vue organisationnel. Nous aborderons ensuite l'étude de l'existant, le choix du modèle de développement ainsi que le planning prévisionnel du projet, afin de mieux contextualiser notre travail de fin d'études.
 
 % =========================
@@ -44,10 +44,10 @@ Site web & www.cihbank.ma \\
 Spécialisé dans le financement immobilier et hôtelier, le CIH est une banque à vocation particulière :
 
 \begin{itemize}
-    \item Elle est un partenaire des pouvoirs publics en matière de financement du logement depuis 1920.
+    \item Elle est un partenaire des pouvoirs publics en matière de financement du logement depuis 1920 ,
     \item Elle finance les promoteurs immobiliers au Maroc, par deux canaux différents :
     \begin{itemize}
-        \item En amont : Par le financement des promoteurs publics et privés (acquisition et viabilisation des terrains ainsi que la construction des programmes immobiliers).
+        \item En amont : Par le financement des promoteurs publics et privés (acquisition et viabilisation des terrains ainsi que la construction des programmes immobiliers) ,
         \item En aval : Par l’octroi de crédits au logement pour les particuliers acquéreurs, sans oublier les services et produits proposés par la banque pour sa clientèle.
     \end{itemize}
 \end{itemize}
@@ -135,11 +135,11 @@ Parmi ces différentes directions, notre attention se porte plus particulièreme
 \paragraph*{Fonctions technologiques et data}
 
 \begin{itemize}
-\item Services Technologiques et Opérations : D. BENNOUNA
+\item Services Technologiques et Opérations : D. BENNOUNA ,
 \begin{itemize}
-\item Sécurité des Systèmes d’Information ;
-\item Qualité ;
-\item Pôle Systèmes d’Information : T. CHARKAOUI ;
+\item Sécurité des Systèmes d’Information ,
+\item Qualité ,
+\item Pôle Systèmes d’Information : T. CHARKAOUI ,
 \item Data Management \& Intelligence Artificielle :
 \begin{itemize}
 \item Data Office.
@@ -165,10 +165,10 @@ Le Data Office est aujourd’hui rattaché au pôle Services Technologiques et O
 
 Cette entité regroupe plusieurs profils complémentaires intervenant sur l’ensemble du cycle de vie de la donnée, notamment :
 \begin{itemize}
-\item Les Data Engineers, en charge de l’ingestion, du traitement et de la mise à disposition des données ,
-\item Les Data Analysts, responsables de l’analyse des données et de la production d’indicateurs décisionnels ,
-\item Les Data Scientists, spécialisés dans la modélisation avancée et l’analyse prédictive ,
-\item L’équipe Data Management, qui assure la gouvernance, la qualité et la structuration des données .
+\item Les Data Engineers, en charge de l’ingestion, du traitement et de la mise à disposition des données,
+\item Les Data Analysts, responsables de l’analyse des données et de la production d’indicateurs décisionnels,
+\item Les Data Scientists, spécialisés dans la modélisation avancée et l’analyse prédictive,
+\item L’équipe Data Management, qui assure la gouvernance, la qualité et la structuration des données.
 \end{itemize}
 
 Les données sont collectées à partir des différents systèmes opérationnels de la banque, puis intégrées et centralisées au sein d’un Data Lake. Elles sont ensuite transformées et mises à disposition pour répondre aux besoins analytiques, réglementaires et métiers.
@@ -177,343 +177,138 @@ Dans ce cadre, le Data Office joue un rôle central dans la mise en place des pr
 
 
 % =========================
-\section{Contexte et enjeux de la qualité des données bancaires}
-
-Dans l'écosystème financier contemporain, la transition vers une économie numérique a redéfini la nature des institutions bancaires. La donnée n'est plus un simple sous-produit de l'activité transactionnelle, mais s'impose comme une infrastructure essentielle sur laquelle reposent l'évaluation des risques, la conformité réglementaire et les décisions stratégiques. La qualité des données n'est pas un simple défi technique isolé, mais une discipline fondamentale ayant des répercussions directes sur la viabilité économique et la stabilité des institutions financières.
-
-\subsection{Cadre réglementaire prudentiel : BCBS 239 et guide RDARR}
-
-La crise financière de 2007-2008 a révélé l'incapacité de nombreuses institutions bancaires à agréger rapidement leurs expositions aux risques. C'est dans ce contexte que le Comité de Bâle a introduit la directive \textbf{BCBS 239} (\textit{Principles for effective risk data aggregation and risk reporting}), devenue le standard international de gestion des données financières. 
-
-Ce cadre réglementaire impose des exigences strictes en matière de gouvernance et de contrôle de la qualité :
-\begin{itemize}
-    \item \textbf{Exactitude et intégrité (Principe 3) :} Les banques doivent implémenter des contrôles automatisés capables de valider les données de risque et de réduire au minimum les ajustements manuels.
-    \item \textbf{Exhaustivité (Principe 4) :} L'institution doit être en mesure d'agréger l'ensemble de ses positions de risque, un seuil d'exhaustivité de 95 \% étant généralement exigé.
-    \item \textbf{Promptitude (Principe 5) :} Les rapports de risques doivent être produits dans des délais très courts pour permettre des décisions rapides en cas de crise.
-\end{itemize}
-
-Face aux progrès d'implémentation jugés insatisfaisants par les autorités, la Banque Centrale Européenne (BCE) a intensifié sa surveillance en publiant en mai 2024 son guide définitif sur l'agrégation efficace des données sur les risques (\textbf{RDARR}), introduisant des exigences renforcées et des sanctions accrues (majorations d'exigences de fonds propres) en cas de non-conformité.
-
-\subsection{Le coût économique de la non-qualité et la \textit{Rule of Ten}}
-
-Sur le plan économique, l'impact d'une mauvaise qualité des données se propage à travers l'ensemble des processus métiers. Selon les recherches du cabinet Gartner, les grandes organisations perdent en moyenne entre 12,9 et 15 millions de dollars par an en raison d'une mauvaise qualité des données. 
-
-Ce coût de la non-qualité s'explique principalement par deux phénomènes documentés en recherche académique :
-\begin{itemize}
-    \item \textbf{Les usines à données fantômes (\textit{hidden data factories}) :} Les collaborateurs consacrent une part significative de leur temps de travail à corriger manuellement les anomalies avant de pouvoir exploiter l'information, masquant le coût réel de l'inefficacité opérationnelle.
-    \item \textbf{La règle de dix (\textit{Rule of Ten}) :} Ce principe de modélisation stipule qu'il coûte environ dix fois plus cher de corriger une donnée en aval (lorsqu'elle a déjà été intégrée dans les rapports ou consommée par les métiers) que de la valider et de la corriger directement en amont lors de sa saisie ou de son ingestion.
-\end{itemize}
-
-\subsection{Bénéfices et création de valeur d'un programme de Data Quality}
-
-À l'inverse des coûts générés par la non-qualité, la mise en place d'un contrôle automatique et d'une gouvernance proactive apporte une valeur mesurable :
-\begin{itemize}
-    \item \textbf{Optimisation des fonds propres :} L'amélioration de la qualité des données permet d'éliminer les marges de prudence excessives appliquées aux modèles internes de risque de crédit, optimisant ainsi l'allocation du capital.
-    \item \textbf{Efficacité opérationnelle :} L'automatisation des contrôles réduit de près de 50 \% les effectifs et le temps dédiés aux ajustements manuels de fin de mois.
-    \item \textbf{Sécurisation des décisions :} À l'ère de l'intelligence artificielle et de l'automatisation, des données propres garantissent la fiabilité des modèles décisionnels et préviennent les dérives algorithmiques.
-\end{itemize}
-
-% =========================
 \section{Étude de l'existant}
 
 \subsection{Description de l'existant}
 
-Historiquement, la vérification de la qualité des données au sein de CIH BANK ne reposait sur aucun processus formel ni outil automatisé. L'absence d'un tel contrôle a d'ailleurs motivé la création récente de l'entité Data Management (DM). En pratique, le processus était exclusivement réactif et déclenché sur demande. Lorsqu'une anomalie ou une incohérence (notamment sur les données relatives au KYC ou aux Catégories Socioprofessionnelles - CSP) était constatée par les équipes métiers lors de l'exploitation de la donnée, une réclamation était émise. L'équipe Data Project prenait alors le relais en collaborant étroitement avec les Data Engineers. La résolution de ces incidents nécessitait souvent l'intervention d'autres départements du Système d'Information (SI), voire des métiers eux-mêmes, afin d'effectuer des tâches de réconciliation manuelles de manière curative.
+\subsubsection*{Contexte et enjeux de la qualité des données bancaires}
+Dans l'écosystème financier contemporain, la transition vers une économie numérique a redéfini la nature des institutions bancaires. La donnée n'est plus un simple sous-produit de l'activité transactionnelle, mais s'impose comme une infrastructure essentielle sur laquelle reposent l'évaluation des risques, la conformité réglementaire (notamment BCBS 239 et le guide RDARR de la BCE) et les décisions stratégiques.
+Sur le plan économique, le coût de la non-qualité est très élevé. La « règle de dix » (\textit{Rule of Ten}) stipule qu'il coûte dix fois plus cher de corriger une donnée en aval que de la valider directement à la source. Une gouvernance proactive apporte une valeur mesurable : optimisation des fonds propres, efficacité opérationnelle et sécurisation des décisions basées sur l'intelligence artificielle.
 
-\subsection{Le domaine Tiers : périmètre métier du projet}
+\subsubsection*{Le domaine Tiers : Cartographie et données}
+Historiquement, la vérification de la qualité des données au sein de CIH BANK était un processus réactif déclenché sur demande, ce qui a motivé la création de l'entité Data Management (DM). Notre projet s'inscrit dans cette volonté d'amélioration continue et cible plus particulièrement le \textbf{Référentiel Tiers}. Ce référentiel regroupe l'ensemble des informations relatives aux personnes physiques et morales en relation avec la banque.
 
-\subsubsection{Définition du Référentiel Tiers}
+Dans le cadre de l'ingestion des données vers le Data Lake, l'équipe travaille sur plus d'une dizaine de tables du domaine Tiers. À titre d'exemple et d'illustration, voici les cinq tables principales extraites du système opérant Oracle NOVA (\texttt{CCM}) qui structurent notre périmètre de base :
+\begin{itemize}
+    \item \texttt{identity} : Données relatives aux pièces d'identité (type, numéro, date d'expiration),
+    \item \texttt{legalentity} : Informations sur les personnes morales (raison sociale, forme juridique),
+    \item \texttt{person} : Informations générales sur le statut du client (marché, agence, type),
+    \item \texttt{professionaldescription} : Caractéristiques professionnelles et financières des entités,
+    \item \textbf{\texttt{np\_description} (Natural Person Description)} : Données d'état civil, d'identification et informations KYC (Know Your Customer) pour les personnes physiques.
+\end{itemize}
 
-Le \textbf{Référentiel Tiers} constitue le référentiel central de CIH Bank regroupant l'ensemble des informations relatives aux personnes physiques (PP) et morales (PM) en relation avec la banque. Ce référentiel est la source de vérité pour toutes les applications métiers : les crédits, la comptabilité, le reporting réglementaire et les outils de CRM.
+Bien que notre étude de l'existant englobe ce vaste écosystème de tables, \textbf{l'implémentation technique, les algorithmes et les règles de Data Quality développés dans la suite de ce rapport se concentreront exclusivement sur la table \texttt{np\_description}}. Cette table est éminemment stratégique car elle concentre les données KYC indispensables à l'identification réglementaire du client, telles que : le nom, le prénom, la date de naissance, la civilité, le genre, la nationalité, et l'identifiant FATCA (pour les clients américains).
 
-Notre projet se concentre sur le périmètre des \textbf{Personnes Physiques (PP) Clients}, qui regroupe l'ensemble des clients particuliers et MRE (Marocains Résidant à l'Étranger) actifs de CIH Bank, soit plus de plusieurs millions de clients. Le filtre appliqué en production est : \texttt{customer\_type = 1} et \texttt{code\_marche IN (1, 8)}.
-
-\subsubsection{Les colonnes KYC et CSP : données critiques du Référentiel Tiers}
-
-Les colonnes ciblées par notre projet de Data Quality sont réparties en deux grands domaines :
-
-\subsubsection{Données KYC (\textit{Know Your Customer})}
-
-Les données KYC sont les informations d'identification réglementaires obligatoires pour chaque client. Elles sont issues de la table \texttt{CCM\_NPDESCRIPTION} du système Oracle NOVA et comprennent notamment :
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{5cm}|}
-\hline
-\textbf{Colonne NOVA} & \textbf{Colonne CIHONE} & \textbf{Rôle métier} \\
-\hline
-NOM & nom & Nom de famille du client \\
-\hline
-PRENOM & prenom & Prénom du client \\
-\hline
-DATE\_NAISSANCE & date\_de\_naissance & Date de naissance \\
-\hline
-CIVILITE & civilite & Civilité : M., MME, MLLE \\
-\hline
-GENRE & genre & Genre : M ou F \\
-\hline
-CODE\_NATIONALITE & code\_pays\_de\_nationalite & Code pays de nationalité \\
-\hline
-CODE\_PAYS\_RESIDENCE & code\_pays\_de\_residence & Pays de résidence \\
-\hline
-IDENTIFIANT\_FATCA & identifiant\_fatca & Numéro FATCA (clients US) \\
-\hline
-DATE\_IMPRESSION\_KYC & --- & Date impression fiche KYC \\
-\hline
-\end{tabular}
-\caption{Colonnes KYC du Référentiel Tiers PP}
-\end{table}
-
-\subsubsection{Données CSP (\textit{Catégorie Socio-Professionnelle})}
-
-Les données CSP décrivent la situation professionnelle du client. Elles proviennent de la table \texttt{CCM\_JOB} et comprennent :
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{5cm}|}
-\hline
-\textbf{Colonne NOVA} & \textbf{Colonne CIHONE} & \textbf{Rôle métier} \\
-\hline
-CODE\_SECTEUR\_PRO & code\_secteur\_professionel & Code secteur (ex : 46=Agriculture) \\
-\hline
-CODE\_PROFESSION & code\_profession & Code profession détaillée \\
-\hline
-CODE\_CSP & code\_categorie\_socio\_professionelle & Catégorie socio-professionnelle \\
-\hline
-SITUATION\_PRO & situation\_professionelle & SAL, FON, TRI, AUT, EMP, NDE \\
-\hline
-EMPLOYEUR & employeur & Nom de l'employeur \\
-\hline
-PPE & --- & Personne Politiquement Exposée \\
-\hline
-NUM\_CNSS & --- & Numéro de sécurité sociale \\
-\hline
-\end{tabular}
-\caption{Colonnes CSP du Référentiel Tiers PP}
-\end{table}
-
-% =========================
-\subsection{Le pipeline de données existant : de NOVA à Tableau}
-
-\subsubsection{Vue d'ensemble de l'architecture}
-
-Les données du Référentiel Tiers suivent un parcours en plusieurs étapes, depuis le système opérant Oracle NOVA jusqu'aux outils de visualisation, en passant par un Data Lake Hadoop. Le schéma ci-dessous décrit l'architecture globale de ce flux de bout en bout.
+\subsubsection*{Architecture et pipeline de données}
+L'ensemble des données ingérées au sein de CIH BANK, incluant celles du domaine Tiers, transite par une plateforme robuste centralisée s'appuyant sur une infrastructure Big Data de pointe. Tout l'écosystème analytique repose sur ce système unifié pour le traitement et la valorisation de la donnée.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/description_de_lexistant.png}
-\caption{Architecture du pipeline de données Référentiel Tiers PP Clients}
-\label{fig:pipeline_existant}
+\includegraphics[width=0.95\textwidth]{figures/Architecture et pipeline de données.png}
+\caption{Architecture matérielle Big Data}
+\label{fig:architecture_big_data}
 \end{figure}
 
-\subsubsection{Étape 1 — Système opérant : Oracle NOVA}
-
-La source de données est le système de \textit{Core Banking} \textbf{Oracle NOVA}, qui héberge le schéma \texttt{REFERENTIELTIERS}. Les tables sources principales utilisées sont :
-
-\begin{itemize}
-    \item \texttt{CCM\_PARTY} : informations générales du tiers (identifiant, numéro client, marché, état)
-    \item \texttt{CCM\_NATURALPERSON} : lien entre le tiers et sa description de personne physique
-    \item \texttt{CCM\_NPDESCRIPTION} : données d'état civil et KYC (nom, prénom, date de naissance, nationalité, FATCA)
-    \item \texttt{CCM\_JOB} : données socio-professionnelles CSP (secteur, profession, CSP, employeur)
-    \item \texttt{CCM\_PORTFOLIO} : portefeuille commercial (gestionnaire associé)
-    \item \texttt{CCM\_CONTEXT} : contexte de création du dossier client (agence, utilisateur)
-\end{itemize}
-
-\subsubsection{Étape 2 — Ingestion RAW vers HDFS/Hive}
-
-Le transfert quotidien des données depuis Oracle NOVA vers le Data Lake est orchestré par \textbf{Apache Airflow}. Le DAG principal du domaine Tiers est \textbf{\texttt{dailyow22}}, qui s'exécute chaque soir à \textbf{22h00}. Il utilise \textbf{Apache Sqoop} en mode \textit{OverWrite} (OW) Full pour importer l'ensemble des tables \texttt{CCM\_*} vers la base Hive \texttt{novatiers}, dans le répertoire HDFS \texttt{/data/raw/novatiers/}, au format ORC.
-
-Un second DAG, \textbf{\texttt{nova\_referentieltiers\_clients}}, alimente en parallèle la base Hive \texttt{raw\_nova\_referentieltiers}, qui est la base \textbf{directement consommée par Dremio} pour la construction des vues analytiques.
-
-\subsubsection{Étape 3 — Transformation STAGING}
-
-Un job \textbf{Apache Spark} (DAG \texttt{referentieltiers\_ingestion}, script \texttt{staging\_novareferentieltiersclients.sh}) transforme et charge les données depuis la zone RAW vers la zone STAGING, dans la base Hive \texttt{staging\_nova\_referentieltiers}, au format Parquet/ORC.
-
-\subsubsection{Étape 4 — Virtualisation Dremio}
-
-\textbf{Dremio} expose les données de staging via \textbf{10 vues virtuelles} dans le schéma \texttt{staging-nova-referentieltiers} :
-
-\begin{itemize}
-    \item \texttt{v.Customers} (source : \texttt{CCM\_PARTY})
-    \item \texttt{v.natural\_person\_description} (source : \texttt{CCM\_NPDESCRIPTION})
-    \item \texttt{v.customer\_job} (source : \texttt{CCM\_JOB})
-    \item \texttt{v.portfolio} (source : \texttt{CCM\_PORTFOLIO})
-    \item \texttt{v.customer\_creation\_context} (source : \texttt{CCM\_CONTEXT})
-    \item \texttt{v.customer\_segmentation} et \texttt{v.customer\_segmentation\_members}
-    \item \texttt{v.operational\_posts} (source : schéma \texttt{staging-e\_params})
-\end{itemize}
-
-\subsubsection{Étape 5 — Vue finale CIHONE (28 colonnes)}
-
-La vue analytique finale \textbf{CIHONE} résulte d'une jointure entre les 10 vues Dremio, filtrée sur \texttt{customer\_type=1} et \texttt{code\_marche IN (1,8)}, pour produire 28 colonnes décrivant chaque client PP actif de CIH Bank. Cette vue alimente les outils de reporting (Tableau) et les analyses métiers.
-
-% =========================
-
-
-\subsection{Critique de l'existant}
-
-L'approche décrite précédemment présente plusieurs limites majeures qui entravent la valorisation et la fiabilité du patrimoine de données de la banque :
-
-\begin{itemize}
-    \item \textbf{Approche exclusivement réactive :} Le système de gestion attend que les erreurs atteignent les utilisateurs finaux (les métiers) avant d'être traitées, ce qui impacte négativement les processus décisionnels et génère de la frustration.
-    \item \textbf{Lourdeur des processus de correction :} La résolution d'une simple anomalie nécessite la mobilisation asynchrone de plusieurs intervenants (métiers, Data Project, Data Engineers, équipes SI) pour des tâches de réconciliation manuelles extrêmement chronophages.
-    \item \textbf{Risques liés aux données critiques :} L'absence de vérification en amont, particulièrement pour des données réglementaires et stratégiques comme le KYC (Know Your Customer) et les CSP, expose la banque à des risques de non-conformité et fausse les modèles analytiques.
-\end{itemize}
-
-Ces limites soulignent l'incapacité de ce fonctionnement réactif à répondre de manière optimale à la volumétrie croissante des données et aux exigences réglementaires.
-
-\subsection{Analyse de la problématique technique}
-
-\subsubsection{Absence de contrôle qualité automatisé sur le pipeline}
-
-Bien que ce pipeline de données soit robuste et opérationnel, il ne dispose d'aucun mécanisme automatisé de contrôle de la qualité des données. Les données transitent quotidiennement depuis Oracle NOVA vers Dremio \textbf{sans aucune validation intermédiaire} sur les colonnes critiques KYC et CSP.
-
-Cette absence de contrôle génère plusieurs problèmes identifiés dans le domaine Tiers :
-
-\begin{itemize}
-    \item \textbf{Incohérences genre / civilité} : des clients de genre masculin associés à une civilité féminine (MME, MLLE) ou inversement, signalant une saisie erronée dans NOVA.
-    \item \textbf{Données CSP massivement nulles ou parasites} : les colonnes \texttt{professional\_sector}, \texttt{occupation} et \texttt{socioprofessional\_category} présentent des taux de valeurs nulles significatifs. Le champ \texttt{employer} contient de nombreuses valeurs parasites non normalisées telles que « AUTRE », « LUI MEME » ou « BIEN VU ».
-    \item \textbf{Dates de naissance approximatives} : une proportion notable de clients enregistre une date de naissance au 1er janvier, signalant une saisie par défaut faute d'information précise.
-    \item \textbf{Non-conformité FATCA} : des clients de nationalité américaine ne disposent d'aucun identifiant FATCA, exposant la banque à un risque réglementaire critique.
-    \item \textbf{Risque de fraîcheur} : aucune alerte ne se déclenche si le batch \texttt{dailyow22} échoue ou se termine en retard, laissant Dremio exposer des données potentiellement obsolètes.
-\end{itemize}
-
-\subsubsection{Absence d'historisation et de traçabilité}
-
-Les anomalies détectées manuellement ne sont ni tracées ni historisées. Il est donc impossible de mesurer l'évolution de la qualité des données dans le temps, d'identifier des tendances dégradantes ou de prouver une amélioration après une action corrective menée par les Data Stewards dans NOVA.
-
-\subsubsection{Absence d'outillage pour les Data Stewards}
-
-Les \textbf{Data Stewards} et \textbf{Data Owners} du domaine Tiers n'ont pas accès à un outil centralisé leur permettant de visualiser les anomalies, de les prioriser par criticité et de suivre l'avancement des corrections. La remédiation est aujourd'hui réactive et non structurée.
-
-% =========================
-
-
-\subsection{Solution proposée}
-
-Pour pallier les lacunes du système existant, il s'avère indispensable d'amorcer une transition d'un fonctionnement réactif vers une gestion proactive de la qualité des données. La solution que nous proposons consiste à concevoir et à mettre en œuvre un \textbf{pipeline automatisé de contrôle de la qualité des données}, ciblant dans un premier temps les données critiques liées au KYC et aux CSP.
-
-Cette solution permettra notamment de :
-\begin{itemize}
-    \item \textbf{Anticiper et prévenir les anomalies :} Les contrôles s'exécuteront automatiquement dès l'ingestion ou la transformation des données, bien avant qu'elles ne soient mises à la disposition des utilisateurs finaux.
-    \item \textbf{Automatiser les vérifications :} Le pipeline appliquera systématiquement un ensemble de règles métiers et techniques prédéfinies pour isoler les doublons, les valeurs manquantes ou les incohérences structurelles.
-    \item \textbf{Mettre en place une supervision continue :} Les résultats de ces contrôles seront consolidés dans des tableaux de bord, offrant aux équipes Data et Métiers une visibilité claire et en temps réel sur la santé des données.
-\end{itemize}
-
-Ce changement de paradigme garantira un gain de temps considérable, fiabilisera les analyses et renforcera la gouvernance globale de la donnée au sein de CIH BANK.
-
-% =========================
-\subsection{Solution proposée : automatisation de la Data Quality}
-
-\subsubsection{Vue d'ensemble de la solution}
-
-Pour répondre à ces problématiques, nous proposons de concevoir et de mettre en œuvre un \textbf{pipeline automatisé de Data Quality (DQ)} déclenché quotidiennement après chaque exécution du DAG \texttt{dailyow22}, basé sur la bibliothèque Python \textbf{Soda Core}. La solution s'articule autour de quatre composantes majeures :
-
+L'architecture matérielle et logicielle de cette plateforme de production s'articule autour d'un \textbf{cluster Cloudera et Dremio} composé de 8 nœuds (3 Masters, 3 Workers, 2 Gateways). Le flux global des données, de la source à l'exploitation, suit un cycle de vie standardisé en plusieurs étapes :
 \begin{enumerate}
-    \item \textbf{Moteur de contrôle DQ (Soda Core)} : un script Python exécutant des règles de qualité paramétrables sur les tables Hive des zones RAW et STAGING du domaine Tiers.
-    \item \textbf{Couche de persistance (HDFS/Hive)} : des tables Hive dédiées pour historiser quotidiennement les scores DQ et le détail des anomalies détectées.
-    \item \textbf{Exposition analytique (Dremio)} : des vues virtuelles Dremio exposant les résultats DQ historisés pour les outils de consommation.
-    \item \textbf{Dashboard de suivi (Tableau)} : un tableau de bord interactif permettant aux Data Stewards et Data Owners de visualiser les KPIs de qualité, l'évolution temporelle des scores et la liste priorisée des anomalies à corriger.
+    \item \textbf{Ingestion} : Les données brutes issues des systèmes opérants (tels qu'Oracle NOVA) sont ingérées massivement (souvent via Sqoop ou Kafka) et stockées dans la zone RAW du HDFS.
+    \item \textbf{Transformation} : Des jobs de traitement distribué (généralement via Apache Spark) nettoient, enrichissent et modélisent ces données brutes pour les charger dans la zone de STAGING.
+    \item \textbf{Virtualisation et Métadonnées} : Le moteur de données Dremio se connecte aux catalogues (Hive Metastore) pour virtualiser les tables. Il offre une couche sémantique puissante permettant de croiser et d'interroger les données sans les dupliquer.
+    \item \textbf{Exposition et Datamarts} : Les données transformées sont consolidées et exposées sous forme de Datamarts (ou vues métiers spécifiques). Ces ensembles de données prêts à l'emploi alimentent les outils de restitution (comme Tableau) pour répondre aux besoins analytiques des métiers.
 \end{enumerate}
 
-\subsubsection{Soda Core : bibliothèque Python de Data Quality}
-
-\textbf{Soda Core} est une bibliothèque Python open source dédiée au contrôle de la qualité des données. Elle permet de définir des règles de qualité (appelées \textit{checks}) dans des fichiers de configuration YAML, de les exécuter sur différentes sources de données (Hive, Spark, PostgreSQL, Snowflake, etc.) et de collecter les résultats de manière programmatique. [REF]
-
-Les avantages de Soda Core pour notre contexte sont les suivants :
-
+\subsection{Critique de l'existant}
+Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à la plupart des tables du domaine Tiers. Pour illustrer notre démarche de remédiation, nous nous focaliserons sur la table \texttt{np\_description}, qui contient des données particulièrement intéressantes concernant les personnes physiques (Natural Persons) :
 \begin{itemize}
-    \item \textbf{Compatibilité Hive / Spark} : Soda Core dispose d'un connecteur natif compatible avec l'environnement Hadoop de CIH Bank (\texttt{soda-core-spark}).
-    \item \textbf{Configuration déclarative} : les règles DQ sont définies en YAML, ce qui facilite leur maintenance et leur évolution sans modifier le code Python.
-    \item \textbf{Intégration Airflow} : Soda Core s'intègre nativement dans les DAGs Airflow via un opérateur Python, permettant de le déclencher automatiquement après chaque ingestion.
-    \item \textbf{Résultats programmatiques} : les résultats des checks (valeur calculée, seuil, statut) sont accessibles en Python, ce qui permet de les persister facilement dans des tables Hive.
+    \item \textbf{Absence de validation à la source :} Les données transitent vers Dremio sans aucune validation intermédiaire. Des incohérences flagrantes persistent, comme des discordances entre le genre et la civilité du client, ou des dates de naissance remplies par défaut (ex: 01/01/XXXX) ,
+    \item \textbf{Risques de non-conformité :} L'absence ou l'invalidité de certains champs critiques, tels que l'identifiant FATCA pour les clients concernés, expose la banque à des risques réglementaires et à d'éventuelles sanctions ,
+    \item \textbf{Démarche réactive et manuelle :} Lorsqu'une anomalie est repérée par les métiers en bout de chaîne, la réconciliation implique asynchronement plusieurs équipes pour des corrections curatives chronophages, créant ainsi des processus inefficaces ,
+    \item \textbf{Manque de traçabilité :} Aucune métrique n'est historisée. Les Data Stewards ne disposent d'aucun outil pour prioriser ou surveiller la santé des données KYC au quotidien.
 \end{itemize}
 
-\subsubsection{Périmètre des contrôles : la zone RAW uniquement}
+\subsection{Solution proposée}
+Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données}, intégré directement dans la zone RAW de l'infrastructure Hadoop, avec un focus particulier sur la table \texttt{np\_description}.
+Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données}, intégré directement dans la zone RAW de l'infrastructure Hadoop.
 
-Le choix de cibler la \textbf{zone RAW} du Data Lake comme unique point de contrôle est délibéré et justifié par plusieurs raisons :
-
+La solution technique s'articulera autour des axes suivants :
 \begin{itemize}
-    \item \textbf{Fidélité à la source} : la zone RAW (base Hive \texttt{raw\_nova\_referentieltiers}, chemin HDFS \texttt{/data/raw/novatiers/}) est la copie exacte et non transformée des tables \texttt{CCM\_*} issues d'Oracle NOVA. Contrôler la qualité sur RAW revient à mesurer directement la qualité du système opérant.
-    \item \textbf{Isolation des responsabilités} : en contrôlant avant la transformation STAGING, on distingue clairement les anomalies issues du système source (responsabilité des Data Stewards Tiers) des éventuels artefacts introduits par les scripts de transformation.
-    \item \textbf{Remédiation à la source} : les anomalies détectées sur RAW peuvent être remontées directement aux équipes saisie des agences pour correction dans NOVA, sans ambiguïté sur leur origine.
+    \item \textbf{Automatisation via Soda Core :} L'intégration de la bibliothèque Soda Core au sein des workflows Airflow existants permettra de valider systématiquement les données KYC (exhaustivité, unicité, validité de format, cohérence croisée) dès leur ingestion ,
+    \item \textbf{Approche proactive :} En signalant les anomalies en zone RAW, nous empêchons l'exploitation de données erronées par les métiers, appliquant ainsi le principe de la \textit{Rule of Ten} ,
+    \item \textbf{Monitoring et Restitution :} Les résultats des contrôles et les anomalies seront persistés dans des tables Hive dédiées. Un tableau de bord interactif sera ensuite construit pour offrir aux Data Stewards une vue claire de la santé des tables du référentiel. Les données sensibles affichées dans les tableaux de bord seront systématiquement anonymisées ou masquées pour garantir la confidentialité et la sécurité des informations clients.
 \end{itemize}
-
-\subsubsection{Déclenchement automatique post-ingestion}
-
-La solution s'insère dans le workflow Airflow existant. Une \textbf{tâche Python dédiée} (\texttt{run\_dq\_tiers\_checks}) est ajoutée dans le DAG \texttt{dailyow22}, en dépendance de toutes les tâches d'ingestion Sqoop des tables \texttt{CCM\_*}. Ainsi, les contrôles DQ se lancent \textbf{automatiquement chaque soir à 22h}, dès que les données RAW sont disponibles, sans intervention manuelle.
-
-\subsubsection{Historisation et traçabilité quotidienne}
-
-Les résultats de chaque exécution sont persistés dans deux tables Hive partitionnées par date (\texttt{run\_date}) dans une base dédiée \texttt{dq\_results} :
-
-\begin{itemize}
-    \item \textbf{\texttt{dq\_tiers\_scores}} : enregistre, pour chaque combinaison table/colonne/règle, la valeur calculée, le seuil configuré, le statut (OK/KO) et le score DQ normalisé sur 100.
-    \item \textbf{\texttt{dq\_tiers\_anomalies}} : enregistre le détail des enregistrements clients (\texttt{identifier}, \texttt{radical}) en situation d'anomalie, avec la description de la règle violée et la criticité associée.
-\end{itemize}
-
-Cette historisation permet de mesurer l'\textbf{évolution temporelle} de la qualité des données à la source et de quantifier l'impact des corrections effectuées dans NOVA par les Data Stewards.
-
-
+Cette solution permettra d'améliorer considérablement la gouvernance des données du domaine Tiers tout en optimisant le temps de traitement des anomalies.
 
 \section{Choix du modèle de développement}
 
-Dans le cadre de ce projet de fin d'études, nous avons opté pour une approche de développement classique et séquentielle, s'apparentant au modèle en cascade (Waterfall) ou au cycle en V. 
+Dans le cadre de ce projet de fin d'études, plutôt que d'adopter un modèle purement séquentiel en cascade, nous avons opté pour une approche \textbf{itérative et incrémentale} s'inspirant des méthodes agiles. 
 
-Ce choix a été motivé par la nature du projet de conception d'un pipeline de contrôle qualité, qui nécessite des étapes bien définies et successives : une étude approfondie de l'existant, une modélisation et une conception précises des règles de qualité, suivies d'une phase de développement (implémentation du pipeline) et enfin d'une période de tests et de validation.
+Ce choix a été motivé par la complexité de l'écosystème Big Data existant et l'étendue du domaine Tiers. Il était impossible de livrer une solution parfaite en une seule fois. Le projet a donc été rythmé par la réalisation de \textit{Proof of Concepts} (POC) et de \textit{Minimum Viable Products} (MVP), permettant de valider les règles de qualité table par table, et étape par étape. 
 
-Bien que ce modèle classique impose un rythme séquentiel et que l'avancement puisse parfois connaître des fluctuations (en fonction des contraintes techniques, de la disponibilité des données ou des dépendances avec d'autres équipes), il permet de garantir un cadre de travail structuré. Il assure notamment une validation claire et une documentation rigoureuse de chaque jalon avant de passer à l'étape suivante. Cette structuration s'est avérée particulièrement pertinente pour s'assurer que les exigences métiers, notamment réglementaires concernant les données KYC et CSP, soient parfaitement intégrées dès la phase de conception.
+Cette démarche nous a permis de maintenir une collaboration continue avec les équipes métiers, et tout particulièrement avec le Data Steward du domaine Tiers et les équipes du Système d'Information (SI), via des points de synchronisation réguliers tout au long des six mois de stage.
 
 % =========================
 \section{Planning prévisionnel}
 
-Afin de mener à bien ce projet de fin d'études au sein de l'entité Data Management de CIH BANK, nous avons défini un planning prévisionnel rigoureux s'étalant sur une durée de six mois, du 9 février au 9 août 2026. 
+Afin de mener à bien ce projet au sein du Data Office de CIH BANK, nous avons défini un planning de travail couvrant une période de six mois, du \textbf{9 février au 9 août 2026}. 
 
-Le déroulement du projet a été structuré autour de quatre grandes phases séquentielles, conformément au cycle de vie adopté :
-\begin{itemize}
-    \item \textbf{Étude de l'existant et cadrage :} Imprégnation du contexte bancaire, compréhension des limites des processus de contrôle qualité actuels et recueil des besoins.
-    \item \textbf{Conception :} Modélisation des règles de qualité de données (Data Quality) spécifiques au KYC et aux CSP, et conception de l'architecture du pipeline.
-    \item \textbf{Réalisation :} Phase centrale dédiée à l'implémentation technique des règles métiers et du pipeline automatisé.
-    \item \textbf{Tests et Déploiement :} Validation de la fiabilité des contrôles, tests de bout en bout, et élaboration des tableaux de bord de supervision.
-\end{itemize}
+Contrairement à un projet classique, l'avancement n'a pas été strictement linéaire. Les deux premiers mois ont été presque exclusivement dédiés à la compréhension fonctionnelle, technique, et à la documentation détaillée de l'architecture existante. Par la suite, les phases de conception, de réalisation des POCs, et de tests se sont superposées de manière itérative, accompagnées de réunions continues avec les métiers.
 
-La figure \ref{fig:gantt} ci-dessous illustre le diagramme de Gantt représentant l'échelonnement temporel de ces différentes étapes tout au long du stage.
+La figure \ref{fig:gantt} ci-dessous illustre ce déroulement sous forme d'un diagramme de Gantt, mettant en évidence la phase initiale de documentation, le cycle itératif de développement, et l'implication constante des acteurs métiers.
+
+\definecolor{ganttblue}{RGB}{68,114,196}
+\definecolor{ganttbluecell}{RGB}{155,187,227}
+\definecolor{ganttorange}{RGB}{237,125,49}
+\definecolor{ganttorangecell}{RGB}{248,203,173}
+\definecolor{ganttgreencell}{RGB}{169,208,142}
+\definecolor{ganttheader}{RGB}{68,114,196}
 
 \begin{figure}[H]
     \centering
     \begin{ganttchart}[
-        vgrid={*1{draw=black!20}},
-        hgrid,
+        expand chart=\textwidth,
+        y unit title=0.6cm,
+        y unit chart=0.55cm,
+        canvas/.append style={draw=black, line width=0.6pt},
+        hgrid style/.style={draw=black!70, line width=0.4pt},
+        vgrid={*1{draw=black!70, line width=0.4pt}},
+        title/.style={draw=black, fill=ganttheader, line width=0.6pt},
+        title label font=\bfseries\scriptsize\color{white},
+        bar height=1,
+        bar top shift=0,
+        bar/.append style={fill=ganttbluecell, draw=none},
+        group height=1,
+        group top shift=0,
+        group/.append style={draw=none, fill=ganttorangecell},
+        group right shift=0,
+        group left shift=0,
+        group peaks width=0,
+        group peaks height=0,
+        bar label font=\scriptsize,
+        group label font=\bfseries\scriptsize,
+        bar label node/.append style={draw=black!70, line width=0.4pt, fill=white, text width=4.8cm, align=left, inner xsep=3pt, inner ysep=0pt, minimum height=0.55cm, anchor=east},
+        group label node/.append style={draw=black!70, line width=0.4pt, fill=ganttorangecell!50, text width=4.8cm, align=left, inner xsep=3pt, inner ysep=0pt, minimum height=0.55cm, anchor=east},
+        include title in canvas=true,
         time slot format=isodate-yearmonth,
-        time slot unit=month,
-        x unit=1.5cm,
-        y unit title=0.5cm,
-        y unit chart=0.6cm,
-        title label font=\bfseries\small,
-        bar label font=\small,
-        bar/.append style={fill=codeblue!80, rounded corners=2pt},
-        group/.append style={draw=black, fill=black!30},
-        bar height=0.6
+        time slot unit=month
     ]{2026-02}{2026-08}
         \gantttitlecalendar{year, month=shortname} \\
-        \ganttgroup{Phase 1 : Étude \& Cadrage}{2026-02}{2026-03} \\
-        \ganttbar{Imprégnation \& Cadrage}{2026-02}{2026-02} \\
-        \ganttbar{Spécification des besoins}{2026-02}{2026-03} \\
-        \ganttgroup{Phase 2 : Conception}{2026-03}{2026-04} \\
-        \ganttbar{Modélisation des règles DQ}{2026-03}{2026-03} \\
-        \ganttbar{Architecture du pipeline}{2026-03}{2026-04} \\
-        \ganttgroup{Phase 3 : Réalisation}{2026-04}{2026-07} \\
-        \ganttbar{Développement (Python/Soda)}{2026-04}{2026-06} \\
-        \ganttbar{Intégration Hive \& Airflow}{2026-06}{2026-07} \\
-        \ganttgroup{Phase 4 : Tests \& Déploiement}{2026-07}{2026-08} \\
-        \ganttbar{Tests de bout en bout}{2026-07}{2026-07} \\
-        \ganttbar{Restitution (Tableau)}{2026-07}{2026-08}
+        \ganttgroup{Appropriation \& Architecture}{2026-02}{2026-04} \\
+        \ganttbar{Compréhension de l'existant}{2026-02}{2026-03} \\
+        \ganttbar{Documentation technique}{2026-03}{2026-04} \\
+        \ganttgroup{Cycle Itératif (POC \& MVP)}{2026-04}{2026-07} \\
+        \ganttbar{Conception des règles DQ}{2026-04}{2026-05} \\
+        \ganttbar{Développement \& Tests itératifs}{2026-04}{2026-07} \\
+        \ganttgroup{Restitution \& Déploiement}{2026-06}{2026-08} \\
+        \ganttbar{Dashboards et livraison finale}{2026-06}{2026-08} \\
+        \ganttbar{Rédaction du rapport PFE}{2026-07}{2026-08} \\
+        \ganttgroup[group/.append style={fill=ganttgreencell}]{Collaboration Transverse}{2026-02}{2026-08} \\
+        \ganttbar[bar/.append style={fill=ganttgreencell}]{Points métiers (Data Steward \& SI)}{2026-02}{2026-08}
     \end{ganttchart}
-    \caption{Diagramme de Gantt du planning prévisionnel du projet}
+    \caption{Planning prévisionnel du projet}
     \label{fig:gantt}
 \end{figure}
 
 % =========================
-\section*{Conclusion}
+\section*{Conclusion du chapitre}
 
 Pour conclure, CIH BANK est une institution bancaire marocaine majeure, fortement structurée et engagée dans la valorisation de la donnée à travers son Data Office. L'étude de l'existant a permis de mettre en évidence les processus actuels de gestion des données et leurs limites, ce qui justifie la nécessité d'un pipeline automatisé de contrôle qualité. Ces éléments constituent la base de notre projet et nous permettent d'entamer sereinement la phase de spécification des besoins dans le chapitre suivant.

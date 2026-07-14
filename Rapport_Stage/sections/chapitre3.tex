@@ -1,472 +1,563 @@
 \chapter{Conception de la Solution}
 
-\section*{Introduction}
-Ce chapitre présente la conception détaillée du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Les contrôles de qualité s'appliquent \textbf{exclusivement à la zone RAW} du Data Lake, qui constitue la copie exacte et fidèle des tables \texttt{CCM\_*} issues du système opérant Oracle NOVA. Nous définirons l'architecture globale de la solution, le modèle de données pour la persistance des résultats DQ, le catalogue complet des règles de contrôle, ainsi que la conception des composants d'orchestration, d'exposition et de visualisation.
+\section*{Introduction du chapitre}
+Après avoir défini les besoins fonctionnels et non fonctionnels de notre système de contrôle de la qualité des données, ce chapitre présente la conception détaillée de la solution. Conformément aux exigences du Template 2, nous décrivons dans un premier temps la modélisation dynamique à travers des diagrammes de séquences, d'états-transitions et d'activités. Dans un second temps, nous présentons la modélisation statique comprenant le diagramme de classes, le modèle relationnel, le dictionnaire de données et le catalogue complet des règles de qualité. Enfin, nous détaillons l'architecture logicielle (diagramme de composants) et matérielle (diagramme de déploiement) de l'application dans son environnement CIH BANK.
 
-% =========================
-\section{Architecture globale de la solution}
+% =========================================================================
+\section{Modélisation dynamique}
 
-\subsection{Vue d'ensemble}
+La modélisation dynamique permet de représenter les interactions temporelles entre les différents composants du système et l'évolution des états des données au cours de l'exécution du processus de contrôle.
 
-La solution de Data Quality s'insère dans le pipeline existant du domaine Tiers comme une \textbf{couche transversale de contrôle} ciblant exclusivement la \textbf{zone RAW}. La logique est simple : la zone RAW est la copie conforme du système opérant Oracle NOVA. Y détecter des anomalies équivaut à mesurer la qualité réelle des données à la source, avant toute transformation. Le schéma ci-dessous illustre l'architecture globale de bout en bout.
+\subsection{Diagrammes de séquences}
+Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux d'exécution séquentiel d'un scan de qualité de données. Il illustre comment la tâche DQ intégrée dans Airflow coordonne le traitement entre la zone HDFS RAW, le moteur Soda Core et la base Hive de résultats, jusqu'à l'exposition finale vers Tableau.
 
 \begin{figure}[H]
-\centering
-\begin{minipage}{0.9\textwidth}
-\centering
-\footnotesize
-\begin{verbatim}
-                      [ FLUX EXISTANT ]
-                    +-------------------+
-                    |  Oracle NOVA (SO) |
-                    +-------------------+
-                              |
-                              | [Sqoop] (Daily 22h)
-                              v
-                    +-------------------+
-                    |  Zone RAW (Hive)  |
-                    +-------------------+
-                      |               |
-                      | [Spark]       | [Soda Core Engine]
-                      v               v
-            +-----------+   +-------------------+
-            |  STAGING  |   |  MOTEUR DQ SODA   | <--- Règles YAML
-            +-----------+   +-------------------+
-                                      |
-                                      v
-                            +-------------------+
-                            |     Base HIVE     |
-                            |   "dq_results"    | <--- Scores & Anomalies
-                            +-------------------+
-                                      |
-                                      | [Exposition]
-                                      v
-                            +-------------------+
-                            |    Vues DREMIO    |
-                            +-------------------+
-                                      |
-                                      | [SQL / ODBC]
-                                      v
-                            +-------------------+
-                            |    TABLEAU (BI)   | <--- Suivi Data Stewards
-                            +-------------------+
-                         [ COUCHE DQ TRANSVERSALE ]
-\end{verbatim}
-\end{minipage}
-\caption{Architecture globale de la solution de Data Quality}
-\label{fig:architecture_dq}
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[node distance=2.2cm, >=stealth, every node/.style={font=\small}]
+        % Lifelines
+        \node (airflow) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm] {Airflow};
+        \node (sqoop) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm, right=of airflow] {Sqoop};
+        \node (hdfs) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm, right=of sqoop] {Hive RAW (HDFS)};
+        \node (soda) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm, right=of hdfs] {Soda Core (Moteur)};
+        \node (hive_res) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm, right=of soda] {Hive (dq\_results)};
+        \node (tableau) [draw, fill=blue!10, minimum width=2.2cm, minimum height=0.8cm, right=of hive_res] {Tableau};
+
+        % Dotted lines
+        \draw [dashed] (airflow) -- +(0,-7);
+        \draw [dashed] (sqoop) -- +(0,-7);
+        \draw [dashed] (hdfs) -- +(0,-7);
+        \draw [dashed] (soda) -- +(0,-7);
+        \draw [dashed] (hive_res) -- +(0,-7);
+        \draw [dashed] (tableau) -- +(0,-7);
+
+        % Execution arrows
+        \draw [->, line width=0.8pt] ($(airflow)+(0,-1)$) -- node[above, font=\scriptsize] {1. Lancer l'ingestion quotidienne} ($(sqoop)+(0,-1)$);
+        \draw [->, line width=0.8pt] ($(sqoop)+(0,-2)$) -- node[above, font=\scriptsize] {2. Importer les tables sources (Oracle NOVA)} ($(hdfs)+(0,-2)$);
+        \draw [<-, dashed, line width=0.8pt] ($(sqoop)+(0,-2.8)$) -- node[above, font=\scriptsize] {3. Ingestion terminée (Succès)} ($(hdfs)+(0,-2.8)$);
+        
+        \draw [->, line width=0.8pt] ($(airflow)+(0,-3.4)$) -- node[above, font=\scriptsize] {4. Déclencher le scan de qualité} ($(soda)+(0,-3.4)$);
+        \draw [->, line width=0.8pt] ($(soda)+(0,-4.2)$) -- node[above, font=\scriptsize] {5. Requêter la zone RAW} ($(hdfs)+(0,-4.2)$);
+        \draw [<-, dashed, line width=0.8pt] ($(soda)+(0,-4.8)$) -- node[above, font=\scriptsize] {6. Retourner les données clients} ($(hdfs)+(0,-4.8)$);
+        
+        \draw [->, line width=0.8pt] ($(soda)+(0,-5.4)$) -- node[above, font=\scriptsize] {7. Sauvegarder scores et anomalies} ($(hive_res)+(0,-5.4)$);
+        \draw [->, line width=0.8pt] ($(tableau)+(0,-6.2)$) -- node[above, font=\scriptsize] {8. Requêter les vues Dremio} ($(hive_res)+(0,-6.2)$);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme de séquences du pipeline de contrôle et restitution DQ}
+    \label{fig:sequence_dq}
 \end{figure}
 
-La solution comprend \textbf{cinq composantes principales} :
+\subsection{Diagrammes d'états-transitions}
+Le diagramme d'états-transitions de la figure \ref{fig:state_dq} modélise les différents états par lesquels passe le dossier d'un tiers physique dans le cycle d'évaluation de la qualité des données, notamment lors de la détection et du traitement d'une anomalie.
 
-\begin{enumerate}
-    \item \textbf{Source} : Oracle NOVA (Core Banking) --- inchangée
-    \item \textbf{Ingestion RAW} : DAG Airflow \texttt{dailyow22} (22h) --- inchangée
-    \item \textbf{Moteur DQ} : Script Python Soda Core (\texttt{dq\_tiers\_checks.py}) exécuté \textbf{sur la zone RAW} --- \textbf{nouveau}
-    \item \textbf{Persistance} : Tables Hive de résultats DQ (base \texttt{dq\_results}) --- \textbf{nouveau}
-    \item \textbf{Exposition \& Visualisation} : Vues Dremio \texttt{dq-tiers} + Dashboard Tableau --- \textbf{nouveau}
-\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \resizebox{0.9\textwidth}{!}{
+    \begin{tikzpicture}[->, >=stealth, node distance=2.5cm, every node/.style={font=\small}, block/.style={draw, rectangle, rounded corners, fill=blue!5, minimum width=3cm, minimum height=1cm, align=center}]
+        % Nodes
+        \node (start) [draw, circle, fill=black, inner sep=2pt] {};
+        \node (none) [block, right=of start, xshift=-1cm] {Non évalué \\ \scriptsize(Donnée brute ingérée)};
+        \node (eval) [block, right=of none, xshift=0.5cm] {En cours d'évaluation \\ \scriptsize(Exécution du scan)};
+        \node (conforme) [block, above right=of eval, yshift=-0.5cm] {Conforme \\ \scriptsize(Intégré au score)};
+        \node (nonconforme) [block, below right=of eval, yshift=0.5cm] {Non conforme \\ \scriptsize(Anomalie détectée)};
+        \node (corr) [block, below=of eval, yshift=-0.5cm] {En cours de correction \\ \scriptsize(Priorisé dans Tableau)};
 
-\subsection{Outils et technologies}
+        % Paths
+        \path (start) edge (none)
+              (none) edge node[above, font=\scriptsize] {Batch 22h} (eval)
+              (eval) edge[bend left=15] node[above, font=\scriptsize, sloped] {Règles validées} (conforme)
+              (eval) edge[bend right=15] node[below, font=\scriptsize, sloped] {Échec de règle} (nonconforme)
+              (nonconforme) edge node[right, font=\scriptsize] {Assignation Steward} (corr)
+              (corr) edge[bend left=20] node[left, font=\scriptsize] {Correction NOVA} (none);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme d'états-transitions d'un profil tiers}
+    \label{fig:state_dq}
+\end{figure}
 
-Le tableau \ref{tab:outils} présente les outils et technologies retenus pour la mise en œuvre de la solution.
+\subsection{Diagrammes d'activités}
+Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décrit le processus de bout en bout de traitement de la qualité, depuis le chargement initial des données en zone RAW HDFS jusqu'à la remédiation effective dans l'application source Oracle NOVA.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.78\textwidth}{!}{
+    \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, block/.style={draw, rectangle, rounded corners, fill=blue!5, minimum width=3.5cm, minimum height=0.8cm, align=center}, decision/.style={draw, diamond, aspect=2, fill=yellow!10, minimum width=2.5cm, align=center}]
+        % Nodes
+        \node (start) [draw, circle, fill=black, inner sep=2pt] at (0,0) {};
+        \node (ingest) [block] at (0,-1) {Ingestion quotidienne\\des tables sources};
+        \node (scan) [block] at (0,-2.3) {Lancement du scan DQ\\par Soda Core};
+        \node (dec) [decision] at (0,-3.8) {Anomalies\\trouvées ?};
+        \node (score_ok) [block] at (4,-3.8) {Mise à jour des\\scores globaux (100\%)};
+        \node (score_fail) [block] at (0,-5.3) {Historisation des anomalies\\et chute du score};
+        \node (remed) [block] at (0,-6.7) {Remédiation manuelle\\par le Data Owner dans NOVA};
+        \node (end) [draw, circle, double=black, fill=black, inner sep=2pt] at (4,-5.3) {};
+
+        % Arrows
+        \draw [->] (start) -- (ingest);
+        \draw [->] (ingest) -- (scan);
+        \draw [->] (scan) -- (dec);
+        \draw [->] (dec) -- node[above, font=\scriptsize] {Non} (score_ok);
+        \draw [->] (dec) -- node[left, font=\scriptsize] {Oui} (score_fail);
+        \draw [->] (score_fail) -- (remed);
+        \draw [->] (score_ok) -- (end);
+        \draw [->] (remed) .. controls (-3.5,-6.7) and (-3.5,-1) .. (ingest);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme d'activités du workflow de remédiation DQ}
+    \label{fig:activity_dq}
+\end{figure}
+
+% =========================================================================
+\section{Modélisation statique}
+
+La modélisation statique définit la structure fixe du système, ses composants de données, le schéma relationnel de stockage de l'historique de qualité, ainsi que le dictionnaire des métadonnées associées.
+
+\subsection{Diagramme de classes}
+Le diagramme de classes de la figure \ref{fig:class_dq} représente les entités logiques et logicielles qui encapsulent les configurations des règles de contrôle, l'historique d'évaluation et les métadonnées d'anomalies.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.9\textwidth}{!}{
+    \begin{tikzpicture}[every node/.style={font=\small}, classbox/.style={draw, rectangle split, rectangle split parts=3, fill=blue!5, rounded corners, text width=5cm, align=left}]
+        % Classes
+        \node (dqrule) [classbox] {
+            \textbf{DQ\_Rule}
+            \nodepart{second}
+            + check\_name : String \\
+            + column\_name : String \\
+            + dimension : String \\
+            + threshold : Double \\
+            + criticite : String \\
+            + domaine : String
+            \nodepart{third}
+            + evaluate() : Boolean
+        };
+
+        \node (dqscore) [classbox, below left=of dqrule, xshift=-0.5cm, yshift=-0.5cm] {
+            \textbf{DQ\_Score}
+            \nodepart{second}
+            + run\_date : Date \\
+            + metric\_value : Double \\
+            + passed : Boolean \\
+            + score\_dq : Double
+            \nodepart{third}
+            + saveScore() : Void
+        };
+
+        \node (dqanomaly) [classbox, below right=of dqrule, xshift=0.5cm, yshift=-0.5cm] {
+            \textbf{DQ\_Anomaly}
+            \nodepart{second}
+            + run\_date : Date \\
+            + radical : String \\
+            + anomaly\_detail : String
+            \nodepart{third}
+            + saveAnomaly() : Void
+        };
+
+        % Relations (Inheritance-like or association)
+        \draw [->, >=stealth, line width=0.8pt] (dqscore) -- node[above left, font=\scriptsize] {évalué par} (dqrule);
+        \draw [->, >=stealth, line width=0.8pt] (dqanomaly) -- node[above right, font=\scriptsize] {généré par} (dqrule);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme de classes des métadonnées de qualité de données}
+    \label{fig:class_dq}
+\end{figure}
+
+\subsection{Modèle relationnel}
+Pour persister les résultats d'évaluation de la qualité des données de manière quotidienne, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive. Ce schéma convertit les structures de classes de modélisation en deux tables distinctes :
+\begin{itemize}
+    \item \textbf{dq\_tiers\_scores} : Table d'historisation des indicateurs et scores agrégés par date, table et règle ,
+    \item \textbf{dq\_tiers\_anomalies} : Table de stockage détaillée des dossiers clients non conformes (identifiés par leur radical) pour action de correction.
+\end{itemize}
+
+Le passage du modèle logique au modèle physique relationnel s'opère selon les règles classiques de traduction :
+\begin{itemize}
+    \item Chaque classe du modèle se traduit par une table relationnelle ,
+    \item Les attributs se traduisent par des colonnes typées avec gestion de la nullité ,
+    \item Le partitionnement est appliqué sur la colonne de date (\texttt{run\_date}) pour optimiser les performances de requêtage temporel.
+\end{itemize}
+
+Le schéma relationnel textuel s'établit comme suit :
+\begin{itemize}
+    \item \textbf{dq\_tiers\_scores} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], dag\_name, dimension, criticite, domaine, metric\_value, threshold, passed, score\_dq) ,
+    \item \textbf{dq\_tiers\_anomalies} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}, \underline{radical}], identifier, anomaly\_detail, criticite).
+\end{itemize}
+
+\subsection{Dictionnaire de données}
+Nous détaillons ci-dessous la structure physique et le dictionnaire de données des deux tables relationnelles de persistance.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|p{5cm}|}
+\caption{Dictionnaire de la table \texttt{dq\_tiers\_scores}}
+\label{tab:dict_scores}
+\renewcommand{\arraystretch}{1.3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|l|c|p{8cm}|}
 \hline
-\textbf{Outil} & \textbf{Rôle dans la solution} & \textbf{Justification} \\
+\rowcolor{gray!20}
+\textbf{Colonne} & \textbf{Type} & \textbf{Clé} & \textbf{Description / Rôle} \\
 \hline
-Oracle NOVA & Système opérant source & Core Banking CIH Bank \\
+\texttt{run\_date} & DATE & PK (Part.) & Date d'exécution du contrôle de qualité. \\
 \hline
-Apache Sqoop & Ingestion Oracle → HDFS & Pipeline existant \\
+\texttt{table\_name} & STRING & PK & Table Hive contrôlée en zone RAW. \\
 \hline
-Apache Airflow & Orchestration des DAGs & Pipeline existant — ajout d'une tâche DQ \\
+\texttt{column\_name} & STRING & PK & Nom de la colonne soumise à la règle de qualité. \\
 \hline
-Apache Hive / HDFS & Stockage RAW et STAGING & Data Lake CIH Bank \\
+\texttt{check\_name} & STRING & PK & Nom descriptif unique de la règle (ex. : \texttt{check\_genre\_civilite}). \\
 \hline
-Apache Spark & Transformation STAGING & Pipeline existant \\
+\texttt{dag\_name} & STRING & - & Nom du DAG Airflow d'orchestration (\texttt{dailyow22}). \\
 \hline
-Soda Core (Python) & Moteur de contrôle DQ & Open source, compatible Spark/Hive, config YAML \\
+\texttt{dimension} & STRING & - & Dimension DQ (\texttt{completeness}, \texttt{validity}, \texttt{consistency}, \texttt{freshness}). \\
 \hline
-Dremio & Virtualisation et exposition SQL & Data Virtualization existante \\
+\texttt{criticite} & STRING & - & Niveau de criticité du contrôle (\texttt{CRITIQUE}, \texttt{HAUTE}, \texttt{MOYENNE}). \\
 \hline
-Tableau & Dashboard de visualisation DQ & Outil de reporting standard CIH Bank \\
+\texttt{domaine} & STRING & - & Domaine métier visé (\texttt{KYC} ou \texttt{CSP}). \\
+\hline
+\texttt{metric\_value} & DOUBLE & - & Valeur numérique calculée par le test (ex. : taux de nuls). \\
+\hline
+\texttt{threshold} & DOUBLE & - & Seuil d'alerte configuré en YAML (ex. : 0.05). \\
+\hline
+\texttt{passed} & BOOLEAN & - & Booléen indiquant si la règle a été respectée (\texttt{TRUE} ou \texttt{FALSE}). \\
+\hline
+\texttt{score\_dq} & DOUBLE & - & Score normalisé (de 0 à 100) pour affichage dashboard. \\
 \hline
 \end{tabular}
-\caption{Outils et technologies de la solution DQ Tiers}
-\label{tab:outils}
+}
 \end{table}
 
-% ---- Présentation des outils de la chaîne technologique ----
+\begin{table}[H]
+\centering
+\caption{Dictionnaire de la table \texttt{dq\_tiers\_anomalies}}
+\label{tab:dict_anomalies}
+\renewcommand{\arraystretch}{1.3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|l|c|p{8cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Colonne} & \textbf{Type} & \textbf{Clé} & \textbf{Description / Rôle} \\
+\hline
+\texttt{run\_date} & DATE & PK (Part.) & Date d'exécution du scan de qualité. \\
+\hline
+\texttt{table\_name} & STRING & PK & Table source de l'anomalie détectée. \\
+\hline
+\texttt{column\_name} & STRING & PK & Colonne contenant la donnée non conforme. \\
+\hline
+\texttt{check\_name} & STRING & PK & Nom de la règle DQ violée. \\
+\hline
+\texttt{radical} & STRING & PK & Identifiant bancaire client (radical) sous 7 chiffres. \\
+\hline
+\texttt{identifier} & STRING & - & UUID technique de l'enregistrement en zone RAW. \\
+\hline
+\texttt{anomaly\_detail} & STRING & - & Message décrivant le problème (ex. : \texttt{Valeur 'LUI MEME' invalide}). \\
+\hline
+\texttt{criticite} & STRING & - & Niveau de criticité du contrôle violé. \\
+\hline
+\end{tabular}
+}
+\end{table}
 
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_oracle.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Oracle NOVA} --- Système opérant (Core Banking)\\[4pt]
-    {\small Système source des données du Référentiel Tiers. Héberge les tables \texttt{CCM\_PARTY}, \texttt{CCM\_NPDESCRIPTION}, \texttt{CCM\_JOB} contenant les informations KYC et CSP des clients PP.}
-\end{minipage}
+\subsection{Catalogue des règles de qualité}
+Les contrôles de qualité s'appliquent sur deux catégories logiques de données du domaine Tiers : les informations KYC (Know Your Customer) et les données CSP (Socio-Professionnelles). 
 
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_sqoop.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Apache Sqoop} --- Ingestion batch Oracle vers HDFS\\[4pt]
-    {\small Outil de transfert massif de données entre bases relationnelles et Hadoop. Utilisé en mode \textit{OverWrite} (OW) Full pour charger quotidiennement les tables \texttt{CCM\_*} vers la zone RAW Hive \texttt{raw\_nova\_referentieltiers}.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_airflow.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Apache Airflow} --- Orchestration des pipelines de données\\[4pt]
-    {\small Plateforme d'orchestration de workflows. Le DAG \texttt{dailyow22} coordonne les tâches d'ingestion Sqoop chaque soir à 22h00. La tâche DQ Soda Core est ajoutée à ce DAG en aval de l'ingestion.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_hadoop.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{HDFS / Apache Hive} --- Data Lake CIH Bank\\[4pt]
-    {\small Système de stockage distribué (HDFS) et moteur de requêtage SQL (Hive). Les données RAW sont stockées dans \texttt{/data/raw/novatiers/} au format ORC. C'est sur ces tables RAW que les contrôles Soda Core sont exécutés.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_spark.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Apache Spark} --- Moteur de transformation RAW vers STAGING\\[4pt]
-    {\small Moteur de traitement distribué en mémoire. Transforme et charge les données de la zone RAW vers la zone STAGING (\texttt{staging\_nova\_referentieltiers}). Mobilisé également par Soda Core via le connecteur \texttt{soda-core-spark}.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_soda.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Soda Core} --- Moteur de Data Quality (Python)\\[4pt]
-    {\small Bibliothèque Python open source de contrôle de la qualité des données. Les règles DQ sont définies en YAML (\texttt{checks\_kyc.yml}, \texttt{checks\_csp.yml}) et exécutées sur les tables RAW Hive. Les résultats sont persistés dans Hive pour historisation quotidienne.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_dremio.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Dremio} --- Virtualisation et exposition SQL des résultats DQ\\[4pt]
-    {\small Plateforme de virtualisation de données exposant les tables Hive sous forme de vues SQL. Les scores et anomalies DQ sont exposés dans le schéma \texttt{dq-tiers} et consommés directement par Tableau sans déplacement de données.}
-\end{minipage}
-
-\vspace{0.8cm}\noindent\rule{\textwidth}{0.4pt}\vspace{0.4cm}
-
-\noindent
-\begin{minipage}[c]{0.15\textwidth}
-    \centering
-    \includegraphics[height=1.6cm, keepaspectratio]{figures/logos/logo_tableau.png}
-\end{minipage}
-\hspace{0.04\textwidth}
-\begin{minipage}[c]{0.78\textwidth}
-    \textbf{Tableau} --- Dashboard de suivi de la qualité des données\\[4pt]
-    {\small Outil de visualisation connecté à Dremio via ODBC. Permet aux Data Stewards et Data Owners du domaine Tiers de suivre l'évolution des scores DQ KYC/CSP, de visualiser les anomalies et de prioriser les corrections dans le système NOVA.}
-\end{minipage}
-
-\vspace{0.4cm}
-
-% =========================
-\section{Catalogue des règles de Data Quality}
-
-\subsection{Principes de conception des règles}
-
-Les règles de Data Quality ont été définies selon les principes suivants :
+L'établissement de ce catalogue de règles de qualité découle d'une analyse exploratoire approfondie menée sur un échantillon réel de 5 000 dossiers de personnes physiques issus de la table \texttt{ccm\_npdescription}. Cette analyse a révélé des anomalies typiques et récurrentes de saisie au sein du système opérant Oracle NOVA, ce qui a directement guidé le choix et le paramétrage de nos dimensions de contrôle :
 \begin{itemize}
-    \item \textbf{Fondement métier} : chaque règle est justifiée par un besoin métier concret (conformité réglementaire KYC, fiabilité du scoring CSP, détection d'anomalies de saisie).
-    \item \textbf{Périmètre RAW} : toutes les règles s'appliquent sur les tables de la \textbf{zone RAW Hive} (base \texttt{raw\_nova\_referentieltiers}) qui sont la copie conforme des tables \texttt{CCM\_*} d'Oracle NOVA.
-    \item \textbf{Seuils quantifiés} : chaque règle dispose d'un seuil d'alerte mesurable (ex : taux de valeurs nulles > 5\% = alerte).
-    \item \textbf{Criticité graduée} : chaque règle est classée selon quatre niveaux de criticité : CRITIQUE, HAUTE, MOYENNE, FAIBLE.
-    \item \textbf{Action corrective définie} : chaque règle est associée à une action corrective à destination des Data Stewards pour correction dans NOVA.
+    \item \textbf{Le phénomène des dates de naissance génériques} : Une forte concentration de dates de naissance au premier janvier (\texttt{01/01/YYYY}) a été identifiée (par exemple \texttt{1947-01-01}, \texttt{1961-01-01}), traduisant une saisie par défaut dans NOVA lorsque seule l'année de naissance est connue. Cela justifie notre règle de validité sur \texttt{birthdate} avec un seuil de tolérance de 15\% ,
+    \item \textbf{Le codage numérique des villes} : Le champ \texttt{birthcity} contient des codes numériques (comme \texttt{787}) au lieu de libellés textuels, nécessitant un contrôle de validité par rapport au référentiel des villes pour assurer la cohérence et la résolubilité des codes ,
+    \item \textbf{La cohérence conditionnelle FATCA} : L'identifiant FATCA (\texttt{fatcaidentificationnumber}) est majoritairement nul, ce qui est cohérent pour les citoyens marocains (\texttt{nationalitycountry = MA}), mais doit être obligatoirement renseigné pour les clients ayant la nationalité ou une double nationalité américaine.
 \end{itemize}
 
-\subsection{Règles DQ sur les colonnes KYC}
-
-Les règles KYC portent sur les données d'état civil et de conformité réglementaire. La table RAW cible est \textbf{\texttt{raw\_nova\_referentieltiers.ccm\_npdescription}}.
+Le catalogue complet est défini ci-dessous. Pour les données CSP, l'intégralité des colonnes de la table \texttt{ccm\_job} fait obligatoirement l'objet d'un contrôle de **Complétude**. Des dimensions complémentaires de **Validité**, de **Cohérence** et d'**Unicité** sont ajoutées pour maximiser la robustesse de l'analyse opérationnelle.
 
 \begin{longtable}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
-\caption{Règles DQ — Colonnes KYC} \label{tab:regles_kyc} \\
+\caption{Catalogue des règles DQ — Données KYC (\texttt{ccm\_npdescription})} \label{tab:regles_kyc} \\
 \hline
-\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
-\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-\texttt{name} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Blocage saisie NOVA — audit dossiers \\
+\texttt{name} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
 \hline
-\texttt{first\_name} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Blocage saisie NOVA — audit dossiers \\
+\texttt{firstname} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
 \hline
-\texttt{birthdate} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Compléter via NOVA avec pièce d'identité \\
+\texttt{name}, \texttt{firstname} & Validité & Longueur $\ge$ 2, aucun chiffre ou caractère spécial & HAUTE & Nettoyage et normalisation dans NOVA \\
 \hline
-\texttt{birthdate} & Validité & Taux dates au 01/01 < 15\% & HAUTE & Flagger \texttt{date\_}\allowbreak\texttt{naissance\_}\allowbreak\texttt{approx} — ne pas utiliser pour le scoring \\
+\texttt{birthdate} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Saisie obligatoire avec justificatif officiel \\
 \hline
-\texttt{civility} & Validité & Valeurs IN (M., MME, MLLE) uniquement & HAUTE & Corriger valeurs hors référentiel dans NOVA \\
+\texttt{birthdate} & Validité & Taux de dates génériques au 01/01 < 15\% & HAUTE & Recherche de la date réelle sur pièce d'identité \\
 \hline
-\texttt{gender} & Validité & Valeurs IN (M, F) uniquement & HAUTE & Corriger valeurs hors référentiel dans NOVA \\
+\texttt{civility} & Validité & Valeurs restreintes à (M., MME, MLLE) & HAUTE & Restauration de la valeur selon pièces fournies \\
 \hline
-\texttt{gender} + \texttt{civility} & Cohérence & Genre M $\neq$ MME/MLLE ; Genre F $\neq$ M. & CRITIQUE & Audit croisé — correction manuelle dans NOVA \\
+\texttt{sex} & Validité & Valeurs restreintes à (M, F) & HAUTE & Restauration de la valeur selon pièces fournies \\
 \hline
-\texttt{nationality\_}\allowbreak\texttt{country} & Complétude & 0 valeur nulle tolérée & HAUTE & Compléter via NOVA avec pièce d'identité \\
+\texttt{sex} + \texttt{civility} & Cohérence & Genre M $\neq$ MME/MLLE ; Genre F $\neq$ M. & CRITIQUE & Résolution manuelle des incohérences de saisie \\
 \hline
-\texttt{fatca\_}\allowbreak\texttt{identification\_}\allowbreak\texttt{number} & Conformité & Clients US ou double-nationalité US : 0 FATCA null & CRITIQUE & Remonter immédiatement à la Conformité CIH \\
+\texttt{nationality\_}\allowbreak\texttt{country} & Complétude & 0 valeur nulle tolérée & HAUTE & Renseigner le code pays de nationalité \\
 \hline
-\texttt{birth\_city} & Validité & 100\% des codes résolus dans le référentiel villes & MOYENNE & Mapper codes numériques vers libellés via table référentiel villes BAM/CIH \\
+\texttt{fatca\_}\allowbreak\texttt{identification\_}\allowbreak\texttt{number} & Cohérence & Si nationalité ou double nationalité = US, 0 valeur nulle & CRITIQUE & Déclaration réglementaire FATCA immédiate \\
+\hline
+\texttt{birth\_city} & Validité & Doit exister dans le référentiel des villes BAM & MOYENNE & Mapping et correction via la table de transcodage \\
 \hline
 \end{longtable}
 
-\subsection{Règles DQ sur les colonnes CSP}
-
-Les règles CSP portent sur les données socio-professionnelles. La table RAW cible est \textbf{\texttt{raw\_nova\_referentieltiers.ccm\_job}}.
-
 \begin{longtable}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
-\caption{Règles DQ — Colonnes CSP} \label{tab:regles_csp} \\
+\caption{Catalogue des règles DQ — Données CSP (\texttt{ccm\_job})} \label{tab:regles_csp} \\
 \hline
-\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
-\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-\texttt{professional\_}\allowbreak\texttt{sector} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA — agences prioritaires \\
+\texttt{professional\_}\allowbreak\texttt{sector} & Complétude & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le secteur d'activité de l'employeur \\
 \hline
-\texttt{occupation} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA \\
+\texttt{professional\_}\allowbreak\texttt{sector} & Validité & Code numérique valide dans le référentiel sectoriel & MOYENNE & Transcodage vers les codes officiels BAM \\
 \hline
-\texttt{socioprofessional\_}\allowbreak\texttt{category} & Complétude & Taux NULL < 5\% & HAUTE & Compléter via NOVA \\
+\texttt{occupation} & Complétude & Taux de valeurs nulles < 5\% & HAUTE & Préciser la profession exacte du client \\
 \hline
-\texttt{professional\_}\allowbreak\texttt{situation} & Validité & Valeurs IN (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Corriger valeurs hors référentiel \\
+\texttt{socioprofessional\_}\allowbreak\texttt{category} & Complétude & Taux de valeurs nulles < 5\% & HAUTE & Renseigner la catégorie socioprofessionnelle (CSP) \\
 \hline
-\texttt{employer} & Validité & Taux valeurs parasites (AUTRE, LUI MEME...) < 30\% & HAUTE & Normaliser : mapper 'LUI MEME' → TRI, 'AUTRE' → NULL \\
+\texttt{professional\_}\allowbreak\texttt{situation} & Complétude & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le statut de la situation professionnelle \\
 \hline
-Triple CSP & Cohérence & Secteur + Profession + CSP non contradictoires & HAUTE & Vérifier cohérence et corriger dans NOVA \\
+\texttt{professional\_}\allowbreak\texttt{situation} & Validité & Valeurs restreintes à (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Remplacer par un code référentiel valide \\
 \hline
-\texttt{ordnum} (multi-emplois) & Unicité & Doublons avec \texttt{main=0} documentés & MOYENNE & Sélectionner emploi principal (main=1) dans la jointure CIHONE \\
+\texttt{employer} & Complétude & Taux de valeurs nulles < 10\% & HAUTE & Renseigner le nom de l'entreprise employeuse \\
 \hline
-\texttt{politically\_}\allowbreak\texttt{exposed} & Complétude & 0 valeur nulle tolérée & CRITIQUE & Demander déclaration PPE à l'agence \\
+\texttt{employer} & Validité & Détection des valeurs parasites ('AUTRE', 'LUI MEME') & HAUTE & Normaliser : mapper 'LUI MEME' vers auto-entrepreneur \\
+\hline
+\texttt{employer} + \texttt{professional\_}\allowbreak\texttt{situation} & Cohérence & Si situation = NDE (sans emploi) ou TRI (retraité), employeur doit être NULL & HAUTE & Annuler le nom d'employeur incohérent dans NOVA \\
+\hline
+\texttt{politically\_}\allowbreak\texttt{exposed} & Complétude & 0 valeur nulle tolérée (PEP obligatoire) & CRITIQUE & Renseigner la déclaration d'exposition politique \\
+\hline
+\texttt{ordnum} & Unicité & Un seul enregistrement actif principal (\texttt{main=1}) par tiers & HAUTE & Éliminer les contrats de travail multiples actifs \\
 \hline
 \end{longtable}
-
-\subsection{Règles DQ Pipeline (Fraîcheur)}
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|p{0.18\textwidth}|p{0.14\textwidth}|p{0.22\textwidth}|p{0.14\textwidth}|p{0.27\textwidth}|}
 \hline
-\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Dimension} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
-\texttt{batch\_}\allowbreak\texttt{datetime\_}\allowbreak\texttt{eaac4} & Fraîcheur & Retard < 26h depuis dernière exécution & HAUTE & Vérifier DAG Airflow et logs Sqoop \\
+\texttt{batch\_}\allowbreak\texttt{datetime} & Fraîcheur & Retard d'ingestion HDFS RAW < 26h & HAUTE & Alerte infrastructure Big Data et relance Sqoop \\
 \hline
-\texttt{code\_segment} & Cohérence & 0 client sans segment valide & HAUTE & Assigner segment par défaut selon code\_marche \\
+\texttt{code\_segment} & Cohérence & Cohérence entre segment client et code\_marche & HAUTE & Recalculer le segment par défaut \\
 \hline
 \end{tabular}
 \caption{Règles DQ — Fraîcheur et Pipeline}
+\label{tab:regles_pipeline}
 \end{table}
 
-% =========================
-\section{Modèle de données DQ (Persistance)}
+% =========================================================================
+\section{Architecture de l'application}
 
-\subsection{Base Hive \texttt{dq\_results}}
+L'architecture présente la structure logique de la solution DQ et son déploiement physique sur l'infrastructure de production de CIH BANK.
 
-Nous créons une base Hive dédiée \textbf{\texttt{dq\_results}} pour stocker les résultats des contrôles DQ. Elle est distincte des bases métier (\texttt{novatiers}, \texttt{staging\_nova\_referentieltiers}) pour garantir la séparation des responsabilités.
-
-\subsection{Table \texttt{dq\_tiers\_scores} — Historique des scores}
-
-Cette table enregistre, pour chaque exécution quotidienne, le résultat agrégé de chaque règle de contrôle.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{6cm}|}
-\hline
-\textbf{Colonne} & \textbf{Type} & \textbf{Description} \\
-\hline
-\texttt{run\_date} & DATE (partition) & Date d'exécution du contrôle DQ \\
-\hline
-\texttt{dag\_name} & STRING & Nom du DAG déclencheur (\texttt{dailyow22}) \\
-\hline
-\texttt{table\_name} & STRING & Table Hive contrôlée \\
-\hline
-\texttt{column\_name} & STRING & Colonne contrôlée \\
-\hline
-\texttt{check\_name} & STRING & Nom descriptif de la règle DQ \\
-\hline
-\texttt{dimension} & STRING & Dimension DQ : completeness, validity, consistency, freshness \\
-\hline
-\texttt{criticite} & STRING & CRITIQUE / HAUTE / MOYENNE / FAIBLE \\
-\hline
-\texttt{domaine} & STRING & KYC / CSP / PIPELINE \\
-\hline
-\texttt{metric\_value} & DOUBLE & Valeur calculée (ex : 0.023 = 2,3\% de nulls) \\
-\hline
-\texttt{threshold} & DOUBLE & Seuil d'alerte configuré \\
-\hline
-\texttt{passed} & BOOLEAN & TRUE si le check est passé \\
-\hline
-\texttt{score\_dq} & DOUBLE & Score normalisé 0–100 pour ce check \\
-\hline
-\end{tabular}
-\caption{Modèle de la table \texttt{dq\_results.dq\_tiers\_scores}}
-\end{table}
-
-\subsection{Table \texttt{dq\_tiers\_anomalies} — Détail des anomalies}
-
-Cette table enregistre le détail de chaque enregistrement client en situation d'anomalie, pour permettre aux Data Stewards de les identifier et de les corriger dans NOVA.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|l|p{6cm}|}
-\hline
-\textbf{Colonne} & \textbf{Type} & \textbf{Description} \\
-\hline
-\texttt{run\_date} & DATE (partition) & Date d'exécution \\
-\hline
-\texttt{table\_name} & STRING & Table source de l'anomalie \\
-\hline
-\texttt{column\_name} & STRING & Colonne en anomalie \\
-\hline
-\texttt{check\_name} & STRING & Règle DQ violée \\
-\hline
-\texttt{identifier} & STRING & UUID du tiers en anomalie \\
-\hline
-\texttt{radical} & STRING & Numéro client CIH (clé bancaire) \\
-\hline
-\texttt{anomaly\_detail} & STRING & Description de l'anomalie (ex : genre=M, civilite=MME) \\
-\hline
-\texttt{criticite} & STRING & Criticité de la règle \\
-\hline
-\end{tabular}
-\caption{Modèle de la table \texttt{dq\_results.dq\_tiers\_anomalies}}
-\end{table}
-
-\subsection{Partitionnement et format de stockage}
-
-Les deux tables sont \textbf{partitionnées par \texttt{run\_date}} (DATE), ce qui permet :
-\begin{itemize}
-    \item Une interrogation performante par période (dernier jour, 7 derniers jours, etc.)
-    \item Une gestion du cycle de vie des données (rétention configurable)
-    \item Un rechargement partiel en cas d'erreur sans affecter l'historique
-\end{itemize}
-
-Le format de stockage retenu est \textbf{ORC} (Optimized Row Columnar), cohérent avec les autres tables du Data Lake CIH Bank, pour une compression et des performances de requêtage optimales.
-
-% =========================
-\section{Conception du moteur DQ — Soda Core}
-
-\subsection{Architecture du script \texttt{dq\_tiers\_checks.py}}
-
-Le script Python principal est organisé en trois phases :
-
-\begin{enumerate}
-    \item \textbf{Initialisation} : connexion à la source de données Hive via Soda Core, chargement des fichiers de configuration YAML des règles.
-    \item \textbf{Exécution des checks} : Soda Core exécute les règles définies dans les fichiers YAML sur les tables Hive cibles et collecte les résultats.
-    \item \textbf{Persistance} : les résultats sont formatés et écrits dans les tables \texttt{dq\_tiers\_scores} et \texttt{dq\_tiers\_anomalies} via une SparkSession.
-\end{enumerate}
-
-\subsection{Fichiers de configuration YAML}
-
-Les règles DQ sont externalisées dans des fichiers YAML séparés par domaine, ce qui facilite leur maintenance sans modifier le code Python. Nous prévoyons trois fichiers :
-
-\begin{itemize}
-    \item \texttt{checks\_kyc.yml} : règles sur les colonnes KYC (\texttt{CCM\_NPDESCRIPTION})
-    \item \texttt{checks\_csp.yml} : règles sur les colonnes CSP (\texttt{CCM\_JOB})
-    \item \texttt{checks\_pipeline.yml} : règles de fraîcheur et cohérence pipeline
-\end{itemize}
-
-% =========================
-\section{Conception de l'orchestration Airflow}
-
-\subsection{Intégration dans le DAG \texttt{dailyow22}}
-
-La tâche DQ s'insère dans le DAG \texttt{dailyow22} existant, en \textbf{aval} de toutes les tâches d'ingestion des tables \texttt{CCM\_*}. Elle ne bloque pas le pipeline en cas d'erreur (mode \texttt{TriggerRule.ALL\_DONE}) afin de garantir que les résultats DQ sont produits même si certaines tables sont partiellement chargées.
-
-La figure \ref{fig:dag_design} illustre le positionnement de la tâche DQ dans le graphe de dépendances du DAG.
+\subsection{Architecture logicielle (diagramme de composants)}
+L'architecture logicielle de notre solution s'articule autour de modules découplés. Le diagramme de la figure \ref{fig:components_dq} illustre les interactions entre les modules d'ingestion, de stockage, de contrôle, de virtualisation et de restitution de la solution.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/architecture_dq_pipeline.png}
-    \caption{Positionnement de la tâche DQ dans le DAG dailyow22}
-    \label{fig:dag_design}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, box/.style={draw, rectangle, fill=blue!5, minimum width=3.2cm, minimum height=1cm, align=center}]
+        % Components
+        \node (ingest) [box] {Module d'Ingestion \\ \scriptsize(Apache Sqoop)};
+        \node (lake) [box, right=of ingest, xshift=0.5cm] {Zone de Stockage RAW \\ \scriptsize(Hive / HDFS)};
+        \node (soda) [box, below=of lake, yshift=-0.5cm] {Moteur DQ \\ \scriptsize(Soda Core / Python)};
+        \node (res) [box, below=of soda, yshift=-0.5cm] {Métadonnées DQ \\ \scriptsize(Hive \texttt{dq\_results})};
+        \node (dremio) [box, right=of soda, xshift=0.5cm] {Couche de Virtualisation \\ \scriptsize(Dremio)};
+        \node (tableau) [box, right=of dremio, xshift=0.5cm] {Dashboard de restitution \\ \scriptsize(Tableau)};
+
+        % Connectors
+        \draw [->, line width=0.8pt] (ingest) -- node[above, font=\scriptsize] {Écrit} (lake);
+        \draw [->, line width=0.8pt] (soda) -- node[left, font=\scriptsize] {Scan} (lake);
+        \draw [->, line width=0.8pt] (soda) -- node[left, font=\scriptsize] {Enregistre} (res);
+        \draw [->, line width=0.8pt] (dremio) -- node[above, font=\scriptsize, sloped] {Virtualise} (res);
+        \draw [->, line width=0.8pt] (tableau) -- node[above, font=\scriptsize] {Consomme} (dremio);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme de composants logiciels de la solution DQ}
+    \label{fig:components_dq}
 \end{figure}
 
-% =========================
-\section{Conception des vues Dremio DQ}
+Les composants clés de cette architecture logicielle sont détaillés ci-dessous :
 
-Un nouveau schéma Dremio \textbf{\texttt{dq-tiers}} est créé pour exposer les résultats DQ. Il comprend trois vues :
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|p{4cm}|p{5cm}|}
-\hline
-\textbf{Vue Dremio} & \textbf{Source Hive} & \textbf{Usage} \\
-\hline
-\texttt{v.dq\_scores\_history} & \texttt{dq\_tiers\_scores} & Historique des scores — courbes de tendance Tableau \\
-\hline
-\texttt{v.dq\_kpis\_summary} & \texttt{dq\_tiers\_scores} (agrégé) & KPIs globaux KYC/CSP par dimension et par jour \\
-\hline
-\texttt{v.dq\_anomalies\_detail} & \texttt{dq\_tiers\_anomalies} & Détail des clients en anomalie — liste pour Data Stewards \\
-\hline
-\end{tabular}
-\caption{Vues Dremio du schéma \texttt{dq-tiers}}
-\end{table}
-
-% =========================
-\section{Conception du dashboard Tableau}
-
-Le dashboard Tableau « \textbf{Qualité Données Référentiel Tiers} » est conçu pour deux profils d'utilisateurs :
-
+\subsubsection{Conception du moteur DQ — Soda Core}
+Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifiquement la bibliothèque Python \texttt{soda-core} et son connecteur Spark \texttt{soda-core-spark}. Afin d'assurer une exécution optimale dans notre écosystème Big Data, la conception logicielle repose sur les principes d'intégration suivants :
 \begin{itemize}
-    \item \textbf{Data Owners et Direction} : vue exécutive avec scores globaux et alertes critiques
-    \item \textbf{Data Stewards} : vue opérationnelle avec liste détaillée des anomalies à corriger
+    \item \textbf{Encapsulation PySpark et Vues Temporaires} : Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (ex: \texttt{ccm\_npdescription} et \texttt{ccm\_job}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques ,
+    \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les fichiers sont séparés logiquement par domaine : \texttt{checks\_kyc.yml} pour le KYC, \texttt{checks\_csp.yml} pour les données socio-professionnelles, et \texttt{checks\_pipeline.yml} pour les indicateurs techniques et la fraîcheur ,
+    \item \textbf{Extraction programmatique et typage des métadonnées} : Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle ,
+    \item \textbf{Persistance partitionnée des anomalies} : Pour toute règle non respectée ayant le statut \texttt{fail}, le script interroge la propriété \texttt{failed\_rows\_query} générée dynamiquement par Soda Core. Cette requête SQL est exécutée au moyen de Spark SQL pour isoler les identifiants uniques (\texttt{oid}) et les radicaux clients associés aux anomalies. Ces dossiers non conformes sont structurés dans un DataFrame puis ajoutés en mode append dans la table partitionnée Hive \texttt{dq\_results.dq\_tiers\_anomalies}, tandis que le résumé quotidien des scores alimente la table \texttt{dq\_results.dq\_tiers\_scores}.
 \end{itemize}
 
-Le dashboard est structuré en \textbf{quatre onglets} :
+\subsubsection{Conception de l'orchestration Airflow}
+La planification, le déclenchement et le monitoring des scans de qualité sont entièrement automatisés par Apache Airflow au moyen d'un unique DAG quotidien nommé \texttt{dailyow22}. La tâche de Data Quality est conçue comme une étape post-ingestion. Elle s'exécute immédiatement après le succès des tâches d'ingestion Sqoop qui rapatrient les tables sources NOVA vers le Data Lake. Afin de garantir la surveillance du pipeline technique, la tâche de qualité est configurée avec la règle de déclenchement \texttt{TriggerRule.ALL\_DONE}. Cela assure que même si une tâche d'ingestion non critique échoue, les contrôles de qualité s'exécutent sur les tables correctement importées, ce qui évite d'aveugler le monitoring en cas de panne technique partielle.
 
+\subsubsection{Conception des vues Dremio DQ}
+Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous concevons une couche de virtualisation via Dremio dans un schéma dédié nommé \texttt{dq-tiers}. Dremio se connecte directement au catalogue Hive Metastore et expose trois vues SQL virtuelles :
+\begin{itemize}
+    \item \texttt{v.dq\_scores\_history} : Expose l'historique temporel des scores calculés par règle et par domaine pour alimenter les courbes de tendance temporelle ,
+    \item \texttt{v.dq\_kpis\_summary} : Fournit une agrégation quotidienne des taux de conformité par dimension DQ ,
+    \item \texttt{v.dq\_anomalies\_detail} : Liste les radicaux des clients en anomalie avec le libellé exact de l'erreur pour la remédiation.
+\end{itemize}
+Cette virtualisation garantit un temps de réponse inférieur à la seconde lors des interactions de l'utilisateur sur Tableau, grâce aux accélérations matérielles (réflexions de données) de Dremio.
+
+\subsubsection{Conception du dashboard Tableau}
+La restitution visuelle est structurée dans un dashboard Tableau interactif composé de quatre onglets fonctionnels :
 \begin{enumerate}
-    \item \textbf{Vue Exécutive} : Score DQ global KYC + CSP du jour, évolution sur 30 jours, alertes critiques en rouge.
-    \item \textbf{Détail KYC} : Score par colonne KYC, heatmap par dimension DQ (Complétude / Validité / Cohérence), filtres par agence de rattachement.
-    \item \textbf{Détail CSP} : Score CSP, analyse des valeurs parasites dans \texttt{employer}, taux de nullité par colonne, tendance d'amélioration après corrections.
-    \item \textbf{Anomalies \& Remédiation} : Liste paginée des tiers en anomalie, triée par criticité, exportable pour les Data Stewards. Lien direct vers le \texttt{radical} CIH pour investigation dans NOVA.
+    \item \textbf{Vue Exécutive} : Présente les KPIs de conformité globaux et les alertes critiques pour les Data Owners et la Direction ,
+    \item \textbf{Détail KYC} : Permet une analyse fine par colonne et par dimension de qualité sur le domaine KYC ,
+    \item \textbf{Détail CSP} : Restitue les scores de conformité socioprofessionnelle et l'évaluation des valeurs parasites ,
+    \item \textbf{Anomalies \& Remédiation} : Liste paginée contenant le radical et le détail de l'anomalie, exportable en Excel pour le traitement correctif par les Data Stewards.
 \end{enumerate}
+Pour des raisons évidentes de sécurité et de conformité réglementaire (notamment les directives de Bank Al-Maghrib et la protection des données personnelles), toutes les données nominatives et les radicaux clients affichés dans les onglets opérationnels font l'objet d'un masquage ou d'un floutage systématique, garantissant la stricte confidentialité des informations sensibles.
 
-\section*{Conclusion}
+\subsection{Architecture matérielle (diagramme de déploiement)}
+Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'architecture système et l'infrastructure distribuée de production sur laquelle est déployée notre solution au sein de CIH BANK.
 
-Ce chapitre a présenté la conception complète de la solution de Data Quality Tiers. Nous avons défini l'architecture globale à six composantes, le catalogue des règles DQ par domaine (KYC, CSP, Pipeline), le modèle de données de persistance dans Hive, la logique d'orchestration Airflow, les vues Dremio d'exposition et la structure du dashboard Tableau. Le chapitre suivant décrit la réalisation concrète de ces différents composants.
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[node distance=1.5cm, >=stealth, every node/.style={font=\small}, host/.style={draw, rectangle, fill=gray!10, minimum width=4cm, minimum height=1.6cm, align=center}]
+        % Nodes
+        \node (edge) [host] {\textbf{Edge Node / Gateway} \\ \small(1 nœud physique) \\ \scriptsize Airflow Orchestrator \\ Dremio Coordinator \\ Hive Metastore};
+        \node (master) [host, right=of edge, xshift=0.5cm] {\textbf{Master Nodes} \\ \small(3 nœuds) \\ \scriptsize HDFS NameNode \\ YARN ResourceManager \\ ZooKeeper};
+        \node (worker) [host, below=of master, yshift=-0.5cm] {\textbf{Worker Nodes} \\ \small(3 nœuds physiques) \\ \scriptsize HDFS DataNodes \\ YARN NodeManagers \\ Dremio Executors};
+        \node (client) [host, below=of edge, yshift=-0.5cm] {\textbf{Poste Data Steward} \\ \small(Terminal Client) \\ \scriptsize Tableau Desktop / Web};
+
+        % Connectors
+        \draw [-, line width=1pt] (edge) -- (master);
+        \draw [-, line width=1pt] (master) -- (worker);
+        \draw [-, line width=1pt] (edge) -- (worker);
+        \draw [-, line width=1pt] (client) -- (edge);
+    \end{tikzpicture}
+    }
+    \caption{Diagramme de déploiement matériel de la solution DQ dans le cluster Big Data}
+    \label{fig:deploy_dq}
+\end{figure}
+
+Le cluster Big Data Cloudera CDP 7.1.7 de production de CIH BANK est structuré autour de 8 nœuds distribués, configurés de la manière suivante :
+\begin{itemize}
+    \item \textbf{1 Nœud Edge (Gateway) principal} : Ce serveur sert de point d'entrée pour l'administration et l'orchestration des jobs. Il héberge les workers d'Apache Airflow, le coordinateur Dremio, ainsi que le service Hive Metastore. C'est sur ce nœud qu'est installé l'environnement virtuel Python contenant les packages \texttt{soda-core} et \texttt{soda-core-spark} ,
+    \item \textbf{3 Nœuds Masters} : Ils assurent la haute disponibilité du stockage (HDFS NameNodes configurés en Actif/Standby et JournalNodes) et la coordination de l'ordonnancement distributed. Ils hébergent également le YARN ResourceManager pour la répartition des ressources du cluster ,
+    \item \textbf{3 Nœuds Workers} : Ces serveurs gèrent le stockage local physique sous HDFS (DataNodes) et disposent des YARN NodeManagers pour allouer des conteneurs de calcul lors de l'exécution distribuée de nos requêtes PySpark et Dremio Executors.
+\end{itemize}
+
+\subsubsection{Orchestration technique et protocole de sécurité Kerberos}
+Afin de sécuriser les accès aux données confidentielles du domaine Tiers de CIH BANK, l'exécution de la solution de qualité s'intègre au protocole de sécurité global du cluster :
+\begin{itemize}
+    \item \textbf{Authentification Kerberos} : Le cluster Cloudera étant sécurisé par Kerberos, l'autorisation d'accès aux répertoires HDFS RAW nécessite un ticket d'authentification valide. Avant de lancer le traitement, la tâche Airflow utilise le fichier keytab chiffré (\texttt{tiers\_dq.keytab}) associé au compte de service du domaine Tiers (\texttt{tiers\_dq\_service}) pour générer et renouveler automatiquement le ticket Kerberos via la commande système \texttt{kinit} ,
+    \item \textbf{Soumission du job Spark sur YARN} : Le script Python principal est exécuté en mode \texttt{spark-submit} avec le gestionnaire de ressources YARN configuré en mode \texttt{client} depuis le nœud Edge. Le driver Spark s'exécute ainsi localement sur le Gateway Node (dans le process Airflow), tandis que YARN ResourceManager alloue de manière distribuée des exécuteurs Spark au sein des nœuds Workers. Ces exécuteurs lisent et traitent en parallèle les partitions des fichiers HDFS de la zone RAW Hive.
+\end{itemize}
+
+% =========================================================================
+\section{Technologies de l'écosystème utilisées}
+
+Pour s'insérer au mieux au sein du système d'information décisionnel et Big Data de CIH BANK, notre solution exploite les briques technologiques de l'écosystème du Data Lake. Ces technologies sont résumées ci-dessous.
+
+\vspace{0.4cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_oracle.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Oracle NOVA} --- Système opérant source\\
+    {\small Base de données relationnelle hébergeant le Core Banking de la banque. Il s'agit du point d'entrée unique des données des clients physiques et moraux (Référentiel Tiers) et de la cible finale de correction.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_sqoop.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Apache Sqoop} --- Ingestion batch Oracle vers HDFS\\
+    {\small Technologie d'ingestion permettant le transfert en masse des tables NOVA vers l'infrastructure Hadoop de manière planifiée.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_airflow.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Apache Airflow} --- Orchestrateur de tâches\\
+    {\small Outil d'orchestration permettant de planifier, ordonnancer et superviser l'exécution du flux d'ingestion et des scans de qualité de manière centralisée.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_hadoop.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{HDFS / Apache Hive} --- Plateforme de stockage et de requêtage\\
+    {\small HDFS assure le stockage persistant distribué tandis que Hive structure ces répertoires sous forme de tables SQL relationnelles cibles pour nos contrôles.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_soda.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Soda Core} --- Moteur de contrôle de la qualité (Python)\\
+    {\small Framework de validation de données déclaratif basé sur des fichiers YAML de règles de gestion et exécuté programmatiquement sur les tables Hive RAW.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_dremio.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Dremio} --- Moteur de virtualisation et d'exposition\\
+    {\small Permet de virtualiser les tables de résultats Hive et d'exposer des vues SQL rapides et sécurisées, éliminant le besoin de dupliquer ou de transférer physiquement les volumes de données.}
+\end{minipage}
+
+\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
+
+\noindent
+\begin{minipage}[c]{0.12\textwidth}
+    \centering
+    \includegraphics[height=1.0cm, keepaspectratio]{figures/logos/logo_tableau.png}
+\end{minipage}
+\hspace{0.03\textwidth}
+\begin{minipage}[c]{0.83\textwidth}
+    \textbf{Tableau} --- Outil d'analyse décisionnelle et Visualisation\\
+    {\small Solution BI standard de CIH BANK, connectée en direct à Dremio pour fournir un reporting réactif sur la qualité des tiers à l'intention des Data Owners.}
+\end{minipage}
+
+\vspace{0.4cm}
+
+% =========================================================================
+\section*{Conclusion du chapitre}
+Ce chapitre a décrit la conception complète de la solution de contrôle de la qualité du domaine Tiers. Nous avons structuré la dynamique d'exécution de nos scans et le cycle de vie des anomalies identifiées. La modélisation statique a fourni le diagramme de classes de nos indicateurs, le schéma relationnel et le catalogue complet des règles KYC et CSP de la solution. Enfin, l'architecture logicielle (composants) et matérielle (déploiement) a été détaillée au sein de l'environnement de production. Le chapitre suivant présente l'implémentation physique et les résultats opérationnels obtenus.
