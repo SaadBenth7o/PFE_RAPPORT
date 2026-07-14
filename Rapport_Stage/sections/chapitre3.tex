@@ -135,7 +135,7 @@ Le diagramme de classes de la figure \ref{fig:class_dq} représente l'entité lo
             + valid\_rows : Long \\
             + invalid\_rows : Long \\
             + percentage : Double \\
-            + passed : Boolean \\
+            + state : String \\
             + score\_dq : Double
             \nodepart{third}
             + evaluate() : Boolean \\
@@ -161,7 +161,7 @@ Le passage du modèle logique au modèle physique relationnel s'opère selon les
 
 Le schéma relationnel textuel s'établit comme suit :
 \begin{itemize}
-    \item \textbf{dq\_tiers\_results\_fact} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], run\_timestamp, dag\_name, dimension, criticite, domaine, total\_rows, valid\_rows, invalid\_rows, percentage, passed, score\_dq).
+    \item \textbf{dq\_tiers\_results\_fact} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], run\_timestamp, dag\_name, dimension, criticite, domaine, total\_rows, valid\_rows, invalid\_rows, percentage, state, score\_dq).
 \end{itemize}
 
 \subsection{Dictionnaire de données}
@@ -204,7 +204,7 @@ Nous détaillons ci-dessous la structure physique et le dictionnaire de données
 \hline
 \texttt{percentage} & DOUBLE & - & Taux de conformité en pourcentage (calculé par : \texttt{valid\_rows} / \texttt{total\_rows} * 100). \\
 \hline
-\texttt{passed} & BOOLEAN & - & Indique si le test a été validé (\texttt{TRUE} ou \texttt{FALSE}). \\
+\texttt{state} & STRING & - & Etat d'execution de la regle (\texttt{pass}, \texttt{warn}, \texttt{fail}). \\
 \hline
 \texttt{score\_dq} & DOUBLE & - & Score de qualité normalisé (entre 0.0 et 100.0). \\
 \hline
@@ -382,22 +382,33 @@ Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'archit
 
 \begin{figure}[H]
     \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[node distance=1.5cm, >=stealth, every node/.style={font=\small}, host/.style={draw, rectangle, fill=gray!10, minimum width=4cm, minimum height=1.6cm, align=center}]
+    \begin{tikzpicture}[
+        node distance=0.8cm and 1.2cm, 
+        >=stealth, 
+        every node/.style={font=\scriptsize},
+        box/.style={
+            draw=blue!60!black, 
+            fill=blue!5, 
+            rounded corners=4pt, 
+            minimum width=3.0cm, 
+            minimum height=1.1cm, 
+            align=center, 
+            line width=0.8pt
+        }
+    ]
         % Nodes
-        \node (edge) [host] {\textbf{Edge Node / Gateway} \\ \small(1 nœud physique) \\ \scriptsize Airflow Orchestrator \\ Dremio Coordinator \\ Hive Metastore};
-        \node (master) [host, right=of edge, xshift=0.5cm] {\textbf{Master Nodes} \\ \small(3 nœuds) \\ \scriptsize HDFS NameNode \\ YARN ResourceManager \\ ZooKeeper};
-        \node (worker) [host, below=of master, yshift=-0.5cm] {\textbf{Worker Nodes} \\ \small(3 nœuds physiques) \\ \scriptsize HDFS DataNodes \\ YARN NodeManagers \\ Dremio Executors};
-        \node (client) [host, below=of edge, yshift=-0.5cm] {\textbf{Poste Data Steward} \\ \small(Terminal Client) \\ \scriptsize Tableau Desktop / Web};
+        \node (client) [box] {\textbf{Poste Data Steward} \\ \tiny Tableau Desktop / Web};
+        \node (edge) [box, right=of client] {\textbf{Edge Node (Gateway)} \\ \tiny Airflow / Dremio Coordinator \\ \tiny Hive Metastore};
+        \node (master) [box, above right=of edge, yshift=-0.3cm] {\textbf{Master Nodes (x3)} \\ \tiny HDFS NameNode \\ \tiny YARN ResourceManager};
+        \node (worker) [box, below right=of edge, yshift=0.3cm] {\textbf{Worker Nodes (x3)} \\ \tiny HDFS DataNodes \\ \tiny YARN NodeManagers};
 
-        % Connectors
-        \draw [-, line width=1pt] (edge) -- (master);
-        \draw [-, line width=1pt] (master) -- (worker);
-        \draw [-, line width=1pt] (edge) -- (worker);
-        \draw [-, line width=1pt] (client) -- (edge);
+        % Connectors with style
+        \draw [<->, thick, blue!80!black] (client) -- (edge);
+        \draw [<->, thick, blue!80!black] (edge) -- (master.west);
+        \draw [<->, thick, blue!80!black] (edge) -- (worker.west);
+        \draw [<->, thick, dashed, gray] (master) -- (worker);
     \end{tikzpicture}
-    }
-    \caption{Diagramme de déploiement matériel de la solution DQ dans le cluster Big Data}
+    \caption{Architecture matérielle et déploiement dans le cluster Big Data}
     \label{fig:deploy_dq}
 \end{figure}
 

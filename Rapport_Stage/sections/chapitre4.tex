@@ -257,7 +257,7 @@ def run_dq_checks(run_date: str):
             valid_rows,
             invalid_rows,
             percentage,
-            passed,
+            check.outcome,
             score,
             run_date
         ))
@@ -266,7 +266,7 @@ def run_dq_checks(run_date: str):
         df = spark.createDataFrame(results_data, [
             "run_timestamp", "dag_name", "table_name", "column_name", "check_name",
             "dimension", "criticite", "domaine", "total_rows", "valid_rows",
-            "invalid_rows", "percentage", "passed", "score_dq", "run_date"
+            "invalid_rows", "percentage", "state", "score_dq", "run_date"
         ])
         df.write.mode("append").partitionBy("run_date").saveAsTable("dq_results.dq_tiers_results_fact")
 
@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_results_fact (
     valid_rows      BIGINT,
     invalid_rows    BIGINT,
     percentage      DOUBLE,
-    passed          BOOLEAN,
+    state           STRING,
     score_dq        DOUBLE
 )
 PARTITIONED BY (run_date DATE)
@@ -379,7 +379,7 @@ SELECT
     valid_rows,
     invalid_rows,
     percentage,
-    passed,
+    state,
     score_dq
 FROM hive.dq_results.dq_tiers_results_fact
 ORDER BY run_date DESC, criticite ASC;
@@ -396,7 +396,7 @@ SELECT
     dimension,
     criticite,
     COUNT(*)                        AS nb_checks,
-    SUM(CASE WHEN passed THEN 1
+    SUM(CASE WHEN state = 'pass' THEN 1
              ELSE 0 END)           AS nb_checks_ok,
     AVG(score_dq)                  AS score_moyen,
     MIN(score_dq)                  AS score_min
@@ -408,7 +408,7 @@ ORDER BY run_date DESC, domaine, criticite;
 \subsection{Vue \texttt{v.dq\_anomalies\_summary}}
 
 \begin{lstlisting}[language=SQL]
--- Vue Dremio : regles en anomalie (filtree sur passed = false)
+-- Vue Dremio : regles en anomalie (filtree sur state != 'pass')
 CREATE OR REPLACE VIEW "dq-tiers"."v.dq_anomalies_summary" AS
 SELECT
     run_date,
@@ -422,7 +422,7 @@ SELECT
     criticite,
     score_dq
 FROM hive.dq_results.dq_tiers_results_fact
-WHERE passed = FALSE
+WHERE state != 'pass'
 ORDER BY run_date DESC,
          CASE criticite
              WHEN 'CRITIQUE' THEN 1
