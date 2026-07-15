@@ -362,6 +362,16 @@ La planification, le déclenchement et le monitoring des scans de qualité sont 
 Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié nommé \texttt{dq-tiers}. Dremio se connecte directement au catalogue Hive Metastore et expose directement la table de faits sous forme d'un unique dataset virtuel nommé \texttt{"dq-tiers"."v\_dq\_tiers\_results\_fact"}. Dremio sert ainsi de passerelle d'exposition performante sans dupliquer ou déplacer les données.
 Cette virtualisation garantit un temps de réponse inférieur à la seconde lors des interactions de l'utilisateur sur Tableau, grâce aux accélérations matérielles (réflexions de données) de Dremio.
 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw[draw=gray, dashed, fill=gray!5, thick, rounded corners] (0,0) rectangle (12,4);
+        \node at (6,2) [align=center, text=gray] {\textbf{Capture d'écran à insérer} \\ \small Emplacement de la vue sémantique dans Dremio};
+    \end{tikzpicture}
+    \caption{Emplacement de la vue virtuelle unique \texttt{v\_dq\_tiers\_results\_fact} dans Dremio}
+    \label{fig:screenshot_dremio}
+\end{figure}
+
 \subsubsection{Conception du dashboard Tableau}
 La restitution visuelle est structurée dans un dashboard Tableau interactif connecté en direct au dataset virtuel unique de Dremio. L'intelligence analytique (calcul des scores quotidiens moyens, taux de conformité globaux, regroupements par dimension de qualité ou par date) est configurée à l'aide de feuilles de calcul (sheets) et de filtres dynamiques directement dans Tableau Desktop, tirant parti de la table de faits unique. Le dashboard est structuré en quatre onglets fonctionnels :
 \begin{enumerate}
@@ -371,6 +381,16 @@ La restitution visuelle est structurée dans un dashboard Tableau interactif con
     \item \textbf{Anomalies \& Remédiation} : Présente une synthèse des règles et colonnes présentant des taux d'anomalies élevés (filtrée sur \texttt{state != 'pass'}), aidant les Data Stewards à cibler les actions correctives collectives dans NOVA.
 \end{enumerate}
 Pour des raisons évidentes de sécurité et de conformité réglementaire (notamment les directives de Bank Al-Maghrib et la protection des données personnelles), toutes les données nominatives et les radicaux clients affichés dans les onglets opérationnels font l'objet d'un masquage ou d'un floutage systématique, garantissant la stricte confidentialité des informations sensibles.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw[draw=gray, dashed, fill=gray!5, thick, rounded corners] (0,0) rectangle (12,4);
+        \node at (6,2) [align=center, text=gray] {\textbf{Capture d'écran à insérer} \\ \small Connexion de Tableau Desktop avec la source Dremio};
+    \end{tikzpicture}
+    \caption{Connexion en direct de Tableau Desktop avec le dataset virtuel Dremio}
+    \label{fig:screenshot_tableau_conn}
+\end{figure}
 
 \subsection{Architecture matérielle (diagramme de déploiement)}
 Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'architecture système et l'infrastructure distribuée de production sur laquelle est déployée notre solution au sein de CIH BANK.
