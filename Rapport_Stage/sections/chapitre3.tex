@@ -225,137 +225,193 @@ L'établissement de ce catalogue découle d'une analyse exploratoire approfondie
 \subsubsection{Dimension Complétude}
 La dimension de complétude mesure le taux de renseignement des attributs obligatoires pour assurer l'exploitabilité opérationnelle des dossiers clients.
 
-\begin{longtable}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.22\textwidth}|p{0.12\textwidth}|p{0.23\textwidth}|}
-\caption{Catalogue des règles DQ — Dimension Complétude} \label{tab:regles_completude} \\
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Complétude — Données KYC (\texttt{ccm\_npdescription})} \label{tab:completude_kyc} \\
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-KYC (\texttt{ccm\_npdescription}) & \texttt{name} & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
+\texttt{name} & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{firstname} & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
+\texttt{firstname} & 0 valeur nulle tolérée & CRITIQUE & Audit dossiers - Blocage saisie agence \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{birthdate} & 0 valeur nulle tolérée & CRITIQUE & Saisie obligatoire avec justificatif officiel \\
+\texttt{birthdate} & 0 valeur nulle tolérée & CRITIQUE & Saisie obligatoire avec justificatif officiel \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{nationality\_}\allowbreak\texttt{country} & 0 valeur nulle tolérée & HAUTE & Renseigner le code pays de nationalité \\
+\texttt{nationality\_}\allowbreak\texttt{country} & 0 valeur nulle tolérée & HAUTE & Renseigner le code pays de nationalité \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{professional\_}\allowbreak\texttt{sector} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le secteur d'activité de l'employeur \\
+\end{longtable}
+
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Complétude — Données CSP (\texttt{ccm\_job})} \label{tab:completude_csp} \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{occupation} & Taux de valeurs nulles < 5\% & HAUTE & Préciser la profession exacte du client \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{socioprofessional\_}\allowbreak\texttt{category} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner la catégorie socioprofessionnelle (CSP) \\
+\endfirsthead
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{professional\_}\allowbreak\texttt{situation} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le statut de la situation professionnelle \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{employer} & Taux de valeurs nulles < 10\% & HAUTE & Renseigner le nom de l'entreprise employeuse \\
+\endhead
+\texttt{professional\_}\allowbreak\texttt{sector} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le secteur d'activité de l'employeur \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{politically\_}\allowbreak\texttt{exposed} & 0 valeur nulle tolérée (PEP obligatoire) & CRITIQUE & Renseigner la déclaration d'exposition politique \\
+\texttt{occupation} & Taux de valeurs nulles < 5\% & HAUTE & Préciser la profession exacte du client \\
+\hline
+\texttt{socioprofessional\_}\allowbreak\texttt{category} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner la catégorie socioprofessionnelle (CSP) \\
+\hline
+\texttt{professional\_}\allowbreak\texttt{situation} & Taux de valeurs nulles < 5\% & HAUTE & Renseigner le statut de la situation professionnelle \\
+\hline
+\texttt{employer} & Taux de valeurs nulles < 10\% & HAUTE & Renseigner le nom de l'entreprise employeuse \\
+\hline
+\texttt{politically\_}\allowbreak\texttt{exposed} & 0 valeur nulle tolérée (PEP obligatoire) & CRITIQUE & Renseigner la déclaration d'exposition politique \\
 \hline
 \end{longtable}
 
 \subsubsection{Dimension Validité}
 La dimension de validité évalue le respect des formats de saisie, des plages de valeurs autorisées et la conformité par rapport aux référentiels métier (BAM, ISO).
 
-\begin{longtable}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.22\textwidth}|p{0.12\textwidth}|p{0.23\textwidth}|}
-\caption{Catalogue des règles DQ — Dimension Validité} \label{tab:regles_validite} \\
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Validité — Données KYC (\texttt{ccm\_npdescription})} \label{tab:validite_kyc} \\
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-KYC (\texttt{ccm\_npdescription}) & \texttt{name}, \texttt{firstname} & Longueur $\ge$ 2, aucun chiffre ou caractère spécial & HAUTE & Nettoyage et normalisation dans NOVA \\
+\texttt{name}, \texttt{firstname} & Longueur $\ge$ 2, aucun chiffre ou caractère spécial & HAUTE & Nettoyage et normalisation dans NOVA \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{birthdate} & Taux de dates génériques au 01/01 < 15\% & HAUTE & Recherche de la date réelle sur pièce d'identité \\
+\texttt{birthdate} & Taux de dates génériques au 01/01 < 15\% & HAUTE & Recherche de la date réelle sur pièce d'identité \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{civility} & Valeurs restreintes à (M., MME, MLLE) & HAUTE & Restauration de la valeur selon pièces fournies \\
+\texttt{civility} & Valeurs restreintes à (M., MME, MLLE) & HAUTE & Restauration de la valeur selon pièces fournies \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{sex} & Valeurs restreintes à (M, F) & HAUTE & Restauration de la valeur selon pièces fournies \\
+\texttt{sex} & Valeurs restreintes à (M, F) & HAUTE & Restauration de la valeur selon pièces fournies \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{birth\_city} & Doit exister dans le référentiel des villes BAM & MOYENNE & Mapping et correction via la table de transcodage \\
+\texttt{birth\_city} & Doit exister dans le référentiel des villes BAM & MOYENNE & Mapping et correction via la table de transcodage \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{professional\_}\allowbreak\texttt{sector} & Code numérique valide dans le référentiel sectoriel & MOYENNE & Transcodage vers les codes officiels BAM \\
+\end{longtable}
+
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Validité — Données CSP (\texttt{ccm\_job})} \label{tab:validite_csp} \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{professional\_}\allowbreak\texttt{situation} & Valeurs restreintes à (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Remplacer par un code référentiel valide \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{employer} & Détection des valeurs parasites ('AUTRE', 'LUI MEME') & HAUTE & Normaliser : mapper 'LUI MEME' vers auto-entrepreneur \\
+\endfirsthead
+\hline
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\hline
+\endhead
+\texttt{professional\_}\allowbreak\texttt{sector} & Code numérique valide dans le référentiel sectoriel & MOYENNE & Transcodage vers les codes officiels BAM \\
+\hline
+\texttt{professional\_}\allowbreak\texttt{situation} & Valeurs restreintes à (SAL, FON, TRI, AUT, EMP, NDE) & HAUTE & Remplacer par un code référentiel valide \\
+\hline
+\texttt{employer} & Détection des valeurs parasites ('AUTRE', 'LUI MEME') & HAUTE & Normaliser : mapper 'LUI MEME' vers auto-entrepreneur \\
 \hline
 \end{longtable}
 
 \subsubsection{Dimension Cohérence}
 La dimension de cohérence vérifie l'absence de contradiction logique entre plusieurs attributs interdépendants.
 
-\begin{longtable}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.22\textwidth}|p{0.12\textwidth}|p{0.23\textwidth}|}
-\caption{Catalogue des règles DQ — Dimension Cohérence} \label{tab:regles_coherence} \\
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Cohérence — Données KYC (\texttt{ccm\_npdescription})} \label{tab:coherence_kyc} \\
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-KYC (\texttt{ccm\_npdescription}) & \texttt{sex} + \texttt{civility} & Genre M $\neq$ MME/MLLE ; Genre F $\neq$ M. & CRITIQUE & Résolution manuelle des incohérences de saisie \\
+\texttt{sex} + \texttt{civility} & Genre M $\neq$ MME/MLLE ; Genre F $\neq$ M. & CRITIQUE & Résolution manuelle des incohérences de saisie \\
 \hline
-KYC (\texttt{ccm\_npdescription}) & \texttt{fatca\_}\allowbreak\texttt{identification\_}\allowbreak\texttt{number} & Si nationalité ou double nationalité = US, 0 valeur nulle & CRITIQUE & Déclaration réglementaire FATCA immédiate \\
+\texttt{fatca\_}\allowbreak\texttt{identification\_}\allowbreak\texttt{number} & Si nationalité ou double nationalité = US, 0 valeur nulle & CRITIQUE & Déclaration réglementaire FATCA immédiate \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{employer} + \texttt{professional\_}\allowbreak\texttt{situation} & Si situation = NDE (sans emploi) ou TRI (retraité), employeur doit être NULL & HAUTE & Annuler le nom d'employeur incohérent dans NOVA \\
+\end{longtable}
+
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Cohérence — Données CSP (\texttt{ccm\_job})} \label{tab:coherence_csp} \\
 \hline
-Transverse & \texttt{code\_segment} & Cohérence entre segment client et code\_marche & HAUTE & Recalculer le segment par défaut \\
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\hline
+\endhead
+\texttt{employer} + \texttt{professional\_}\allowbreak\texttt{situation} & Si situation = NDE (sans emploi) ou TRI (retraité), employeur doit être NULL & HAUTE & Annuler le nom d'employeur incohérent dans NOVA \\
 \hline
 \end{longtable}
 
 \subsubsection{Dimension Unicité}
 La dimension d'unicité contrôle l'absence de doublons d'enregistrements et garantit l'unicité des identifiants principaux du référentiel.
 
-\begin{longtable}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.22\textwidth}|p{0.12\textwidth}|p{0.23\textwidth}|}
-\caption{Catalogue des règles DQ — Dimension Unicité} \label{tab:regles_unicite} \\
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Unicité — Données KYC (\texttt{ccm\_npdescription})} \label{tab:unicite_kyc} \\
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-KYC (\texttt{ccm\_npdescription}) & \texttt{oid} / \texttt{radical} & Unicité stricte du numéro de radical client (0 doublon) & CRITIQUE & Fusion des doublons clients dans le référentiel \\
+\texttt{oid} / \texttt{radical} & Unicité stricte du numéro de radical client (0 doublon) & CRITIQUE & Fusion des doublons clients dans le référentiel \\
 \hline
-CSP (\texttt{ccm\_job}) & \texttt{ordnum} & Un seul enregistrement actif principal (\texttt{main=1}) par tiers & HAUTE & Éliminer les contrats de travail multiples actifs \\
+\end{longtable}
+
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Unicité — Données CSP (\texttt{ccm\_job})} \label{tab:unicite_csp} \\
+\hline
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!20}
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\hline
+\endhead
+\texttt{ordnum} & Un seul enregistrement actif principal (\texttt{main=1}) par tiers & HAUTE & Éliminer les contrats de travail multiples actifs \\
 \hline
 \end{longtable}
 
 \subsubsection{Dimension Fraîcheur et Pipeline}
 La dimension de fraîcheur s'assure du bon cadencement de l'ingestion quotidienne et de l'intégrité de la chaîne technique.
 
-\begin{longtable}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.22\textwidth}|p{0.12\textwidth}|p{0.23\textwidth}|}
-\caption{Catalogue des règles DQ — Dimension Fraîcheur et Pipeline} \label{tab:regles_fraicheur} \\
+\begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
+\caption{Dimension Fraîcheur et Pipeline — Flux Batch} \label{tab:regles_fraicheur} \\
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endfirsthead
 \hline
 \rowcolor{gray!20}
-\textbf{Périmètre} & \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
+\textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
 \hline
 \endhead
-Pipeline & \texttt{batch\_}\allowbreak\texttt{datetime} & Retard d'ingestion HDFS RAW < 26h & HAUTE & Alerte infrastructure Big Data et relance Sqoop \\
+\texttt{batch\_}\allowbreak\texttt{datetime} & Retard d'ingestion HDFS RAW < 26h & HAUTE & Alerte infrastructure Big Data et relance Sqoop \\
 \hline
-Pipeline & \texttt{row\_count} & Écart de volumétrie entre Oracle NOVA et Hive RAW < 0.1\% & CRITIQUE & Rejouer le DAG d'ingestion Sqoop \\
+\texttt{row\_count} & Écart de volumétrie entre Oracle NOVA et Hive RAW < 0.1\% & CRITIQUE & Rejouer le DAG d'ingestion Sqoop \\
+\hline
+\texttt{code\_segment} & Cohérence entre segment client et code\_marche & HAUTE & Recalculer le segment par défaut \\
 \hline
 \end{longtable}
 
