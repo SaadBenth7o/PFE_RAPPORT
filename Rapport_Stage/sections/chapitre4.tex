@@ -10,41 +10,55 @@ Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur 
 
 Le développement et les tests ont été réalisés dans l'environnement Hadoop de CIH Bank. L'accès aux tables Hive et aux fichiers HDFS est effectué via les interfaces disponibles dans l'environnement Data Office, en utilisant les comptes de service existants du domaine Tiers.
 
-Les versions des composants utilisés dans l'environnement de production sont les suivantes :
+Les versions exactes des composants utilisés dans l'environnement de production sont les suivantes :
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|}
 \hline
+\rowcolor{gray!20}
 \textbf{Composant} & \textbf{Version} \\
 \hline
-Apache Hadoop (HDFS) & Cluster CIH Bank \\
+Cloudera Data Platform (CDP) & Private Cloud Base 7.1.7 \\
 \hline
-Apache Hive & Cluster CIH Bank \\
+Apache Hadoop (HDFS / YARN) & 3.1.1 \\
 \hline
-Apache Spark & Cluster CIH Bank \\
+Apache Hive & 3.1.3 \\
 \hline
-Apache Airflow & Cluster CIH Bank \\
+Apache Spark & 3.2.0 \\
 \hline
-Dremio & Instance CIH Bank \\
+Apache Airflow & 2.5.1 \\
 \hline
-Python & 3.x \\
+Dremio & Enterprise Edition 24.1 \\
 \hline
-Soda Core & soda-core-spark \\
+Python & 3.9.13 \\
 \hline
-Tableau & Tableau Desktop / Server CIH Bank \\
+Soda Core & soda-core-spark 3.0.45 \\
+\hline
+Tableau Desktop & Professional Edition 2024.1.2 \\
 \hline
 \end{tabular}
 \caption{Versions des composants de l'environnement technique}
+\label{tab:versions_composants}
 \end{table}
 
-\subsection{Installation de Soda Core}
+\subsection{Installation hors-ligne de Soda Core}
 
-Soda Core est installé dans l'environnement Python accessible depuis les workers Airflow. Le connecteur retenu est \texttt{soda-core-spark}, qui permet à Soda Core d'utiliser une \texttt{SparkSession} existante comme moteur d'exécution pour interroger les tables Hive de la zone RAW.
+La politique stricte de sécurité des systèmes d'information (PSSI) de CIH BANK impose une isolation réseau (air-gap) des serveurs du cluster Big Data, interdisant par conséquent tout accès direct à Internet. L'exécution standard de la commande \texttt{pip install} pour rapatrier les dépendances depuis le registre public PyPI est donc impossible.
+
+L'installation de Soda Core et de son connecteur Spark a donc été réalisée via une procédure d'installation hors-ligne (Offline Wheel Installation) :
+\begin{enumerate}
+    \item \textbf{Téléchargement des archives (Wheels)} : Sur un poste de travail disposant d'un accès à Internet, les archives des paquets \texttt{soda-core} et \texttt{soda-core-spark} ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format \texttt{.whl} dans un dossier dédié.
+    \item \textbf{Transfert sécurisé} : Le dossier d'archives a été contrôlé puis transféré de manière sécurisée (SFTP/SCP) vers le nœud Edge (Gateway) du cluster.
+    \item \textbf{Installation locale} : Sur le nœud Edge, les paquets ont été déployés dans l'environnement virtuel Python (venv) alloué à l'orchestrateur Airflow à l'aide de la commande \texttt{pip}, en forçant la recherche locale :
+\end{enumerate}
 
 \begin{lstlisting}[language=bash]
-pip install soda-core-spark
+source /opt/airflow/venv_dq/bin/activate
+pip install --no-index --find-links=./soda_wheels soda-core-spark
 \end{lstlisting}
+
+Cette méthode garantit la reproductibilité de l'environnement de contrôle tout en respectant scrupuleusement les contraintes de sécurité bancaires.
 
 % =========================
 \section{Implémentation du moteur DQ — Soda Core}
