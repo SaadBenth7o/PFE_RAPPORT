@@ -8,7 +8,7 @@ Après avoir défini les besoins fonctionnels et non fonctionnels de notre syst�
 
 La modélisation dynamique permet de représenter les interactions temporelles entre les différents composants du système et l'évolution des états des données au cours de l'exécution du processus de contrôle.
 
-\subsection{Diagrammes de séquences}
+\subsection{Diagramme de séquences}
 Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux d'exécution séquentiel d'un scan de qualité de données. Il illustre comment la tâche DQ intégrée dans Airflow coordonne le traitement entre la zone HDFS RAW, le moteur Soda Core et la base Hive de résultats, jusqu'à l'exposition finale vers Tableau.
 
 \begin{figure}[H]
@@ -48,7 +48,7 @@ Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux 
     \label{fig:sequence_dq}
 \end{figure}
 
-\subsection{Diagrammes d'états-transitions}
+\subsection{Diagramme d'états-transitions}
 Le diagramme d'états-transitions de la figure \ref{fig:state_dq} modélise les différents états par lesquels passe le dossier d'un tiers physique dans le cycle d'évaluation de la qualité des données, notamment lors de la détection et du traitement d'une anomalie.
 
 \begin{figure}[H]
@@ -76,7 +76,7 @@ Le diagramme d'états-transitions de la figure \ref{fig:state_dq} modélise les 
     \label{fig:state_dq}
 \end{figure}
 
-\subsection{Diagrammes d'activités}
+\subsection{Diagramme d'activités}
 Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décrit le processus de bout en bout de traitement de la qualité, depuis le chargement initial des données en zone RAW HDFS jusqu'à la remédiation effective dans l'application source Oracle NOVA.
 
 \begin{figure}[H]
@@ -212,7 +212,7 @@ Nous détaillons ci-dessous la structure physique et le dictionnaire de données
 }
 \end{table}
 
-\subsection{Catalogue des règles de qualité par dimension}
+\subsection{Catalogue des règles de qualité}
 Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations KYC et données socioprofessionnelles CSP). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Validité, Cohérence, Unicité et Fraîcheur / Pipeline.
 
 L'établissement de ce catalogue découle d'une analyse exploratoire approfondie menée sur un échantillon réel de 5 000 dossiers de personnes physiques issus de la table \texttt{ccm\_npdescription}. Cette analyse a révélé des anomalies typiques et récurrentes de saisie au sein du système opérant Oracle NOVA, ce qui a directement guidé le choix et le paramétrage de nos dimensions de contrôle :
@@ -545,7 +545,7 @@ Afin de sécuriser les accès aux données confidentielles du domaine Tiers de C
 \end{itemize}
 
 % =========================================================================
-\section{Technologies de l'écosystème utilisées}
+\subsection{Technologies de l'écosystème utilisées}
 
 Pour s'insérer au mieux au sein du système d'information décisionnel et Big Data de CIH BANK, notre solution exploite les briques technologiques de l'écosystème du Data Lake. Ces technologies sont résumées ci-dessous.
 
