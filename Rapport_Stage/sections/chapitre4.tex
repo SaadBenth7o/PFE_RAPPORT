@@ -372,40 +372,25 @@ Le DAG \texttt{dailyow22} s'exécute quotidiennement à \textbf{22h00}. La tâch
 % =========================
 \section{Exposition et virtualisation sous Dremio}
 
-Une unique vue sémantique virtuelle de la table de faits est créée dans Dremio sous le schéma \texttt{dq-tiers}. Dremio sert de couche d'exposition et de virtualisation directe sans déplacement ni duplication physique des données. 
+Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques générées par Soda Core.
 
-Le script SQL de création du dataset virtuel est le suivant :
+Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\_tiers\_dq\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données). La figure \ref{fig:screenshot_dremio} montre le lignage réel des données au sein de la plateforme Dremio.
 
-\begin{lstlisting}[language=SQL]
--- Vue Dremio : exposition de la table de faits unique
-CREATE OR REPLACE VIEW "dq-tiers"."v_dq_tiers_results_fact" AS
-SELECT
-    run_date,
-    run_timestamp,
-    dag_name,
-    table_name,
-    column_name,
-    check_name,
-    dimension,
-    criticite,
-    domaine,
-    total_rows,
-    valid_rows,
-    invalid_rows,
-    percentage,
-    state,
-    score_dq
-FROM hive.dq_results.dq_tiers_results_fact;
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
+    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\_tiers\_dq\_consolidated}}
+    \label{fig:screenshot_dremio}
+\end{figure}
 
-Afin d'optimiser les performances de requêtage, aucune pré-agrégation SQL ou filtre n'est appliqué au niveau de Dremio. L'exposition brute de cette table de faits permet de déléguer toute l'intelligence de calcul et de regroupement à l'outil BI Tableau Desktop.
+Afin d'optimiser les performances de requêtage, aucune pré-agrégation lourde n'est appliquée au niveau de Dremio. L'exposition de cette grande table de faits consolidée permet de déléguer toute l'intelligence de calcul et de restitution dynamique à l'outil BI Tableau Desktop.
 
 % =========================
 \section{Réalisation du dashboard Tableau}
 
 \subsection{Connexion Tableau à Dremio et traitement analytique}
 
-Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle \texttt{"dq-tiers"."v\_dq\_tiers\_results\_fact"} est importée comme source de données unique dans Tableau Desktop. 
+Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle \texttt{fact\_tiers\_dq\_consolidated} est importée comme source de données unique dans Tableau Desktop. 
 
 Tous les filtres (par date d'exécution, par domaine KYC/CSP, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
 
