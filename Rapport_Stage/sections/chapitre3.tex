@@ -113,88 +113,119 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
 
 La modélisation statique définit la structure fixe du système, ses composants de données, le schéma relationnel de stockage de l'historique de qualité, ainsi que le dictionnaire des métadonnées associées.
 
-\subsection{Diagramme de classes}
-Le diagramme de classes de la figure \ref{fig:class_dq} représente la structure des données générée par notre moteur de qualité. Contrairement à une table de faits unique, le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une table de faits consolidée complète pour le reporting.
+\subsection{Modélisation de la table de faits}
+Étant donné que la solution s'articule autour de la manipulation de données (Data Management) et non d'un développement orienté objet, nous remplaçons le diagramme de classes traditionnel par une modélisation explicite de la table de faits. 
+
+La figure \ref{fig:fact_dq} illustre la structure des données générée par notre moteur de qualité. Le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id} et \texttt{query\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une grande table de faits consolidée (21 colonnes) servant de source unique de vérité pour le reporting BI.
 
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[every node/.style={font=\scriptsize}, classbox/.style={draw, rectangle split, rectangle split parts=2, fill=blue!5, rounded corners, align=left}]
+    \begin{tikzpicture}[
+        every node/.style={font=\small}, 
+        tablebox/.style={draw, rectangle split, rectangle split parts=2, fill=blue!5, rounded corners, align=left, drop shadow, text width=5.8cm},
+        factbox/.style={draw, rectangle split, rectangle split parts=2, fill=green!10, rounded corners, align=left, drop shadow, text width=6.5cm, line width=1.2pt, draw=green!50!black}
+    ]
         
-        \node (colhist) [classbox, text width=5.5cm] {
-            \textbf{consolidated\_all\_column\_history}
+        % Central Fact Table
+        \node (fact) [factbox] {
+            \centering \textbf{fact\_tiers\_dq\_consolidated} \\ (Vue Dremio - 21 colonnes)
             \nodepart{second}
-            + run\_id : String \textbf{[PK]}\\
-            + colonne\_controlee : String \\
-            + chemin\_source : String \\
-            + table\_dataset : String \\
-            + query\_id : String \textbf{[PK]}\\
-            + domaine\_metier : String \\
-            + type\_regle\_dq : String \\
-            + volume\_total : Long \\
-            + lignes\_conformes : Long \\
-            + score\_qualite\_pct : Double \\
-            + statut : String (PASS/WARN/FAIL)\\
-            + date\_execution : Timestamp\\
-            + criticite : String
+            \textbf{Clés de jointure :}\\
+            - Run\_ID \hfill \textit{String}\\
+            - Query\_ID \hfill \textit{String}\\
+            \midrule
+            \textbf{Indicateurs métier (History) :}\\
+            - Date de run \hfill \textit{Date}\\
+            - Table \hfill \textit{String}\\
+            - Colonne \hfill \textit{String}\\
+            - Domaine \hfill \textit{String}\\
+            - Règle \hfill \textit{String}\\
+            - Score Qualité (\%) \hfill \textit{Double}\\
+            - Statut (PASS/WARN/FAIL) \hfill \textit{String}\\
+            - Criticité \hfill \textit{String}\\
+            - Volume Total \hfill \textit{Long}\\
+            - Lignes Conformes \hfill \textit{Long}\\
+            \midrule
+            \textbf{Configuration (Config) :}\\
+            - Requête SQL exécutée \hfill \textit{String}\\
+            - Chemin Virtuel Complet \hfill \textit{String}\\
+            \midrule
+            \textbf{Statuts techniques (Log) :}\\
+            - Check Execution Status \hfill \textit{String}\\
+            - Check Error Message \hfill \textit{String}\\
+            - Run Execution Status \hfill \textit{String}\\
+            - Run Error Message \hfill \textit{String}\\
+            - Date Mise à jour \hfill \textit{Timestamp}
         };
 
-        \node (checks) [classbox, text width=6cm, right=of colhist, xshift=0.5cm, yshift=2cm] {
-            \textbf{consolidated\_all\_checks\_config}
+        % Top Table (History)
+        \node (colhist) [tablebox, above=of fact, yshift=1.5cm] {
+            \centering \textbf{consolidated\_all\_column\_history} \\ (Table physique Hive)
             \nodepart{second}
-            + run\_id : String \textbf{[FK]}\\
-            + run\_date : Date \\
-            + query\_id : String \textbf{[FK]}\\
-            + table : String \\
-            + domain : String \\
-            + rule : String \\
-            + virt\_col : String \\
-            + virt\_full\_path : String \\
-            + raw\_col : String \\
-            + sql : String \\
-            + updated\_at : Timestamp\\
-            + criticite : String
+            + run\_id \textbf{[PK]} \hfill \textit{String}\\
+            + query\_id \textbf{[PK]} \hfill \textit{String}\\
+            + colonne\_controlee \hfill \textit{String}\\
+            + chemin\_source \hfill \textit{String}\\
+            + table\_dataset \hfill \textit{String}\\
+            + domaine\_metier \hfill \textit{String}\\
+            + type\_regle\_dq \hfill \textit{String}\\
+            + volume\_total \hfill \textit{Long}\\
+            + lignes\_conformes \hfill \textit{Long}\\
+            + score\_qualite\_pct \hfill \textit{Double}\\
+            + statut \hfill \textit{String}\\
+            + date\_execution \hfill \textit{Timestamp}\\
+            + criticite \hfill \textit{String}
         };
 
-        \node (exec) [classbox, text width=6cm, right=of colhist, xshift=0.5cm, yshift=-2cm] {
-            \textbf{consolidated\_execution\_log}
+        % Bottom Left Table (Checks Config)
+        \node (checks) [tablebox, below left=of fact, xshift=-1cm, yshift=-1.5cm] {
+            \centering \textbf{consolidated\_all\_checks\_config} \\ (Table physique Hive)
             \nodepart{second}
-            + run\_id : String \textbf{[FK]}\\
-            + run\_date : Date \\
-            + query\_id : String \textbf{[FK]}\\
-            + table : String \\
-            + domain : String \\
-            + rule : String \\
-            + virt\_col : String \\
-            + virt\_full\_path : String \\
-            + raw\_col : String \\
-            + check\_execution\_status : String \\
-            + check\_error\_message : String \\
-            + check\_timestamp : Timestamp \\
-            + run\_execution\_status : String \\
-            + run\_error\_message : String \\
-            + updated\_at : Timestamp
+            + run\_id \textbf{[PK]} \hfill \textit{String}\\
+            + query\_id \textbf{[PK]} \hfill \textit{String}\\
+            + run\_date \hfill \textit{Date}\\
+            + table \hfill \textit{String}\\
+            + domain \hfill \textit{String}\\
+            + rule \hfill \textit{String}\\
+            + virt\_col \hfill \textit{String}\\
+            + virt\_full\_path \hfill \textit{String}\\
+            + raw\_col \hfill \textit{String}\\
+            + sql \hfill \textit{String}\\
+            + updated\_at \hfill \textit{Timestamp}\\
+            + criticite \hfill \textit{String}
         };
 
-        \node (dremio) [draw, rectangle split, rectangle split parts=2, fill=green!5, rounded corners, align=left, text width=6cm, right=of checks, xshift=0.5cm, yshift=-2cm] {
-            \textbf{fact\_tiers\_dq\_consolidated (Vue Dremio)}
+        % Bottom Right Table (Execution Log)
+        \node (exec) [tablebox, below right=of fact, xshift=1cm, yshift=-1.5cm] {
+            \centering \textbf{consolidated\_execution\_log} \\ (Table physique Hive)
             \nodepart{second}
-            \textit{Jointure des 3 tables (21 colonnes)} \\
-            - Regroupe l'historique, la configuration \\
-            et le statut d'exécution pour Tableau.
+            + run\_id \textbf{[PK]} \hfill \textit{String}\\
+            + query\_id \textbf{[PK]} \hfill \textit{String}\\
+            + run\_date \hfill \textit{Date}\\
+            + table \hfill \textit{String}\\
+            + domain \hfill \textit{String}\\
+            + rule \hfill \textit{String}\\
+            + virt\_col \hfill \textit{String}\\
+            + virt\_full\_path \hfill \textit{String}\\
+            + raw\_col \hfill \textit{String}\\
+            + check\_execution\_status \hfill \textit{String}\\
+            + check\_error\_message \hfill \textit{String}\\
+            + check\_timestamp \hfill \textit{Timestamp} \\
+            + run\_execution\_status \hfill \textit{String}\\
+            + run\_error\_message \hfill \textit{String}\\
+            + updated\_at \hfill \textit{Timestamp}
         };
 
-        \draw[->, dashed] (checks.west) -- node[above, sloped] {lié par run\_id, query\_id} (colhist.east);
-        \draw[->, dashed] (exec.west) -- node[below, sloped] {lié par run\_id, query\_id} (colhist.east);
-        
-        \draw[->, thick, green!50!black] (colhist.east) to[bend left=10] (dremio.west);
-        \draw[->, thick, green!50!black] (checks.east) to[bend left=10] (dremio.west);
-        \draw[->, thick, green!50!black] (exec.east) to[bend left=10] (dremio.west);
+        % Arrows pointing to the central fact table
+        \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (colhist.south) -- node[right, font=\footnotesize\bfseries, text=gray!80] {Virtualisation Dremio} (fact.north);
+        \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (checks.north east) -- (fact.south west);
+        \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (exec.north west) -- (fact.south east);
         
     \end{tikzpicture}
     }
-    \caption{Diagramme de classes des tables physiques et de la vue consolidée}
-    \label{fig:class_dq}
+    \caption{Modélisation de la grande table de faits \texttt{fact\_tiers\_dq\_consolidated} et ses 3 tables sources}
+    \label{fig:fact_dq}
 \end{figure}
 
 \subsection{Modèle relationnel}
