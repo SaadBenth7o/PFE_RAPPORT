@@ -327,14 +327,14 @@ TBLPROPERTIES ('orc.compress'='SNAPPY');
 \end{lstlisting}
 
 % =========================
-\section{Création du DAG Airflow indépendant \texttt{dq\_tiers\_daily}}
+\section{Création du DAG Airflow indépendant \texttt{daily\_dq\_00}}
 
 \subsection{Ajout de la tâche DQ}
 
-Un nouveau DAG nommé \texttt{dq\_tiers\_daily} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite le \texttt{BashOperator} pour déclencher un script d'enveloppe Shell (\texttt{run\_dq.sh}), garantissant une exécution modulaire et isolée du moteur Python Soda Core sur le nœud Edge.
+Un nouveau DAG nommé \texttt{daily\_dq\_00} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite l'orchestrateur pour déclencher le pipeline Python Soda Core, garantissant une exécution modulaire et isolée du moteur de qualité sur le nœud Edge.
 
 \begin{lstlisting}[language=Python]
-# DAG indépendant dq_tiers_daily (Airflow)
+# DAG indépendant daily_dq_00 (Airflow)
 from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 import subprocess
@@ -367,7 +367,7 @@ dq_tiers_task = PythonOperator(
 
 \subsection{Planification et monitoring}
 
-Ce nouveau DAG \texttt{dq\_tiers\_daily} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} lance le script shell qui gère en interne le ticket Kerberos (\texttt{kinit}) puis déclenche le job PySpark. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
+Ce nouveau DAG \texttt{daily\_dq\_00} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} déclenche l'exécution du job PySpark de validation de données. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
 
 % =========================
 \section{Exposition et virtualisation sous Dremio}
