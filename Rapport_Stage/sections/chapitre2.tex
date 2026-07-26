@@ -10,7 +10,7 @@ Les besoins fonctionnels décrivent les actions que le système doit être capab
 
 \subsection{Automatisation et planification des contrôles}
 \begin{itemize}
-    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\underline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) (via un nouveau DAG dédié s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00) ,
+    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\uline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) (via un nouveau DAG dédié s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00) ,
     \item \textbf{Sous-besoin 1.2 : Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
 \end{itemize}
 
