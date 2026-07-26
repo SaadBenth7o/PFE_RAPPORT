@@ -341,48 +341,63 @@ Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. 
 
 Tous les filtres (par date d'exécution, par sous-domaine, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
 
-\subsection{Onglet 1 — Vue Exécutive}
 
-La figure \ref{fig:dashboard_exec} présente l'onglet « Vue Exécutive » du dashboard.
+\emph{Note de confidentialité : Il est important de souligner que, pour des raisons évidentes de sécurité et de respect du secret bancaire, les noms de tables réels et certaines données sensibles présentées dans les captures d'écran suivantes ont fait l'objet d'un masquage ou d'un floutage systématique.}
+
+\subsection{Onglet 1 — Vue d'ensemble (Dashboard Global)}
+
+La figure \ref{fig:vuehome} présente la page d'accueil du dashboard, offrant une vision synthétique de l'état de santé du référentiel.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/dashboard_vue_exec.png}
-    \caption{Dashboard Tableau — Vue Exécutive : scores DQ globaux métier}
-    \label{fig:dashboard_exec}
+    \includegraphics[width=\textwidth]{figures/vuehome.png}
+    \caption{Dashboard Tableau — Vue d'ensemble de la qualité des données}
+    \label{fig:vuehome}
 \end{figure}
 
-Cet onglet affiche :
+Cet onglet centralise les indicateurs de haut niveau :
 \begin{itemize}
-    \item Le score DQ global du jour pour le domaine Tiers (indicateurs chiffrés 0–100)
-    \item La courbe d'évolution des scores sur les 30 derniers jours
-    \item Le nombre d'alertes critiques et hautes en cours
-    \item La date et l'heure de la dernière exécution du batch d'ingestion (\texttt{dailyow22})
+    \item Le \textbf{Score Général} de qualité (ex: 88,70\%) et sa variation par rapport à la semaine précédente.
+    \item La répartition des contrôles par statut : le nombre de tests en succès (PASS), en avertissement (WARN) ou en échec (FAIL), accompagnés de leurs pourcentages respectifs.
+    \item Le périmètre évalué (nombre de tables contrôlées et nombre de règles déployées).
+    \item L'\textbf{Évolution du score} sur les 5 dernières semaines sous forme de graphique linéaire, permettant d'observer la tendance globale de la qualité.
+    \item Un tableau de classement détaillant le \textbf{Score par table}, permettant d'identifier d'un coup d'œil les tables les plus problématiques (marquées en rouge "Fail").
 \end{itemize}
 
-\subsection{Onglet 2 — Détails Métier}
+\subsection{Onglet 2 — Heatmap Qualité}
 
-La figure \ref{fig:dashboard_kyc} présente l'onglet « Détails Métier ».
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/dashboard_kyc.png}
-    \caption{Dashboard Tableau — Détails Métier : score par colonne et dimension DQ}
-    \label{fig:dashboard_kyc}
-\end{figure}
-
-\subsection{Onglet 3 — Détail CSP}
+La figure \ref{fig:heatmap} présente la vue matricielle détaillée.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/dashboard_csp.png}
-    \caption{Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}
-    \label{fig:dashboard_csp}
+    \includegraphics[width=\textwidth]{figures/HEATMAP.png}
+    \caption{Dashboard Tableau — Heatmap Qualité par colonne et par date}
+    \label{fig:heatmap}
 \end{figure}
 
-\subsection{Onglet 4 — Anomalies et Remédiation}
+Cet onglet permet une analyse granulaire du niveau de qualité :
+\begin{itemize}
+    \item Il liste précisément chaque \textbf{Indicateur contrôlé} (ex: \texttt{birthdate}, \texttt{gender}, \texttt{city}, etc.) associé à sa \textbf{Règle de qualité} (Complétude, Validité, Conformité).
+    \item Une \textbf{carte de chaleur (Heatmap) temporelle} colore les résultats par date de scan, allant du rouge (échec total) au vert (succès total). Cette visualisation est extrêmement pertinente pour repérer rapidement des dégradations soudaines (incident de pipeline) ou confirmer l'efficacité d'une campagne de remédiation des données au fil du temps.
+\end{itemize}
 
-Le quatrième onglet présente le résumé des règles de qualité en échec (triée par criticité décroissante). Elle permet aux Data Stewards de cibler directement les colonnes et les règles de gestion présentant des taux d'anomalies élevés pour engager des actions de correction collectives dans NOVA. Les colonnes affichées sont : \texttt{table\_name}, \texttt{column\_name}, \texttt{check\_name}, \texttt{total\_rows}, \texttt{invalid\_rows}, \texttt{percentage}, \texttt{criticite}, \texttt{run\_date}.
+\subsection{Onglet 3 — Top Anomalies}
+
+La figure \ref{fig:anomaly} présente la vue orientée sur l'analyse et la remédiation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/anomaly.png}
+    \caption{Dashboard Tableau — Top anomalies et colonnes en échec}
+    \label{fig:anomaly}
+\end{figure}
+
+Ce dernier onglet est un véritable outil d'action pour les Data Stewards :
+\begin{itemize}
+    \item Il cible exclusivement les règles de qualité et les colonnes présentant des taux d'anomalies élevés.
+    \item Un diagramme en barres horizontales présente le \textbf{Score Global (\%)} pour chaque indicateur en souffrance. Plus la barre s'approche du rouge et de 0, plus la volumétrie de données non-conformes est critique.
+    \item Grâce aux filtres dynamiques situés en haut (par table, par indicateur, par règle ou par date), les utilisateurs métiers peuvent isoler instantanément les axes nécessitant des actions de correction collectives dans l'application source NOVA.
+\end{itemize}
 
 \section*{Conclusion}
 
