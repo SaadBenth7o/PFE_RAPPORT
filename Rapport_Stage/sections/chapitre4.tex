@@ -1,14 +1,18 @@
 \chapter{Réalisation de la Solution}
 
 \section*{Introduction}
-Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA (\textbf{\uline{le périmètre complet englobe environ 15 tables Tiers ; dans ce chapitre, les tables \texttt{ccm\_npdescription} et \texttt{ccm\_job} serviront d'exemples illustratifs}}). Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
+Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA (\textbf{\uline{le périmètre complet englobe environ 15 tables Tiers ; dans ce chapitre, les tables \texttt{ccm\_npdescription} et \texttt{ccm\_job} serviront d'exemples illustratifs}}). 
+
+Nous détaillerons successivement l'environnement technique de développement et l'accès via MobaXterm, l'implémentation complète du script Soda Core avec Spark, la création des trois tables Hive physiques de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place de la vue virtualisée sous Dremio, et enfin la réalisation du dashboard Tableau.
 
 % =========================
 \section{Environnement technique de développement}
 
-\subsection{Environnement Hadoop et cluster}
+\subsection{Environnement Hadoop et accès distant}
 
-Le développement et les tests ont été réalisés dans l'environnement Hadoop de CIH Bank. L'accès aux tables Hive et aux fichiers HDFS est effectué via les interfaces disponibles dans l'environnement Data Office, en utilisant les comptes de service existants du domaine Tiers.
+Le développement et les tests ont été réalisés dans l'environnement Hadoop sécurisé de CIH Bank. L'accès aux serveurs du cluster (nœud Edge) et l'exécution des commandes en ligne de commande (CLI) s'effectuent via l'outil \textbf{MobaXterm}. MobaXterm est un terminal avancé qui fournit toutes les fonctionnalités réseaux nécessaires (SSH, SFTP) pour se connecter au cluster Big Data. 
+
+Une fois connecté au nœud Edge, l'authentification sécurisée est garantie par le protocole \textbf{Kerberos} (commande \texttt{kinit}). L'accès aux tables Hive et aux fichiers HDFS est effectué en utilisant les comptes de service existants du domaine Tiers.
 
 Les versions exactes des composants utilisés dans l'environnement de production sont les suivantes :
 
@@ -46,10 +50,10 @@ Tableau Desktop & Professional Edition 2024.1.2 \\
 
 La politique stricte de sécurité des systèmes d'information (PSSI) de CIH BANK impose une isolation réseau (air-gap) des serveurs du cluster Big Data, interdisant par conséquent tout accès direct à Internet. L'exécution standard de la commande \texttt{pip install} pour rapatrier les dépendances depuis le registre public PyPI est donc impossible.
 
-L'installation de Soda Core et de son connecteur Spark a donc été réalisée via une procédure d'installation hors-ligne (Offline Wheel Installation) :
+L'installation de Soda Core et de son connecteur Spark a été réalisée via une procédure d'installation hors-ligne (Offline Wheel Installation) :
 \begin{enumerate}
-    \item \textbf{Téléchargement des archives (Wheels)} : Sur un poste de travail disposant d'un accès à Internet, les archives des paquets \texttt{soda-core} et \texttt{soda-core-spark} ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format \texttt{.whl} dans un dossier dédié.
-    \item \textbf{Transfert sécurisé} : Le dossier d'archives a été contrôlé puis transféré de manière sécurisée (SFTP/SCP) vers le nœud Edge (Gateway) du cluster.
+    \item \textbf{Téléchargement des archives (Wheels)} : Sur un poste de travail disposant d'un accès à Internet, les archives des paquets \texttt{soda-core} et \texttt{soda-core-spark} ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format \texttt{.whl} dans un dossier dédié via la commande \texttt{pip download}.
+    \item \textbf{Transfert sécurisé via MobaXterm} : Le dossier d'archives a été transféré de manière sécurisée en SFTP vers le nœud Edge du cluster grâce à l'interface graphique de MobaXterm.
     \item \textbf{Installation locale} : Sur le nœud Edge, les paquets ont été déployés dans l'environnement virtuel Python (venv) alloué à l'orchestrateur Airflow à l'aide de la commande \texttt{pip}, en forçant la recherche locale :
 \end{enumerate}
 
@@ -58,279 +62,188 @@ source /opt/airflow/venv_dq/bin/activate
 pip install --no-index --find-links=./soda_wheels soda-core-spark
 \end{lstlisting}
 
-Cette méthode garantit la reproductibilité de l'environnement de contrôle tout en respectant scrupuleusement les contraintes de sécurité bancaires.
-
 % =========================
-\section{Implémentation du moteur DQ — Soda Core}
+\section{Implémentation du moteur DQ — Soda Core et Spark}
 
-\subsection{Structure des fichiers du projet DQ}
+\subsection{Principe de fonctionnement de Soda Core avec Spark}
 
-Le projet DQ est organisé selon l'arborescence suivante :
+Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire. Le principe de fonctionnement adopté est le suivant :
+\begin{enumerate}
+    \item Le script Python crée une \textbf{SparkSession}.
+    \item Il charge les tables Hive brutes de la zone RAW (par exemple, \texttt{ccm\_npdescription}) sous forme de \textbf{DataFrames PySpark}.
+    \item Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires} (\texttt{createOrReplaceTempView}).
+    \item Soda Core lit le fichier de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL}, et exécute ces requêtes directement sur les vues temporaires en utilisant le moteur distribué de Spark.
+\end{enumerate}
+Cette approche permet d'analyser d'énormes volumes de données de manière distribuée sur le cluster via YARN, sans surcharger le Hive Metastore par de multiples requêtes de contrôle.
 
-\begin{lstlisting}
-dq_tiers/
-|-- dq_tiers_checks.py          # Script principal Python
-|-- checks/
-|   |-- checks_tiers.yml        # Regles DQ fonctionnelles Tiers
-|   |-- checks_csp.yml          # Regles DQ colonnes CSP
-|   +-- checks_pipeline.yml     # Regles fraicheur & pipeline
-+-- utils/
-    +-- hive_writer.py          # Module d'ecriture resultats dans Hive
-\end{lstlisting}
+\subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml})}
 
-\subsection{Fichier de configuration YAML — Règles Métier (\texttt{checks\_tiers.yml})}
+Les règles métier sont définies dans des fichiers YAML de manière déclarative. Conformément aux conventions de nommage, toutes les règles du domaine Tiers (qu'elles concernent les données KYC ou CSP) sont centralisées. À titre d'illustration, nous présentons ci-dessous un extrait du fichier \texttt{checks\_tiers.yml} regroupant des contrôles de complétude et de validité sur deux tables du périmètre : \texttt{ccm\_npdescription} et \texttt{ccm\_job}.
 
 \begin{lstlisting}[language=YAML]
 # checks_tiers.yml
-# Regles Data Quality - Domaine Tiers
-# Source : raw_nova_referentieltiers.ccm_npdescription (zone RAW)
-# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquee
+# Regles Data Quality - Domaine Tiers (KYC & CSP)
 
 checks for ccm_npdescription:
-
   # --- Completude ---
   - missing_count(name) = 0:
       name: "KYC-01 | Completude | Nom"
-      fail: error
       attributes:
         criticite: CRITIQUE
-        domaine: KYC
         dimension: completeness
 
   - missing_count(first_name) = 0:
       name: "KYC-02 | Completude | Prenom"
-      fail: error
       attributes:
         criticite: CRITIQUE
-        domaine: KYC
-        dimension: completeness
-
-  - missing_count(birthdate) = 0:
-      name: "KYC-03 | Completude | Date de naissance"
-      fail: error
-      attributes:
-        criticite: CRITIQUE
-        domaine: KYC
-        dimension: completeness
-
-  - missing_count(nationality_country) = 0:
-      name: "KYC-04 | Completude | Nationalite"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: KYC
         dimension: completeness
 
   # --- Validite ---
-  - invalid_count(civility) = 0:
-      valid values: ["M.", "MME", "MLLE"]
-      name: "KYC-05 | Validite | Civilite hors referentiel"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: KYC
-        dimension: validity
-
   - invalid_count(gender) = 0:
       valid values: ["M", "F"]
       name: "KYC-06 | Validite | Genre hors referentiel"
-      fail: warn
       attributes:
         criticite: HAUTE
-        domaine: KYC
         dimension: validity
 
-  # --- Fraicheur ---
-  - freshness(batch_datetime_eaac4) < 26h:
-      name: "KYC-07 | Fraicheur | Retard batch"
-      fail: error
+checks for ccm_job:
+  # --- Completude ---
+  - missing_count(professional_sector) = 0:
+      name: "CSP-01 | Completude | Secteur professionnel"
+      attributes:
+        criticite: CRITIQUE
+        dimension: completeness
+
+  - missing_count(employer) = 0:
+      name: "CSP-02 | Completude | Employeur"
       attributes:
         criticite: HAUTE
-        domaine: PIPELINE
-        dimension: freshness
+        dimension: completeness
 \end{lstlisting}
 
+\subsection{Traduction des règles SodaCL en Spark SQL}
 
+En interne, Soda Core traduit chaque condition déclarative SodaCL (Soda Check Language) en une syntaxe Spark SQL adaptée. Par exemple, la règle de complétude \texttt{missing\_count(name) = 0} se traduira par une requête mesurant le nombre de valeurs nulles (\texttt{SELECT COUNT(*) FROM ccm\_npdescription WHERE name IS NULL}). La règle de validité sur le genre (\texttt{invalid\_count(gender) = 0 valid values: ["M", "F"]}) génère un contrôle d'exclusion (\texttt{SELECT COUNT(*) FROM ccm\_npdescription WHERE gender NOT IN ('M','F')}). Cela décharge le Data Engineer de l'écriture fastidieuse du code SQL.
 
 \subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
 
+Le script Python principal orchestre l'exécution. Après le scan, il n'y a pas d'écriture automatique des résultats par Soda Core. Le script extrait les résultats du scan via l'API (méthode \texttt{get\_scan\_results()}), et les transforme en trois DataFrames PySpark distincts. Conformément à la conception (voir Chapitre 3), ces DataFrames sont ensuite persistés dans trois tables physiques Hive : l'historique des colonnes, la configuration des contrôles, et le journal d'exécution.
+
 \begin{lstlisting}[language=Python]
 # dq_tiers_checks.py
-# Pipeline de Data Quality - Referentiel Tiers PP Clients - Zone RAW
-# CIH Bank - Data Office
-# Auteur : Saad BENDAHOU
-# Declenchement : Nouveau DAG Indépendant (00h00)
-
-import argparse
 import datetime
-from datetime import date
 from pyspark.sql import SparkSession
 from soda.scan import Scan
+import json
 
 def run_dq_checks(run_date: str):
-    """
-    Execute les controles DQ Soda Core sur les tables Hive
-    du domaine Tiers et persiste les resultats.
-    """
-    # --- 1. Initialisation de la SparkSession ---
+    # 1. Initialisation de la SparkSession
     spark = SparkSession.builder \
         .appName("DQ_Tiers_Checks") \
         .enableHiveSupport() \
         .getOrCreate()
 
-    # --- 2. Initialisation du scan Soda Core ---
+    # 2. Chargement des tables physiques Hive en Vues Temporaires Spark
+    tables_to_check = ["ccm_npdescription", "ccm_job"]
+    for table in tables_to_check:
+        df = spark.sql(f"SELECT * FROM raw_nova_referentieltiers.{table}")
+        df.createOrReplaceTempView(table)
+
+    # 3. Initialisation du scan Soda Core
     scan = Scan()
-    scan.set_data_source_name("hive_raw")
-    scan.add_spark_session(spark, "hive_raw")
+    scan.set_data_source_name("spark_df")
+    scan.add_spark_session(spark)
+    scan.add_sodacl_yaml_file("checks/checks_tiers.yml")
 
-    # --- 3. Chargement des fichiers de regles YAML ---
-    scan.add_sodacl_yaml_file("checks/checks_kyc.yml")
-    scan.add_sodacl_yaml_file("checks/checks_csp.yml")
-    scan.add_sodacl_yaml_file("checks/checks_pipeline.yml")
-
-    # --- 4. Execution des checks ---
+    # 4. Execution distribuee des checks
     scan.execute()
+    results_dict = scan.get_scan_results()
 
-    # --- 5. Collecte et persistance des resultats de faits ---
-    run_timestamp = datetime.datetime.now()
-    results_data = []
-
-    for check in scan.get_checks_self():
-        passed = check.outcome == "pass"
-        score = 100.0 if passed else (50.0 if check.outcome == "warn" else 0.0)
-        
-        # Recupere le total des lignes et le nombre d'anomalies
-        total_rows = spark.table(f"raw_nova_referentieltiers.{check.dataset_name}").count()
-        invalid_rows = int(check.check_value or 0) if not passed else 0
-        valid_rows = total_rows - invalid_rows
-        percentage = (valid_rows / total_rows) * 100.0 if total_rows > 0 else 100.0
-
-        results_data.append((
-            run_timestamp,
-            "dailyow22",
-            check.dataset_name,
-            check.column_name or "TRANSVERSE",
-            check.name,
-            check.attributes.get('dimension', 'completeness'),
-            check.attributes.get('criticite', 'HAUTE'),
-            check.attributes.get('domaine', 'Tiers'),
-            total_rows,
-            valid_rows,
-            invalid_rows,
-            percentage,
-            check.outcome,
-            score,
-            run_date
-        ))
-
-    if results_data:
-        df = spark.createDataFrame(results_data, [
-            "run_timestamp", "dag_name", "table_name", "column_name", "check_name",
-            "dimension", "criticite", "domaine", "total_rows", "valid_rows",
-            "invalid_rows", "percentage", "state", "score_dq", "run_date"
-        ])
-        df.write.mode("append").partitionBy("run_date").saveAsTable("dq_results.dq_tiers_results_fact")
+    # 5. Extraction et structuration en 3 tables
+    # (Le code de parsing de results_dict vers 3 DataFrames 
+    # est omi par souci de concision)
+    
+    # ... Logique de transformation en 3 DataFrames :
+    # df_history, df_config, df_exec
+    
+    # 6. Persistance physique dans Hive (Append Mode)
+    df_history.write.mode("append") \
+        .saveAsTable("dq_results.consolidated_all_column_history")
+    df_config.write.mode("append") \
+        .saveAsTable("dq_results.consolidated_all_checks_config")
+    df_exec.write.mode("append") \
+        .saveAsTable("dq_results.consolidated_execution_log")
 
     spark.stop()
-    print(f"[DQ Tiers] Controles termines pour la date {run_date}")
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--run_date", type=str, default=str(date.today()))
-    args = parser.parse_args()
-    run_dq_checks(args.run_date)
 \end{lstlisting}
 
 % =========================
-\section{Création des tables Hive de persistance}
+\section{Création des tables Hive physiques de persistance}
 
-Les tables de persistance DQ sont créées dans la base Hive \texttt{dq\_results}. Le script HiveQL de création est le suivant :
+Les trois tables de persistance, définies lors de la conception, sont créées physiquement dans la base Hive \texttt{dq\_results}. Ces tables stockent l'intégralité des métriques : les scores de qualité, les définitions SQL générées, et les statuts d'exécution. L'utilisation du format ORC avec compression Snappy garantit de très hautes performances lors des requêtes analytiques ultérieures.
 
 \begin{lstlisting}[language=SQL]
--- Creation de la base dediee DQ
-CREATE DATABASE IF NOT EXISTS dq_results
-COMMENT 'Base de resultats Data Quality - CIH Bank Data Office';
+CREATE DATABASE IF NOT EXISTS dq_results;
 
--- Table de faits unique pour la Data Quality
-CREATE TABLE IF NOT EXISTS dq_results.dq_tiers_results_fact (
-    run_timestamp   TIMESTAMP,
-    dag_name        STRING,
-    table_name      STRING,
-    column_name     STRING,
-    check_name      STRING,
-    dimension       STRING,
-    criticite       STRING,
-    domaine         STRING,
-    total_rows      BIGINT,
-    valid_rows      BIGINT,
-    invalid_rows    BIGINT,
-    percentage      DOUBLE,
-    state           STRING,
-    score_dq        DOUBLE
-)
-PARTITIONED BY (run_date DATE)
-STORED AS ORC
-TBLPROPERTIES ('orc.compress'='SNAPPY');
+-- Table 1 : Historique des scores et resultats
+CREATE TABLE dq_results.consolidated_all_column_history (
+    run_id STRING, query_id STRING, colonne_controlee STRING, 
+    score_qualite_pct DOUBLE, statut STRING, anomalies_count BIGINT
+) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
+
+-- Table 2 : Configuration des checks (code SQL genere)
+CREATE TABLE dq_results.consolidated_all_checks_config (
+    run_id STRING, query_id STRING, sql_query STRING, 
+    check_name STRING, dimension STRING, criticite STRING
+) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
+
+-- Table 3 : Journal d'execution (statut technique)
+CREATE TABLE dq_results.consolidated_execution_log (
+    run_id STRING, query_id STRING, execution_status STRING, 
+    error_message STRING, run_timestamp TIMESTAMP
+) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
 \end{lstlisting}
 
 % =========================
-\section{Création du DAG Airflow indépendant \texttt{daily\allowbreak\_dq\allowbreak\_00}}
+\section{Création du DAG Airflow indépendant}
 
-\subsection{Ajout de la tâche DQ}
-
-Un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite l'orchestrateur pour déclencher le pipeline Python Soda Core, garantissant une exécution modulaire et isolée du moteur de qualité sur le nœud Edge.
+Pour garantir un découplage total avec le processus d'ingestion (Sqoop), un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été configuré dans Airflow. Ce DAG s'exécute quotidiennement à 00h00. Il utilise le \texttt{PythonOperator} couplé à \texttt{subprocess} pour déclencher le job d'évaluation de la qualité. En cas d'échec d'une règle critique, l'orchestrateur remonte une erreur globale.
 
 \begin{lstlisting}[language=Python]
-# DAG indépendant daily_dq_00 (Airflow)
 from airflow.operators.python import PythonOperator
-from airflow.utils.trigger_rule import TriggerRule
 import subprocess
 
 def run_dq_tiers(**context):
-    run_date = context['ds']  # Format YYYY-MM-DD
+    run_date = context['ds']
     result = subprocess.run(
-        [
-            'python',
-            '/opt/airflow/scripts/dq/dq_tiers_checks.py',
-            '--run_date', run_date
-        ],
-        capture_output=True,
-        text=True
+        ['python', '/opt/airflow/scripts/dq/dq_tiers_checks.py', '--run_date', run_date],
+        capture_output=True, text=True
     )
     if result.returncode != 0:
-        raise Exception(f"DQ Tiers failed:\n{result.stderr}")
+        raise Exception(f"Echec DQ Tiers:\n{result.stderr}")
 
 dq_tiers_task = PythonOperator(
     task_id='run_dq_tiers_checks',
     python_callable=run_dq_tiers,
-    trigger_rule=TriggerRule.ALL_DONE,
     dag=dag
 )
-
-# Positionnement dans le graphe : apres toutes les ingestions CCM_*
-[ccm_party_task, ccm_npdescription_task, ccm_job_task,
- ccm_portfolio_task, ccm_context_task] >> dq_tiers_task
 \end{lstlisting}
-
-\subsection{Planification et monitoring}
-
-Ce nouveau DAG \texttt{daily\allowbreak\_dq\allowbreak\_00} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} déclenche l'exécution du job PySpark de validation de données. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
 
 % =========================
 \section{Exposition et virtualisation sous Dremio}
 
-Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques générées par Soda Core.
+Une fois les trois tables physiques alimentées dans Hive (\texttt{consolidated\_all\_column\_history}, \texttt{consolidated\_all\_checks\_config}, et \texttt{consolidated\_execution\_log}), il est nécessaire de consolider ces informations pour les exposer à l'outil BI Tableau de manière claire et optimale. 
 
-Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données). La figure \ref{fig:screenshot_dremio} montre le lignage réel des données au sein de la plateforme Dremio.
+Plutôt que de créer une table physique supplémentaire ou d'effectuer des jointures complexes et coûteuses dans Tableau, nous utilisons \textbf{Dremio} en tant que couche de virtualisation sémantique.
+
+Dans Dremio, nous créons un dataset virtuel (VDS) nommé \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated}. Cette vue réalise dynamiquement la jointure sur les clés uniques \texttt{run\_id} et \texttt{query\_id} des trois tables sources de Hive. Le résultat est une table de faits consolidée, exposant la totalité de la vision 360\textdegree{} des règles DQ, sans aucune duplication physique des données. Dremio accélère les temps de réponse de cette jointure virtuelle grâce à ses réflexions matérielles (Data Reflections).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
-    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated}}
+    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique à partir des 3 tables Hive}
     \label{fig:screenshot_dremio}
 \end{figure}
-
-Afin d'optimiser les performances de requêtage, aucune pré-agrégation lourde n'est appliquée au niveau de Dremio. L'exposition de cette grande table de faits consolidée permet de déléguer toute l'intelligence de calcul et de restitution dynamique à l'outil BI Tableau Desktop.
 
 % =========================
 \section{Réalisation du dashboard Tableau}
