@@ -23,7 +23,7 @@ Les besoins fonctionnels décrivent les actions que le système doit être capab
 
 \subsection{Historisation et traçabilité des indicateurs}
 \begin{itemize}
-    \item \textbf{Sous-besoin 3.1 : Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans une table d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution ,
+    \item \textbf{Sous-besoin 3.1 : Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans des tables d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution ,
     \item \textbf{Sous-besoin 3.2 : Identification des anomalies (Remédiation)} : Le système doit capturer de manière détaillée la liste des enregistrements clients en anomalie en stockant leur identifiant technique (UUID) et leur radical (numéro client), ainsi que le libellé du contrôle en échec et sa criticité. Ces informations doivent être stockées dans une table d'anomalies pour actions correctives.
 \end{itemize}
 

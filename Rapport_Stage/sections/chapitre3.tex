@@ -113,6 +113,17 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
 
 La modélisation statique définit la structure fixe du système, ses composants de données, le schéma relationnel de stockage de l'historique de qualité, ainsi que le dictionnaire des métadonnées associées.
 
+\subsection{Conception de la couche de virtualisation Dremio}
+Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques.
+Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\_tiers\_dq\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
+    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\_tiers\_dq\_consolidated}}
+    \label{fig:screenshot_dremio}
+\end{figure}
+
 \subsection{Modélisation de la table de faits}
 Étant donné que la solution s'articule autour de la manipulation de données (Data Management) et non d'un développement orienté objet, nous remplaçons le diagramme de classes traditionnel par une modélisation explicite de la table de faits. 
 
@@ -472,16 +483,7 @@ Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifi
 \subsubsection{Conception de l'orchestration Airflow}
 La planification, le déclenchement et le monitoring des scans de qualité sont entièrement automatisés par Apache Airflow au moyen d'un unique DAG quotidien nommé \texttt{dailyow22}. La tâche de Data Quality est conçue comme une étape post-ingestion. Elle s'exécute immédiatement après le succès des tâches d'ingestion Sqoop qui rapatrient les tables sources NOVA vers le Data Lake. Afin de garantir la surveillance du pipeline technique, la tâche de qualité est configurée avec la règle de déclenchement \texttt{TriggerRule.ALL\_DONE}. Cela assure que même si une tâche d'ingestion non critique échoue, les contrôles de qualité s'exécutent sur les tables correctement importées, ce qui évite d'aveugler le monitoring en cas de panne technique partielle.
 
-\subsubsection{Conception de la couche de virtualisation Dremio}
-Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques.
-Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\_tiers\_dq\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données).
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
-    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\_tiers\_dq\_consolidated}}
-    \label{fig:screenshot_dremio}
-\end{figure}
 
 \subsubsection{Conception du dashboard Tableau}
 La restitution visuelle est structurée dans un dashboard Tableau interactif connecté en direct au dataset virtuel unique de Dremio. L'intelligence analytique (calcul des scores quotidiens moyens, taux de conformité globaux, regroupements par dimension de qualité ou par date) est configurée à l'aide de feuilles de calcul (sheets) et de filtres dynamiques directement dans Tableau Desktop, tirant parti de la table de faits unique. Le dashboard est structuré en quatre onglets fonctionnels :
