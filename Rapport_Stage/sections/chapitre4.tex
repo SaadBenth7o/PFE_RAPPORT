@@ -267,7 +267,6 @@ def run_dq_checks(run_date: str):
              if qid in q.get("name","")), ""
         )
         exec_ok = (outcome != "error")
-        virt_path = "dq_results.consolidated_all_column_history"
 
         # -- Table 1 : consolidated_all_column_history --
         history_rows.append(Row(
@@ -294,9 +293,6 @@ def run_dq_checks(run_date: str):
             table     = dataset,
             domain    = attrs.get("domaine", "Tiers"),
             rule      = check.get("name", ""),
-            virt_col  = col,
-            virt_full_path = virt_path,
-            raw_col   = col,
             sql       = sql_gen,
             updated_at = now,
             criticite = attrs.get("criticite", "HAUTE")
@@ -310,9 +306,6 @@ def run_dq_checks(run_date: str):
             table           = dataset,
             domain          = attrs.get("domaine", "Tiers"),
             rule            = check.get("name", ""),
-            virt_col        = col,
-            virt_full_path  = virt_path,
-            raw_col         = col,
             check_execution_status = "SUCCESS" if exec_ok else "ERROR",
             check_error_message    = "" if exec_ok else str(check.get("error","")),
             check_timestamp        = now,
