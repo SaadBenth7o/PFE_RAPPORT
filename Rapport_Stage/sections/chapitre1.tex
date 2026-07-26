@@ -197,7 +197,7 @@ Dans le cadre de l'ingestion des données vers le Data Lake, l'équipe travaille
     \item \textbf{\texttt{np\_description} (Natural Person Description)} : Données d'état civil, d'identification et informations KYC (Know Your Customer) pour les personnes physiques.
 \end{itemize}
 
-Bien que notre étude de l'existant englobe ce vaste écosystème de tables, \textbf{l'implémentation technique, les algorithmes et les règles de Data Quality développés dans la suite de ce rapport se concentreront exclusivement sur la table \texttt{np\_description}}. Cette table est éminemment stratégique car elle concentre les données KYC indispensables à l'identification réglementaire du client, telles que : le nom, le prénom, la date de naissance, la civilité, le genre, la nationalité, et l'identifiant FATCA (pour les clients américains).
+Bien que le pipeline automatisé de qualité de données déployé couvre l'ensemble du domaine Tiers (soit une quinzaine de tables issues de NOVA), \textbf{pour des soucis de clarté et d'illustration, les implémentations techniques et les règles de Data Quality présentées dans la suite de ce rapport se focaliseront particulièrement sur les tables \texttt{np\_description} et \texttt{jobs}}. Ces tables sont éminemment stratégiques : \texttt{np\_description} concentre les données KYC indispensables à l'identification réglementaire du client (nom, prénom, date de naissance, genre, nationalité, etc.), tandis que \texttt{jobs} contient des informations essentielles pour la catégorisation socio-professionnelle (CSP).
 
 \subsubsection*{Architecture et pipeline de données}
 L'ensemble des données ingérées au sein de CIH BANK, incluant celles du domaine Tiers, transite par une plateforme robuste centralisée s'appuyant sur une infrastructure Big Data de pointe. Tout l'écosystème analytique repose sur ce système unifié pour le traitement et la valorisation de la donnée.
@@ -218,7 +218,7 @@ L'architecture matérielle et logicielle de cette plateforme de production s'art
 \end{enumerate}
 
 \subsection{Critique de l'existant}
-Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à la plupart des tables du domaine Tiers. Pour illustrer notre démarche de remédiation, nous nous focaliserons sur la table \texttt{np\_description}, qui contient des données particulièrement intéressantes concernant les personnes physiques (Natural Persons) :
+Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à l'ensemble des tables du domaine Tiers. Pour illustrer l'impact de ces problèmes, nous prendrons l'exemple des tables \texttt{np\_description} et \texttt{jobs}, qui contiennent des données KYC et CSP particulièrement sensibles concernant les personnes physiques :
 \begin{itemize}
     \item \textbf{Absence de validation à la source :} Les données transitent vers Dremio sans aucune validation intermédiaire. Des incohérences flagrantes persistent, comme des discordances entre le genre et la civilité du client, ou des dates de naissance remplies par défaut (ex: 01/01/XXXX) ,
     \item \textbf{Risques de non-conformité :} L'absence ou l'invalidité de certains champs critiques, tels que l'identifiant FATCA pour les clients concernés, expose la banque à des risques réglementaires et à d'éventuelles sanctions ,
@@ -227,8 +227,7 @@ Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'u
 \end{itemize}
 
 \subsection{Solution proposée}
-Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données}, intégré directement dans la zone RAW de l'infrastructure Hadoop, avec un focus particulier sur la table \texttt{np\_description}.
-Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données}, intégré directement dans la zone RAW de l'infrastructure Hadoop.
+Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données} couvrant l'ensemble du périmètre Tiers, intégré directement dans la zone RAW de l'infrastructure Hadoop.
 
 La solution technique s'articulera autour des axes suivants :
 \begin{itemize}
