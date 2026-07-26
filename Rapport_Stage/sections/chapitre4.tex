@@ -96,7 +96,7 @@ Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core i
     \item Les résultats sont extraits sous forme de dictionnaire Python, puis structurés et persistés dans \textbf{3 tables Hive physiques} en mode \texttt{append}.
 \end{enumerate}
 
-\subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml})}
+\subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml} — exemplaire)}
 
 Les règles métier sont définies de manière déclarative en utilisant le langage \textbf{SodaCL} (Soda Check Language). Ce langage permet de définir des contrôles simples (complétude, validité) ou avancés (fraîcheur, unicité, règles SQL personnalisées). Toutes les règles du domaine Tiers (KYC et CSP) sont regroupées dans un fichier unique, présenté ici en extrait illustratif sur les deux tables d'exemple \texttt{ccm\_npdescription} et \texttt{ccm\_job} :
 
@@ -111,6 +111,7 @@ checks for ccm_npdescription:
       attributes:
         criticite: CRITIQUE
         dimension: completeness
+        domaine: Tiers
 
   - missing_count(first_name) = 0:
       name: "KYC-02 | Completude | Prenom"
@@ -125,6 +126,7 @@ checks for ccm_npdescription:
       attributes:
         criticite: HAUTE
         dimension: validity
+        domaine: Tiers
 
   # --- Unicite ---
   - duplicate_count(radical) = 0:
@@ -158,6 +160,7 @@ checks for ccm_job:
       attributes:
         criticite: MOYENNE
         dimension: consistency
+        domaine: Tiers
 \end{lstlisting}
 
 Les fonctions SodaCL utilisées sont les suivantes :
