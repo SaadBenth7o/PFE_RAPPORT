@@ -1,7 +1,7 @@
 \chapter{Réalisation de la Solution}
 
 \section*{Introduction}
-Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA. Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
+Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA (le périmètre complet englobe environ 15 tables Tiers ; dans ce chapitre, les tables \texttt{ccm\_npdescription} et \texttt{ccm\_job} serviront d'exemples illustratifs). Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
 
 % =========================
 \section{Environnement technique de développement}
