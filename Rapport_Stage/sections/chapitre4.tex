@@ -1,7 +1,7 @@
 \chapter{Réalisation de la Solution}
 
 \section*{Introduction}
-Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA. Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans le DAG Airflow \texttt{dailyow22}, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
+Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la \textbf{zone RAW} du Data Lake (base Hive \texttt{raw\_nova\_referentieltiers}), qui constitue la copie exacte et non transformée des tables \texttt{CCM\_*} du système opérant Oracle NOVA. Nous détaillerons successivement l'environnement technique de développement, l'implémentation du script Soda Core, la création des tables Hive de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place des vues Dremio et la réalisation du dashboard Tableau.
 
 % =========================
 \section{Environnement technique de développement}
@@ -212,7 +212,7 @@ checks for ccm_job:
 # Pipeline de Data Quality - Referentiel Tiers PP Clients - Zone RAW
 # CIH Bank - Data Office
 # Auteur : Saad BENDAHOU
-# Declenchement : post-ingestion DAG dailyow22 (22h00)
+# Declenchement : Nouveau DAG Indépendant (00h00)
 
 import argparse
 import datetime
@@ -327,14 +327,14 @@ TBLPROPERTIES ('orc.compress'='SNAPPY');
 \end{lstlisting}
 
 % =========================
-\section{Intégration dans le DAG Airflow \texttt{dailyow22}}
+\section{Création du DAG Airflow indépendant \texttt{dq\_tiers\_daily}}
 
 \subsection{Ajout de la tâche DQ}
 
-La tâche de Data Quality est ajoutée au DAG \texttt{dailyow22} en tant qu'opérateur Python, déclenchée après la fin de toutes les tâches d'ingestion Sqoop des tables \texttt{CCM\_*}. Le \texttt{TriggerRule.ALL\_DONE} garantit que les contrôles DQ s'exécutent même si certaines tâches d'ingestion ont échoué partiellement.
+Un nouveau DAG nommé \texttt{dq\_tiers\_daily} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite le \texttt{BashOperator} pour déclencher un script d'enveloppe Shell (\texttt{run\_dq.sh}), garantissant une exécution modulaire et isolée du moteur Python Soda Core sur le nœud Edge.
 
 \begin{lstlisting}[language=Python]
-# Extrait du DAG dailyow22 (Airflow)
+# DAG indépendant dq_tiers_daily (Airflow)
 from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 import subprocess
@@ -367,7 +367,7 @@ dq_tiers_task = PythonOperator(
 
 \subsection{Planification et monitoring}
 
-Le DAG \texttt{dailyow22} s'exécute quotidiennement à \textbf{22h00}. La tâche DQ \texttt{run\_dq\_tiers\_checks} se déclenche donc automatiquement chaque nuit après l'ingestion, sans intervention manuelle. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ lui-même.
+Ce nouveau DAG \texttt{dq\_tiers\_daily} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} lance le script shell qui gère en interne le ticket Kerberos (\texttt{kinit}) puis déclenche le job PySpark. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
 
 % =========================
 \section{Exposition et virtualisation sous Dremio}
@@ -410,7 +410,7 @@ Cet onglet affiche :
     \item Le score DQ global du jour pour le domaine KYC et le domaine CSP (indicateurs chiffrés 0–100)
     \item La courbe d'évolution des scores sur les 30 derniers jours
     \item Le nombre d'alertes critiques et hautes en cours
-    \item La date et l'heure de la dernière exécution du batch (\texttt{dailyow22})
+    \item La date et l'heure de la dernière exécution du batch d'ingestion (\texttt{dailyow22})
 \end{itemize}
 
 \subsection{Onglet 2 — Détail KYC}
