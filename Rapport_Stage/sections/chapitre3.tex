@@ -271,7 +271,7 @@ Les attributs clés de ces trois tables sont consolidés via Dremio pour fournir
 \end{table}
 
 \subsection{Catalogue des règles de qualité}
-Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations KYC et données socioprofessionnelles CSP). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Conformité, Cohérence, Unicité et Actualité / Pipeline.
+Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations signalétiques, données socioprofessionnelles, etc.). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Conformité, Cohérence, Unicité et Actualité / Pipeline.
 
 L'établissement de ce catalogue découle d'une analyse exploratoire approfondie menée sur un échantillon réel de 5 000 dossiers de personnes physiques issus des tables du périmètre (\textbf{\uline{environ 15 tables \texttt{CCM\_*}, dont \texttt{ccm\_npdescription} prise ici à titre d'exemple illustratif}}). Cette analyse a révélé des anomalies typiques et récurrentes de saisie au sein du système opérant Oracle NOVA, ce qui a directement guidé le choix et le paramétrage de nos dimensions de contrôle :
 \begin{itemize}
@@ -284,7 +284,7 @@ L'établissement de ce catalogue découle d'une analyse exploratoire approfondie
 La dimension de complétude mesure le taux de renseignement des attributs obligatoires pour assurer l'exploitabilité opérationnelle des dossiers clients.
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Complétude — Données Tiers (KYC \& CSP)} \label{tab:completude_tiers} \\
+\caption{Dimension Complétude — Données Tiers (Référentiel Tiers)} \label{tab:completude_tiers} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -321,7 +321,7 @@ La dimension de complétude mesure le taux de renseignement des attributs obliga
 La dimension de validité évalue le respect des formats de saisie, des plages de valeurs autorisées et la conformité par rapport aux référentiels métier (BAM, ISO).
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Conformité — Données Tiers (KYC \& CSP)} \label{tab:validite_tiers} \\
+\caption{Dimension Conformité — Données Tiers (Référentiel Tiers)} \label{tab:validite_tiers} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -354,7 +354,7 @@ La dimension de validité évalue le respect des formats de saisie, des plages d
 La dimension de cohérence vérifie l'absence de contradiction logique entre plusieurs attributs interdépendants.
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Cohérence — Données Tiers (KYC \& CSP)} \label{tab:coherence_tiers} \\
+\caption{Dimension Cohérence — Données Tiers (Référentiel Tiers)} \label{tab:coherence_tiers} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -377,7 +377,7 @@ La dimension de cohérence vérifie l'absence de contradiction logique entre plu
 La dimension d'unicité contrôle l'absence de doublons d'enregistrements et garantit l'unicité des identifiants principaux du référentiel.
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Unicité — Données Tiers (KYC \& CSP)} \label{tab:unicite_tiers} \\
+\caption{Dimension Unicité — Données Tiers (Référentiel Tiers)} \label{tab:unicite_tiers} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -464,7 +464,7 @@ Les composants clés de cette architecture logicielle sont détaillés ci-dessou
 Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifiquement la bibliothèque Python \texttt{soda-core} et son connecteur Spark \texttt{soda-core-spark}. Afin d'assurer une exécution optimale dans notre écosystème Big Data, la conception logicielle repose sur les principes d'intégration suivants :
 \begin{itemize}
     \item \textbf{Encapsulation PySpark et Vues Temporaires} : Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (\textbf{\uline{parmi la quinzaine de tables du périmètre \texttt{CCM\_*}, telles que \texttt{ccm\_npdescription} et \texttt{ccm\_job} citées en exemple}}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques ,
-    \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les fichiers sont séparés logiquement par domaine : \texttt{checks\_kyc.yml} pour le KYC, \texttt{checks\_csp.yml} pour les données socio-professionnelles, et \texttt{checks\_pipeline.yml} pour les indicateurs techniques et la fraîcheur ,
+    \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les règles fonctionnelles sont regroupées au sein d'un unique fichier métier \texttt{checks\_tiers.yml}, tandis que les vérifications techniques sont isolées dans \texttt{checks\_pipeline.yml} ,
     \item \textbf{Extraction programmatique et typage des métadonnées} : Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle ,
     \item \textbf{Persistance partitionnée dans trois tables Hive} : Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\allowbreak\_all\allowbreak\_column\allowbreak\_history} pour les résultats, \texttt{consolidated\allowbreak\_all\allowbreak\_checks\allowbreak\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\allowbreak\_execution\allowbreak\_log} pour la journalisation technique.
 \end{itemize}
@@ -477,7 +477,7 @@ La planification, le déclenchement et le monitoring des scans de qualité sont 
 La restitution visuelle est structurée dans un dashboard Tableau interactif connecté en direct au dataset virtuel unique de Dremio. L'intelligence analytique (calcul des scores quotidiens moyens, taux de conformité globaux, regroupements par dimension de qualité ou par date) est configurée à l'aide de feuilles de calcul (sheets) et de filtres dynamiques directement dans Tableau Desktop, tirant parti de la table de faits unique. Le dashboard est structuré en quatre onglets fonctionnels :
 \begin{enumerate}
     \item \textbf{Vue Exécutive} : Présente les KPIs de conformité globaux et les alertes critiques pour les Data Owners et la Direction ,
-    \item \textbf{Détail KYC} : Permet une analyse fine par colonne et par dimension de qualité sur le domaine KYC ,
+    \item \textbf{Détail Métier} : Permet une analyse fine par colonne et par dimension de qualité sur le domaine métier Tiers ,
     \item \textbf{Détail CSP} : Restitue les scores de conformité socioprofessionnelle et l'évaluation des valeurs parasites ,
     \item \textbf{Anomalies \& Remédiation} : Présente une synthèse des règles et colonnes présentant des taux d'anomalies élevés (filtrée sur \texttt{state != 'pass'}), aidant les Data Stewards à cibler les actions correctives collectives dans NOVA.
 \end{enumerate}
@@ -642,4 +642,4 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 
 % =========================================================================
 \section*{Conclusion du chapitre}
-Ce chapitre a décrit la conception complète de la solution de contrôle de la qualité du domaine Tiers. Nous avons structuré la dynamique d'exécution de nos scans et le cycle de vie des anomalies identifiées. La modélisation statique a fourni le diagramme de classes de nos indicateurs, le schéma relationnel et le catalogue complet des règles KYC et CSP de la solution. Enfin, l'architecture logicielle (composants) et matérielle (déploiement) a été détaillée au sein de l'environnement de production. Le chapitre suivant présente l'implémentation physique et les résultats opérationnels obtenus.
+Ce chapitre a décrit la conception complète de la solution de contrôle de la qualité du domaine Tiers. Nous avons structuré la dynamique d'exécution de nos scans et le cycle de vie des anomalies identifiées. La modélisation statique a fourni le diagramme de classes de nos indicateurs, le schéma relationnel et le catalogue complet des règles métier de la solution. Enfin, l'architecture logicielle (composants) et matérielle (déploiement) a été détaillée au sein de l'environnement de production. Le chapitre suivant présente l'implémentation physique et les résultats opérationnels obtenus.

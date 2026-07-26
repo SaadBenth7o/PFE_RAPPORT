@@ -71,18 +71,18 @@ Le projet DQ est organisé selon l'arborescence suivante :
 dq_tiers/
 |-- dq_tiers_checks.py          # Script principal Python
 |-- checks/
-|   |-- checks_kyc.yml          # Regles DQ colonnes KYC
+|   |-- checks_tiers.yml        # Regles DQ fonctionnelles Tiers
 |   |-- checks_csp.yml          # Regles DQ colonnes CSP
 |   +-- checks_pipeline.yml     # Regles fraicheur & pipeline
 +-- utils/
     +-- hive_writer.py          # Module d'ecriture resultats dans Hive
 \end{lstlisting}
 
-\subsection{Fichier de configuration YAML — Règles KYC (\texttt{checks\_kyc.yml})}
+\subsection{Fichier de configuration YAML — Règles Métier (\texttt{checks\_tiers.yml})}
 
 \begin{lstlisting}[language=YAML]
-# checks_kyc.yml
-# Regles Data Quality - Domaine KYC
+# checks_tiers.yml
+# Regles Data Quality - Domaine Tiers
 # Source : raw_nova_referentieltiers.ccm_npdescription (zone RAW)
 # Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquee
 
@@ -150,60 +150,7 @@ checks for ccm_npdescription:
         dimension: freshness
 \end{lstlisting}
 
-\subsection{Fichier de configuration YAML — Règles CSP (\texttt{checks\_csp.yml})}
 
-\begin{lstlisting}[language=YAML]
-# checks_csp.yml
-# Regles Data Quality - Domaine CSP
-# Source : raw_nova_referentieltiers.ccm_job (zone RAW)
-# Zone RAW = copie exacte d'Oracle NOVA, aucune transformation appliquee
-
-checks for ccm_job:
-
-  # --- Completude triple CSP ---
-  - missing_percent(professional_sector) < 5:
-      name: "CSP-01 | Completude | Secteur professionnel"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: CSP
-        dimension: completeness
-
-  - missing_percent(occupation) < 5:
-      name: "CSP-02 | Completude | Code profession"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: CSP
-        dimension: completeness
-
-  - missing_percent(socioprofessional_category) < 5:
-      name: "CSP-03 | Completude | Code CSP"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: CSP
-        dimension: completeness
-
-  # --- Validite ---
-  - invalid_count(professional_situation) = 0:
-      valid values: ["SAL", "FON", "TRI", "AUT", "EMP", "NDE"]
-      name: "CSP-04 | Validite | Situation professionnelle"
-      fail: warn
-      attributes:
-        criticite: HAUTE
-        domaine: CSP
-        dimension: validity
-
-  # --- Conformite PPE ---
-  - missing_count(politically_exposed) = 0:
-      name: "CSP-05 | Completude | PPE (Personne Politiquement Exposee)"
-      fail: error
-      attributes:
-        criticite: CRITIQUE
-        domaine: CSP
-        dimension: completeness
-\end{lstlisting}
 
 \subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
 
@@ -392,7 +339,7 @@ Afin d'optimiser les performances de requêtage, aucune pré-agrégation lourde 
 
 Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated} est importée comme source de données unique dans Tableau Desktop. 
 
-Tous les filtres (par date d'exécution, par domaine KYC/CSP, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
+Tous les filtres (par date d'exécution, par sous-domaine, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
 
 \subsection{Onglet 1 — Vue Exécutive}
 
@@ -401,7 +348,7 @@ La figure \ref{fig:dashboard_exec} présente l'onglet « Vue Exécutive » du da
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/dashboard_vue_exec.png}
-    \caption{Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}
+    \caption{Dashboard Tableau — Vue Exécutive : scores DQ globaux métier}
     \label{fig:dashboard_exec}
 \end{figure}
 
@@ -439,4 +386,4 @@ Le quatrième onglet présente le résumé des règles de qualité en échec (tr
 
 \section*{Conclusion}
 
-Ce chapitre a présenté l'implémentation concrète des différents composants du pipeline de Data Quality Tiers : le script Soda Core avec ses fichiers de configuration YAML, les tables Hive de persistance, la tâche Airflow post-ingestion, l'exposition sémantique de Dremio et le dashboard Tableau de visualisation. L'ensemble de ces composants forme un pipeline automatisé, opérationnel chaque nuit à 22h, qui permet de mesurer, historiser et restituer la qualité des données KYC et CSP du Référentiel Tiers. Le chapitre suivant présente les résultats obtenus lors des premières exécutions.
+Ce chapitre a présenté l'implémentation concrète des différents composants du pipeline de Data Quality Tiers : le script Soda Core avec ses fichiers de configuration YAML, les tables Hive de persistance, la tâche Airflow post-ingestion, l'exposition sémantique de Dremio et le dashboard Tableau de visualisation. L'ensemble de ces composants forme un pipeline automatisé, opérationnel chaque nuit à 22h, qui permet de mesurer, historiser et restituer la qualité des données métier du Référentiel Tiers. Le chapitre suivant présente les résultats obtenus lors des premières exécutions.
