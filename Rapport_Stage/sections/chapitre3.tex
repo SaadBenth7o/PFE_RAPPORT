@@ -52,7 +52,7 @@ Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux 
         \draw [->, line width=1.2pt] ($(dremio)+(0,-13.8)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {9. Interroger les 3 tables} ($(hdfs)+(0,-13.8)$);
         
         % Arrow from HDFS to Dremio (crosses Soda)
-        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(dremio)+(0,-15.3)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {10. Retour des données} ($(hdfs)+(0,-15.3)$);
+        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(dremio)+(0,-15.3)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {10. Virtualisation des données} ($(hdfs)+(0,-15.3)$);
         
         \draw [<-, dashed, line width=1.2pt, color=blue!60!black] ($(tableau)+(0,-16.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {11. Vues consolidées} ($(dremio)+(0,-16.8)$);
         
@@ -232,12 +232,7 @@ Pour persister les résultats d'évaluation de la qualité des données, nous co
     \item \textbf{consolidated\_execution\_log} : Table de journalisation technique traçant le succès ou l'échec d'exécution du contrôle.
 \end{itemize}
 
-Le schéma relationnel textuel s'établit comme suit :
-\begin{itemize}
-    \item \textbf{consolidated\_all\_column\_history} ([\underline{run\_id}, \underline{query\_id}], colonne\_controlee, chemin\_source, table\_dataset, domaine\_metier, type\_regle\_dq, volume\_total, lignes\_conformes, score\_qualite\_pct, statut, date\_execution, criticite).
-    \item \textbf{consolidated\_all\_checks\_config} ([\underline{run\_id}$^{\#}$, \underline{query\_id}$^{\#}$], run\_date, table, domain, rule, virt\_col, virt\_full\_path, raw\_col, sql, updated\_at, criticite).
-    \item \textbf{consolidated\_execution\_log} ([\underline{run\_id}$^{\#}$, \underline{query\_id}$^{\#}$], run\_date, table, domain, rule, virt\_col, virt\_full\_path, raw\_col, check\_execution\_status, check\_error\_message, check\_timestamp, run\_execution\_status, run\_error\_message, updated\_at).
-\end{itemize}
+
 
 \subsection{Dictionnaire de données}
 Les attributs clés de ces trois tables sont consolidés via Dremio pour fournir un ensemble de 21 colonnes à Tableau. Voici les colonnes principales exploitées :
