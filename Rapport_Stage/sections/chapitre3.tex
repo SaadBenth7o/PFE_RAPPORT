@@ -14,34 +14,36 @@ Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux 
 \begin{figure}[H]
     \centering
     \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[node distance=2.8cm, >=stealth, every node/.style={font=\normalsize}]
+    \begin{tikzpicture}[node distance=2.2cm, >=stealth, every node/.style={font=\normalsize}]
         % Lifelines
-        \node (airflow) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow] {\textbf{Airflow}};
-        \node (sqoop) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of airflow] {\textbf{Sqoop}};
-        \node (hdfs) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of sqoop] {\textbf{Hive RAW}};
-        \node (soda) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of hdfs] {\textbf{Soda Core}};
-        \node (hive_res) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of soda] {\textbf{Hive DQ}};
-        \node (tableau) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of hive_res] {\textbf{Tableau}};
+        \node (airflow) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2cm, minimum height=1cm, drop shadow] {\textbf{Airflow}};
+        \node (sqoop) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2cm, minimum height=1cm, drop shadow, right=of airflow] {\textbf{Sqoop}};
+        \node (hdfs) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.5cm, minimum height=1cm, drop shadow, right=of sqoop] {\textbf{Hive / HDFS}};
+        \node (soda) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.2cm, minimum height=1cm, drop shadow, right=of hdfs] {\textbf{Soda Core}};
+        \node (dremio) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2cm, minimum height=1cm, drop shadow, right=of soda] {\textbf{Dremio}};
+        \node (tableau) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2cm, minimum height=1cm, drop shadow, right=of dremio] {\textbf{Tableau}};
 
         % Dotted lines
-        \draw [dashed, draw=gray, thick] (airflow) -- +(0,-9);
-        \draw [dashed, draw=gray, thick] (sqoop) -- +(0,-9);
-        \draw [dashed, draw=gray, thick] (hdfs) -- +(0,-9);
-        \draw [dashed, draw=gray, thick] (soda) -- +(0,-9);
-        \draw [dashed, draw=gray, thick] (hive_res) -- +(0,-9);
-        \draw [dashed, draw=gray, thick] (tableau) -- +(0,-9);
+        \draw [dashed, draw=gray, thick] (airflow) -- +(0,-9.5);
+        \draw [dashed, draw=gray, thick] (sqoop) -- +(0,-9.5);
+        \draw [dashed, draw=gray, thick] (hdfs) -- +(0,-9.5);
+        \draw [dashed, draw=gray, thick] (soda) -- +(0,-9.5);
+        \draw [dashed, draw=gray, thick] (dremio) -- +(0,-9.5);
+        \draw [dashed, draw=gray, thick] (tableau) -- +(0,-9.5);
 
         % Execution arrows
         \draw [->, line width=1.2pt] ($(airflow)+(0,-1.5)$) -- node[above, font=\small, text width=2.5cm, align=center] {1. Déclencher\\ingestion} ($(sqoop)+(0,-1.5)$);
-        \draw [->, line width=1.2pt] ($(sqoop)+(0,-2.8)$) -- node[above, font=\small, text width=3.5cm, align=center] {2. Importer données\\(depuis NOVA)} ($(hdfs)+(0,-2.8)$);
-        \draw [<-, dashed, line width=1.2pt, color=green!50!black] ($(sqoop)+(0,-4.0)$) -- node[above, font=\small, text width=3cm, align=center] {3. OK (Succès)} ($(hdfs)+(0,-4.0)$);
+        \draw [->, line width=1.2pt] ($(sqoop)+(0,-2.6)$) -- node[above, font=\small, text width=3.5cm, align=center] {2. Importer données\\(depuis NOVA)} ($(hdfs)+(0,-2.6)$);
+        \draw [<-, dashed, line width=1.2pt, color=green!50!black] ($(sqoop)+(0,-3.5)$) -- node[above, font=\small, text width=3cm, align=center] {3. OK (Succès)} ($(hdfs)+(0,-3.5)$);
         
-        \draw [->, line width=1.2pt] ($(airflow)+(0,-5.2)$) -- node[above, font=\small, text width=5cm, align=center] {4. Lancer les scans\\de Data Quality} ($(soda)+(0,-5.2)$);
-        \draw [->, line width=1.2pt] ($(soda)+(0,-6.3)$) -- node[above, font=\small, text width=3cm, align=center] {5. Évaluer règles\\sur la zone RAW} ($(hdfs)+(0,-6.3)$);
-        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(soda)+(0,-7.3)$) -- node[above, font=\small, text width=3cm, align=center] {6. Données\\brutes} ($(hdfs)+(0,-7.3)$);
+        \draw [->, line width=1.2pt] ($(airflow)+(0,-4.5)$) -- node[above, font=\small, text width=5cm, align=center] {4. Lancer les scans\\de Data Quality} ($(soda)+(0,-4.5)$);
+        \draw [->, line width=1.2pt] ($(soda)+(0,-5.4)$) -- node[above, font=\small, text width=3cm, align=center] {5. Évaluer règles\\sur la zone RAW} ($(hdfs)+(0,-5.4)$);
+        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(soda)+(0,-6.3)$) -- node[above, font=\small, text width=3cm, align=center] {6. Données\\brutes} ($(hdfs)+(0,-6.3)$);
         
-        \draw [->, line width=1.2pt] ($(soda)+(0,-8.3)$) -- node[above, font=\small, text width=3cm, align=center] {7. Sauvegarder\\résultats (3 tables)} ($(hive_res)+(0,-8.3)$);
-        \draw [<-, line width=1.2pt] ($(hive_res)+(0,-9.2)$) -- node[above, font=\small, text width=3.5cm, align=center] {8. Requêter via\\Dremio (Virtualisation)} ($(tableau)+(0,-9.2)$);
+        \draw [->, line width=1.2pt] ($(soda)+(0,-7.2)$) -- node[above, font=\small, text width=3cm, align=center] {7. Sauvegarder\\résultats (3 tables)} ($(hdfs)+(0,-7.2)$);
+        
+        \draw [->, line width=1.2pt] ($(dremio)+(0,-8.2)$) -- node[above, font=\small, text width=3.5cm, align=center] {8. Virtualiser en 1\\table de faits} ($(hdfs)+(0,-8.2)$);
+        \draw [<-, line width=1.2pt] ($(dremio)+(0,-9.1)$) -- node[above, font=\small, text width=3cm, align=center] {9. Requêter le\\Dashboard} ($(tableau)+(0,-9.1)$);
     \end{tikzpicture}
     }
     \caption{Diagramme de séquences du pipeline de contrôle et restitution DQ}
