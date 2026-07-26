@@ -114,106 +114,142 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
 La modélisation statique définit la structure fixe du système, ses composants de données, le schéma relationnel de stockage de l'historique de qualité, ainsi que le dictionnaire des métadonnées associées.
 
 \subsection{Diagramme de classes}
-Le diagramme de classes de la figure \ref{fig:class_dq} représente l'entité logique unique qui encapsule l'ensemble des résultats d'évaluation de la qualité des données (table de faits dénormalisée). Cette modélisation unifiée simplifie l'architecture logique en regroupant les informations sur les règles, les volumes de lignes vérifiées et non conformes, les scores et le temps d'exécution.
+Le diagramme de classes de la figure \ref{fig:class_dq} représente la structure des données générée par notre moteur de qualité. Contrairement à une table de faits unique, le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une table de faits consolidée complète pour le reporting.
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}[every node/.style={font=\small}, classbox/.style={draw, rectangle split, rectangle split parts=3, fill=blue!5, rounded corners, text width=6cm, align=left}]
-        % Single Fact Class
-        \node (dqfact) [classbox] {
-            \textbf{DQ\_Result\_Fact}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[every node/.style={font=\scriptsize}, classbox/.style={draw, rectangle split, rectangle split parts=2, fill=blue!5, rounded corners, align=left}]
+        
+        \node (colhist) [classbox, text width=5.5cm] {
+            \textbf{consolidated\_all\_column\_history}
             \nodepart{second}
-            + run\_date : Date \\
-            + run\_timestamp : Timestamp \\
-            + table\_name : String \\
-            + column\_name : String \\
-            + check\_name : String \\
-            + dimension : String \\
-            + criticite : String \\
-            + domaine : String \\
-            + total\_rows : Long \\
-            + valid\_rows : Long \\
-            + invalid\_rows : Long \\
-            + percentage : Double \\
-            + state : String \\
-            + score\_dq : Double
-            \nodepart{third}
-            + evaluate() : Boolean \\
-            + saveResult() : Void
+            + run\_id : String \textbf{[PK]}\\
+            + colonne\_controlee : String \\
+            + chemin\_source : String \\
+            + table\_dataset : String \\
+            + query\_id : String \textbf{[PK]}\\
+            + domaine\_metier : String \\
+            + type\_regle\_dq : String \\
+            + volume\_total : Long \\
+            + lignes\_conformes : Long \\
+            + score\_qualite\_pct : Double \\
+            + statut : String (PASS/WARN/FAIL)\\
+            + date\_execution : Timestamp\\
+            + criticite : String
         };
+
+        \node (checks) [classbox, text width=6cm, right=of colhist, xshift=0.5cm, yshift=2cm] {
+            \textbf{consolidated\_all\_checks\_config}
+            \nodepart{second}
+            + run\_id : String \textbf{[FK]}\\
+            + run\_date : Date \\
+            + query\_id : String \textbf{[FK]}\\
+            + table : String \\
+            + domain : String \\
+            + rule : String \\
+            + virt\_col : String \\
+            + virt\_full\_path : String \\
+            + raw\_col : String \\
+            + sql : String \\
+            + updated\_at : Timestamp\\
+            + criticite : String
+        };
+
+        \node (exec) [classbox, text width=6cm, right=of colhist, xshift=0.5cm, yshift=-2cm] {
+            \textbf{consolidated\_execution\_log}
+            \nodepart{second}
+            + run\_id : String \textbf{[FK]}\\
+            + run\_date : Date \\
+            + query\_id : String \textbf{[FK]}\\
+            + table : String \\
+            + domain : String \\
+            + rule : String \\
+            + virt\_col : String \\
+            + virt\_full\_path : String \\
+            + raw\_col : String \\
+            + check\_execution\_status : String \\
+            + check\_error\_message : String \\
+            + check\_timestamp : Timestamp \\
+            + run\_execution\_status : String \\
+            + run\_error\_message : String \\
+            + updated\_at : Timestamp
+        };
+
+        \node (dremio) [draw, rectangle split, rectangle split parts=2, fill=green!5, rounded corners, align=left, text width=6cm, right=of checks, xshift=0.5cm, yshift=-2cm] {
+            \textbf{fact\_tiers\_dq\_consolidated (Vue Dremio)}
+            \nodepart{second}
+            \textit{Jointure des 3 tables (21 colonnes)} \\
+            - Regroupe l'historique, la configuration \\
+            et le statut d'exécution pour Tableau.
+        };
+
+        \draw[->, dashed] (checks.west) -- node[above, sloped] {lié par run\_id, query\_id} (colhist.east);
+        \draw[->, dashed] (exec.west) -- node[below, sloped] {lié par run\_id, query\_id} (colhist.east);
+        
+        \draw[->, thick, green!50!black] (colhist.east) to[bend left=10] (dremio.west);
+        \draw[->, thick, green!50!black] (checks.east) to[bend left=10] (dremio.west);
+        \draw[->, thick, green!50!black] (exec.east) to[bend left=10] (dremio.west);
+        
     \end{tikzpicture}
-    \caption{Diagramme de classes unifié de la table de faits DQ}
+    }
+    \caption{Diagramme de classes des tables physiques et de la vue consolidée}
     \label{fig:class_dq}
 \end{figure}
 
 \subsection{Modèle relationnel}
-Pour persister les résultats d'évaluation de la qualité des données de manière quotidienne, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive. Ce schéma convertit la classe de modélisation logique en une unique table de faits dénormalisée :
+Pour persister les résultats d'évaluation de la qualité des données, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive, basé sur trois tables distinctes :
 \begin{itemize}
-    \item \textbf{dq\_tiers\_results\_fact} : Table unique d'historisation consolidée des indicateurs et scores de qualité par exécution, par table et par règle.
-\end{itemize}
-
-Le passage du modèle logique au modèle physique relationnel s'opère selon les règles classiques de traduction :
-\begin{itemize}
-    \item La classe unique se traduit par une table de faits relationnelle dénormalisée ,
-    \item Les attributs se traduisent par des colonnes typées avec gestion de la nullité ,
-    \item Le partitionnement est appliqué sur la colonne de date (\texttt{run\_date}) pour optimiser les performances de requêtage temporel et simplifier le chargement quotidien.
+    \item \textbf{consolidated\_all\_column\_history} : Table principale d'historisation des indicateurs et scores de qualité par exécution, table et colonne. Elle inclut la criticité métier du contrôle.
+    \item \textbf{consolidated\_all\_checks\_config} : Table de configuration stockant la requête SQL générée par le moteur pour chaque règle évaluée, ainsi que sa criticité.
+    \item \textbf{consolidated\_execution\_log} : Table de journalisation technique traçant le succès ou l'échec d'exécution du contrôle.
 \end{itemize}
 
 Le schéma relationnel textuel s'établit comme suit :
 \begin{itemize}
-    \item \textbf{dq\_tiers\_results\_fact} ([\underline{run\_date}, \underline{table\_name}, \underline{column\_name}, \underline{check\_name}], run\_timestamp, dag\_name, dimension, criticite, domaine, total\_rows, valid\_rows, invalid\_rows, percentage, state, score\_dq).
+    \item \textbf{consolidated\_all\_column\_history} ([\underline{run\_id}, \underline{query\_id}], colonne\_controlee, chemin\_source, table\_dataset, domaine\_metier, type\_regle\_dq, volume\_total, lignes\_conformes, score\_qualite\_pct, statut, date\_execution, criticite).
+    \item \textbf{consolidated\_all\_checks\_config} ([\underline{run\_id}$^{\#}$, \underline{query\_id}$^{\#}$], run\_date, table, domain, rule, virt\_col, virt\_full\_path, raw\_col, sql, updated\_at, criticite).
+    \item \textbf{consolidated\_execution\_log} ([\underline{run\_id}$^{\#}$, \underline{query\_id}$^{\#}$], run\_date, table, domain, rule, virt\_col, virt\_full\_path, raw\_col, check\_execution\_status, check\_error\_message, check\_timestamp, run\_execution\_status, run\_error\_message, updated\_at).
 \end{itemize}
 
 \subsection{Dictionnaire de données}
-Nous détaillons ci-dessous la structure physique et le dictionnaire de données de la table de faits consolidée de persistance.
+Les attributs clés de ces trois tables sont consolidés via Dremio pour fournir un ensemble de 21 colonnes à Tableau. Voici les colonnes principales exploitées :
 
 \begin{table}[H]
 \centering
-\caption{Dictionnaire de la table de faits unique \texttt{dq\_tiers\_results\_fact}}
+\caption{Dictionnaire simplifié des tables de faits de Qualité des Données}
 \label{tab:dict_results_fact}
 \renewcommand{\arraystretch}{1.3}
 \resizebox{\textwidth}{!}{
-\begin{tabular}{|l|l|c|p{8cm}|}
+\begin{tabular}{|l|l|p{8cm}|}
 \hline
 \rowcolor{gray!20}
-\textbf{Colonne} & \textbf{Type} & \textbf{Clé} & \textbf{Description / Rôle} \\
+\textbf{Colonne} & \textbf{Table source} & \textbf{Description / Rôle} \\
 \hline
-\texttt{run\_date} & DATE & PK (Part.) & Date d'exécution du contrôle de qualité. \\
+\texttt{run\_id} & Toutes & Identifiant unique de l'exécution du processus DQ. \\
 \hline
-\texttt{run\_timestamp} & TIMESTAMP & - & Horodatage précis de l'exécution (autour de minuit). \\
+\texttt{query\_id} & Toutes & Identifiant de la requête ou de la règle évaluée. \\
 \hline
-\texttt{table\_name} & STRING & PK & Table Hive contrôlée en zone RAW. \\
+\texttt{type\_regle\_dq} & \texttt{column\_history} & Dimension DQ (ex: Completude, Conformite, Coherence...). \\
 \hline
-\texttt{column\_name} & STRING & PK & Nom de la colonne soumise à la règle de qualité. \\
+\texttt{criticite} & \texttt{column\_history} / \texttt{checks\_config} & Niveau de criticité du contrôle (CRITIQUE, HAUTE, MOYENNE). \\
 \hline
-\texttt{check\_name} & STRING & PK & Nom descriptif unique de la règle (ex. : \texttt{check\_genre\_civilite}). \\
+\texttt{domaine\_metier} & \texttt{column\_history} & Domaine métier visé (PTP-TIE-POR). \\
 \hline
-\texttt{dag\_name} & STRING & - & Nom du DAG Airflow d'orchestration (\texttt{dailyow22}). \\
+\texttt{score\_qualite\_pct} & \texttt{column\_history} & Taux de conformité en pourcentage. \\
 \hline
-\texttt{dimension} & STRING & - & Dimension DQ (\texttt{completeness}, \texttt{validity}, \texttt{consistency}, \texttt{uniqueness}, \texttt{freshness}). \\
+\texttt{statut} & \texttt{column\_history} & État d'évaluation métier de la règle (PASS, WARN, FAIL). \\
 \hline
-\texttt{criticite} & STRING & - & Niveau de criticité du contrôle (\texttt{CRITIQUE}, \texttt{HAUTE}, \texttt{MOYENNE}). \\
+\texttt{sql} & \texttt{checks\_config} & Requête SQL exécutée par le moteur SparkSQL. \\
 \hline
-\texttt{domaine} & STRING & - & Domaine métier visé (\texttt{KYC} ou \texttt{CSP}). \\
-\hline
-\texttt{total\_rows} & BIGINT & - & Nombre total d'enregistrements clients vérifiés lors du scan. \\
-\hline
-\texttt{valid\_rows} & BIGINT & - & Nombre d'enregistrements conformes validant la règle. \\
-\hline
-\texttt{invalid\_rows} & BIGINT & - & Nombre d'enregistrements non conformes (anomalies). \\
-\hline
-\texttt{percentage} & DOUBLE & - & Taux de conformité en pourcentage (calculé par : \texttt{valid\_rows} / \texttt{total\_rows} * 100). \\
-\hline
-\texttt{state} & STRING & - & Etat d'execution de la regle (\texttt{pass}, \texttt{warn}, \texttt{fail}). \\
-\hline
-\texttt{score\_dq} & DOUBLE & - & Score de qualité normalisé (entre 0.0 et 100.0). \\
+\texttt{check\_execution\_status} & \texttt{execution\_log} & Statut d'exécution technique du job (SUCCESS/ERROR). \\
 \hline
 \end{tabular}
 }
 \end{table}
 
 \subsection{Catalogue des règles de qualité}
-Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations KYC et données socioprofessionnelles CSP). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Validité, Cohérence, Unicité et Fraîcheur / Pipeline.
+Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations KYC et données socioprofessionnelles CSP). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Conformité, Cohérence, Unicité et Actualité / Pipeline.
 
 L'établissement de ce catalogue découle d'une analyse exploratoire approfondie menée sur un échantillon réel de 5 000 dossiers de personnes physiques issus de la table \texttt{ccm\_npdescription}. Cette analyse a révélé des anomalies typiques et récurrentes de saisie au sein du système opérant Oracle NOVA, ce qui a directement guidé le choix et le paramétrage de nos dimensions de contrôle :
 \begin{itemize}
@@ -259,11 +295,11 @@ La dimension de complétude mesure le taux de renseignement des attributs obliga
 \hline
 \end{longtable}
 
-\subsubsection{Dimension Validité}
+\subsubsection{Dimension Conformité}
 La dimension de validité évalue le respect des formats de saisie, des plages de valeurs autorisées et la conformité par rapport aux référentiels métier (BAM, ISO).
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Validité — Données Tiers (KYC \& CSP)} \label{tab:validite_tiers} \\
+\caption{Dimension Conformité — Données Tiers (KYC \& CSP)} \label{tab:validite_tiers} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -336,11 +372,11 @@ La dimension d'unicité contrôle l'absence de doublons d'enregistrements et gar
 \hline
 \end{longtable}
 
-\subsubsection{Dimension Fraîcheur et Pipeline}
+\subsubsection{Dimension Actualité et Pipeline}
 La dimension de fraîcheur s'assure du bon cadencement de l'ingestion quotidienne et de l'intégrité de la chaîne technique.
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
-\caption{Dimension Fraîcheur et Pipeline — Flux Batch} \label{tab:regles_fraicheur} \\
+\caption{Dimension Actualité et Pipeline — Flux Batch} \label{tab:regles_fraicheur} \\
 \hline
 \rowcolor{gray!20}
 \textbf{Colonne(s)} & \textbf{Description Règle / Seuil} & \textbf{Criticité} & \textbf{Action corrective} \\
@@ -399,23 +435,20 @@ Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifi
     \item \textbf{Encapsulation PySpark et Vues Temporaires} : Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (ex: \texttt{ccm\_npdescription} et \texttt{ccm\_job}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques ,
     \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les fichiers sont séparés logiquement par domaine : \texttt{checks\_kyc.yml} pour le KYC, \texttt{checks\_csp.yml} pour les données socio-professionnelles, et \texttt{checks\_pipeline.yml} pour les indicateurs techniques et la fraîcheur ,
     \item \textbf{Extraction programmatique et typage des métadonnées} : Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle ,
-    \item \textbf{Persistance unifiée de la table de faits} : Après l'exécution du scan, le script consolide toutes les métriques de qualité (nombre total de lignes, lignes conformes, anomalies, pourcentage de conformité, score normalisé et état) dans un DataFrame PySpark unique. Ce DataFrame est ensuite écrit en mode append dans la table de faits unique Hive \texttt{dq\_results.dq\_tiers\_results\_fact}, partitionnée par \texttt{run\_date} et stockée au format ORC compressé Snappy, ce qui évite la création de sous-tables de détails complexes.
+    \item \textbf{Persistance partitionnée dans trois tables Hive} : Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\_all\_column\_history} pour les résultats, \texttt{consolidated\_all\_checks\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\_execution\_log} pour la journalisation technique.
 \end{itemize}
 
 \subsubsection{Conception de l'orchestration Airflow}
 La planification, le déclenchement et le monitoring des scans de qualité sont entièrement automatisés par Apache Airflow au moyen d'un unique DAG quotidien nommé \texttt{dailyow22}. La tâche de Data Quality est conçue comme une étape post-ingestion. Elle s'exécute immédiatement après le succès des tâches d'ingestion Sqoop qui rapatrient les tables sources NOVA vers le Data Lake. Afin de garantir la surveillance du pipeline technique, la tâche de qualité est configurée avec la règle de déclenchement \texttt{TriggerRule.ALL\_DONE}. Cela assure que même si une tâche d'ingestion non critique échoue, les contrôles de qualité s'exécutent sur les tables correctement importées, ce qui évite d'aveugler le monitoring en cas de panne technique partielle.
 
 \subsubsection{Conception de la couche de virtualisation Dremio}
-Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié nommé \texttt{dq-tiers}. Dremio se connecte directement au catalogue Hive Metastore et expose directement la table de faits sous forme d'un unique dataset virtuel nommé \texttt{"dq-tiers"."v\_dq\_tiers\_results\_fact"}. Dremio sert ainsi de passerelle d'exposition performante sans dupliquer ou déplacer les données.
-Cette virtualisation garantit un temps de réponse inférieur à la seconde lors des interactions de l'utilisateur sur Tableau, grâce aux accélérations matérielles (réflexions de données) de Dremio.
+Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques.
+Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\_tiers\_dq\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données).
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        \draw[draw=gray, dashed, fill=gray!5, thick, rounded corners] (0,0) rectangle (12,4);
-        \node at (6,2) [align=center, text=gray] {\textbf{Capture d'écran à insérer} \\ \small Emplacement de la vue sémantique dans Dremio};
-    \end{tikzpicture}
-    \caption{Emplacement de la vue virtuelle unique \texttt{v\_dq\_tiers\_results\_fact} dans Dremio}
+    \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
+    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\_tiers\_dq\_consolidated}}
     \label{fig:screenshot_dremio}
 \end{figure}
 
