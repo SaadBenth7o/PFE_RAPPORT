@@ -430,8 +430,8 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
     \resizebox{\textwidth}{!}{
     \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, box/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=2.8cm, minimum height=1cm, align=center, drop shadow}]
         % Orchestrators
-        \node (dag_ing) [box, fill=orange!10, draw=orange!60!black] {DAG Ingestion \\ \scriptsize(22h00)};
-        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, below=of dag_ing, yshift=-1.0cm] {Nouveau DAG DQ \\ \scriptsize(00h00)};
+        \node (dag_ing) [box, fill=orange!10, draw=orange!60!black] {DAG \texttt{dailyow22} \\ \scriptsize(Ingestion à 22h00)};
+        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, below=of dag_ing, yshift=-1.0cm] {DAG \texttt{daily\_dq\_00} \\ \scriptsize(Qualité à 00h00)};
         
         % Components
         \node (ingest) [box, right=of dag_ing, xshift=1.5cm] {Module d'Ingestion \\ \scriptsize(Apache Sqoop)};
