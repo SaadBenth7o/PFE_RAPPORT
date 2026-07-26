@@ -65,32 +65,40 @@ pip install --no-index --find-links=./soda_wheels soda-core-spark
 % =========================
 \section{Implémentation du moteur DQ — Soda Core et Spark}
 
-\section{Implémentation du moteur DQ — Soda Core et Spark}
+\subsection{Arborescence du projet DQ}
+
+Le moteur de Data Quality est structuré en un projet Python autonome, déployé sur le nœud Edge du cluster. L'arborescence suivante présente une vue simplifiée des fichiers essentiels :
+
+\begin{lstlisting}
+dq_tiers/               (Projet DQ - Noeud Edge)
+|-- dq_tiers_checks.py  # Script principal : orchestration & persistance
+|-- checks/
+|   +-- checks_tiers.yml   # Regles DQ (KYC + CSP) en SodaCL
++-- utils/
+    +-- hive_writer.py      # Module de persistance des 3 tables Hive
+\end{lstlisting}
 
 \subsection{Principe de fonctionnement de Soda Core avec Spark}
 
 Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire. Le principe de fonctionnement adopté est le suivant :
 \begin{enumerate}
-    \item Le script Python crée une \textbf{SparkSession}.
-    \item Il charge les tables Hive brutes de la zone RAW (par exemple, \texttt{ccm\_npdescription} et \texttt{ccm\_job}) sous forme de \textbf{DataFrames PySpark}.
-    \item Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires} (\texttt{createOrReplaceTempView}).
-    \item Soda Core lit le fichier de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL}, et exécute ces requêtes directement sur les vues temporaires en utilisant le moteur distribué de Spark.
+    \item Le script Python crée une \textbf{SparkSession} avec support Hive activé.
+    \item Il charge les tables Hive brutes de la zone RAW sous forme de \textbf{DataFrames PySpark}.
+    \item Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires Spark} via \texttt{createOrReplaceTempView}.
+    \item Soda Core lit le fichier de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL}, et exécute ces requêtes distribuées sur le cluster via YARN.
+    \item Les résultats sont extraits sous forme de dictionnaire Python, puis structurés et persistés dans \textbf{3 tables Hive physiques} en mode \texttt{append}.
 \end{enumerate}
-Cette approche permet d'analyser d'énormes volumes de données de manière distribuée sur le cluster via YARN, sans surcharger le Hive Metastore par de multiples requêtes de contrôle directes.
 
 \subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml})}
 
-Les règles métier sont définies dans des fichiers YAML de manière déclarative en utilisant le langage SodaCL (Soda Check Language). Ce langage permet de définir non seulement des contrôles simples de validité ou de complétude, mais aussi des contrôles avancés (unicité, fraîcheur, expressions régulières personnalisées).
-
-Conformément aux conventions de nommage, toutes les règles du domaine Tiers (qu'elles concernent les données KYC ou CSP) sont centralisées. À titre d'illustration, nous présentons ci-dessous un extrait enrichi du fichier \texttt{checks\_tiers.yml} regroupant divers contrôles sur les tables \texttt{ccm\_npdescription} et \texttt{ccm\_job} (qui représentent des exemples parmi les 15 tables du périmètre).
+Les règles métier sont définies de manière déclarative en utilisant le langage \textbf{SodaCL} (Soda Check Language). Ce langage permet de définir des contrôles simples (complétude, validité) ou avancés (fraîcheur, unicité, règles SQL personnalisées). Toutes les règles du domaine Tiers (KYC et CSP) sont regroupées dans un fichier unique, présenté ici en extrait illustratif sur les deux tables d'exemple \texttt{ccm\_npdescription} et \texttt{ccm\_job} :
 
 \begin{lstlisting}[language=YAML]
 # checks_tiers.yml
 # Regles Data Quality - Domaine Tiers (KYC & CSP)
 
 checks for ccm_npdescription:
-  # --- Completude (Fonction missing_count) ---
-  # Verifie qu'aucune ligne ne possede un nom ou prenom nul.
+  # --- Completude ---
   - missing_count(name) = 0:
       name: "KYC-01 | Completude | Nom"
       attributes:
@@ -103,8 +111,7 @@ checks for ccm_npdescription:
         criticite: CRITIQUE
         dimension: completeness
 
-  # --- Validite (Fonction invalid_count) ---
-  # Le genre doit strictement faire partie du referentiel autorise.
+  # --- Validite ---
   - invalid_count(gender) = 0:
       valid values: ["M", "F"]
       name: "KYC-06 | Validite | Genre hors referentiel"
@@ -112,10 +119,9 @@ checks for ccm_npdescription:
         criticite: HAUTE
         dimension: validity
 
-  # --- Unicite (Fonction duplicate_count) ---
-  # Verifie que l'identifiant radical du client est unique
+  # --- Unicite ---
   - duplicate_count(radical) = 0:
-      name: "KYC-07 | Unicite | Doublon sur le radical client"
+      name: "KYC-07 | Unicite | Doublon radical client"
       attributes:
         criticite: CRITIQUE
         dimension: uniqueness
@@ -128,18 +134,16 @@ checks for ccm_job:
         criticite: CRITIQUE
         dimension: completeness
 
-  # --- Fraicheur (Fonction freshness) ---
-  # S'assure que les donnees chargees datent de moins de 26 heures.
+  # --- Fraicheur ---
   - freshness(batch_datetime) < 26h:
-      name: "CSP-04 | Fraicheur | Retard de mise a jour batch"
+      name: "CSP-04 | Fraicheur | Retard batch superieur a 26h"
       attributes:
         criticite: HAUTE
         dimension: timeliness
-        
-  # --- Regle SQL personnalisee (Failed Rows) ---
-  # Verifie la coherence entre l'employeur et le secteur d'activite.
+
+  # --- Regle SQL personnalisee (failed rows) ---
   - failed rows:
-      name: "CSP-05 | Coherence | Employeur non valide pour ce secteur"
+      name: "CSP-05 | Coherence | Employeur invalide pour ce secteur"
       fail query: |
         SELECT radical, employer, professional_sector 
         FROM ccm_job 
@@ -149,117 +153,189 @@ checks for ccm_job:
         dimension: consistency
 \end{lstlisting}
 
-Comme on peut l'observer, SodaCL met à disposition plusieurs fonctions natives :
+Les fonctions SodaCL utilisées sont les suivantes :
 \begin{itemize}
-    \item \texttt{missing\_count} : Calcule le nombre d'enregistrements où la colonne spécifiée est nulle.
-    \item \texttt{invalid\_count} : Couplé à l'attribut \texttt{valid values} ou \texttt{valid regex}, il permet de valider le format ou l'appartenance à une liste de référence.
-    \item \texttt{duplicate\_count} : Détecte les doublons sur une clé (primaire ou métier).
-    \item \texttt{freshness} : Évalue la fraîcheur des données en comparant la date maximale de la colonne avec l'horodatage d'exécution du scan.
-    \item \texttt{failed rows} : Permet d'injecter du code SQL pur pour exprimer des règles métiers complexes multi-colonnes ou inter-tables qui ne sont pas couvertes par les fonctions natives.
+    \item \textbf{\texttt{missing\_count}} : Compte le nombre d'enregistrements où la colonne est nulle ou vide.
+    \item \textbf{\texttt{invalid\_count}} : Couplé à \texttt{valid values} ou \texttt{valid regex}, valide l'appartenance à un référentiel ou le respect d'un format.
+    \item \textbf{\texttt{duplicate\_count}} : Détecte les doublons sur une clé métier (ex: \texttt{radical}).
+    \item \textbf{\texttt{freshness}} : Mesure le délai entre la valeur maximale d'une colonne date et l'instant d'exécution du scan.
+    \item \textbf{\texttt{failed rows}} : Permet d'injecter du SQL pur pour des règles multi-colonnes complexes (cohérence, croisement de référentiels).
 \end{itemize}
 
 \subsection{Traduction des règles SodaCL en Spark SQL}
 
-En interne, le moteur Soda Core parse ce fichier YAML, identifie la cible de l'environnement (Spark dans notre cas), et traduit dynamiquement chaque condition déclarative en une syntaxe Spark SQL optimisée. Par exemple :
-\begin{itemize}
-    \item La règle de complétude \texttt{missing\_count(name) = 0} se traduira par une requête d'agrégation mesurant le nombre de valeurs nulles : \newline \texttt{SELECT COUNT(*) FROM ccm\_npdescription WHERE name IS NULL}.
-    \item La règle de validité sur le genre (\texttt{invalid\_count(gender) = 0 valid values: ["M", "F"]}) génère un contrôle d'exclusion : \newline \texttt{SELECT COUNT(*) FROM ccm\_npdescription WHERE gender NOT IN ('M','F')}.
-    \item Le contrôle de fraîcheur génère un calcul de delta temporel : \newline \texttt{SELECT MAX(batch\_datetime) FROM ccm\_job}. Soda effectue ensuite la soustraction avec \texttt{CURRENT\_TIMESTAMP} au niveau Python.
-\end{itemize}
-Cette abstraction décharge considérablement le Data Engineer de l'écriture fastidieuse du code SQL répétitif, tout en standardisant la définition de la qualité.
+En interne, Soda Core identifie la cible (Spark) et traduit chaque règle SodaCL en une requête Spark SQL exécutée sur les vues temporaires. Voici trois exemples de cette traduction :
+
+\medskip
+\noindent\textbf{Exemple 1 — Complétude (missing\_count) :}
+\begin{lstlisting}[language=YAML]
+# >> Regle SodaCL :
+- missing_count(name) = 0
+\end{lstlisting}
+\begin{center}$\Downarrow$ \textit{Traduction automatique par Soda Core}\end{center}
+\begin{lstlisting}[language=SQL]
+-- >> Requete Spark SQL generee :
+SELECT COUNT(*) AS missing_count
+FROM ccm_npdescription
+WHERE name IS NULL OR TRIM(name) = ''
+\end{lstlisting}
+
+\medskip
+\noindent\textbf{Exemple 2 — Validité (invalid\_count avec referentiel) :}
+\begin{lstlisting}[language=YAML]
+# >> Regle SodaCL :
+- invalid_count(gender) = 0:
+    valid values: ["M", "F"]
+\end{lstlisting}
+\begin{center}$\Downarrow$ \textit{Traduction automatique par Soda Core}\end{center}
+\begin{lstlisting}[language=SQL]
+-- >> Requete Spark SQL generee :
+SELECT COUNT(*) AS invalid_count
+FROM ccm_npdescription
+WHERE gender NOT IN ('M', 'F') OR gender IS NULL
+\end{lstlisting}
+
+\medskip
+\noindent\textbf{Exemple 3 — Fraîcheur (freshness) :}
+\begin{lstlisting}[language=YAML]
+# >> Regle SodaCL :
+- freshness(batch_datetime) < 26h
+\end{lstlisting}
+\begin{center}$\Downarrow$ \textit{Traduction automatique par Soda Core}\end{center}
+\begin{lstlisting}[language=SQL]
+-- >> Requete Spark SQL generee (etape 1) :
+SELECT MAX(batch_datetime) AS last_batch FROM ccm_job
+-- Soda calcule ensuite le delta : CURRENT_TIMESTAMP - last_batch
+-- et compare le resultat en heures a la limite de 26h.
+\end{lstlisting}
 
 \subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
 
-Le script Python principal orchestre l'exécution complète. Après le scan, Soda Core s'exécutant sur Spark ne persiste pas automatiquement les résultats dans Hive (contrairement à l'intégration avec Soda Cloud). C'est le script Python qui doit extraire la matrice de résultats JSON via l'API (méthode \texttt{get\_scan\_results()}), puis aplatir cette structure complexe (dictionnaires imbriqués contenant les métriques, le statut \texttt{pass}/\texttt{fail}, la requête SQL générée, etc.) en tableaux bidimensionnels exploitables.
-
-Conformément à la modélisation statique détaillée dans le chapitre précédent, le script transforme ces extractions en trois DataFrames PySpark distincts, afin de capturer l'ensemble du cycle de vie du contrôle de la qualité, et les persiste dans Hive.
+Le script Python principal orchestre l'exécution complète. Soda Core exécutant les checks sur Spark ne persiste pas automatiquement les résultats dans Hive (contrairement à l'intégration cloud). C'est le script Python qui extrait la matrice de résultats JSON via \texttt{get\_scan\_results()}, l'aplatit, puis structure les données en \textbf{3 DataFrames} dont les schémas respectent exactement les tables physiques définies en conception. Les écritures se font systématiquement en mode \textbf{append} pour historiser chaque run journalier.
 
 \begin{lstlisting}[language=Python]
 # dq_tiers_checks.py
-import datetime
-from pyspark.sql import SparkSession
+import datetime, uuid, argparse
+from datetime import date
+from pyspark.sql import SparkSession, Row
 from soda.scan import Scan
-import json
 
 def run_dq_checks(run_date: str):
-    # 1. Initialisation de la SparkSession
+    # --- 1. SparkSession avec support Hive ---
     spark = SparkSession.builder \
         .appName("DQ_Tiers_Checks") \
         .enableHiveSupport() \
         .getOrCreate()
 
-    # 2. Chargement des tables physiques Hive en Vues Temporaires Spark
-    tables_to_check = ["ccm_npdescription", "ccm_job"]
-    for table in tables_to_check:
-        df = spark.sql(f"SELECT * FROM raw_nova_referentieltiers.{table}")
-        df.createOrReplaceTempView(table)
+    # --- 2. Chargement des tables RAW en vues temporaires Spark ---
+    for table in ["ccm_npdescription", "ccm_job"]:
+        spark.sql(f"SELECT * FROM raw_nova_referentieltiers.{table}") \
+             .createOrReplaceTempView(table)
 
-    # 3. Initialisation du scan Soda Core
+    # --- 3. Scan Soda Core ---
     scan = Scan()
     scan.set_data_source_name("spark_df")
     scan.add_spark_session(spark)
     scan.add_sodacl_yaml_file("checks/checks_tiers.yml")
-
-    # 4. Execution distribuee des checks sur le cluster YARN
     scan.execute()
-    
-    # 5. Extraction des resultats sous forme de dictionnaire Python
-    results_dict = scan.get_scan_results()
+    results = scan.get_scan_results()
 
-    # 6. Extraction et structuration en 3 tables physiques
-    # (Exemple simplifie de parsing de la matrice JSON)
-    history_data = []
-    config_data = []
-    
-    for check in results_dict.get("checks", []):
-        run_id = scan._scan_results.get("scanId")
-        query_id = check.get("identity")
-        
-        # Table Historique
-        history_data.append((
-            run_id, 
-            query_id,
-            check.get("column", "TRANSVERSE"),
-            100.0 if check.get("outcome") == "pass" else 0.0,
-            check.get("outcome"),
-            check.get("metrics", {}).get("value", 0)
-        ))
-        
-        # Table Configuration
-        config_data.append((
-            run_id,
-            query_id,
-            check.get("definition", ""),
-            check.get("name"),
-            check.get("attributes", {}).get("dimension", ""),
-            check.get("attributes", {}).get("criticite", "")
+    run_id = str(uuid.uuid4())
+    now = datetime.datetime.now()
+    history_rows, config_rows, log_rows = [], [], []
+
+    for check in results.get("checks", []):
+        qid      = check.get("identity", str(uuid.uuid4()))
+        outcome  = check.get("outcome", "error")
+        attrs    = check.get("attributes", {})
+        dataset  = check.get("dataset", "")
+        col      = check.get("column", "TRANSVERSE")
+        score    = 100.0 if outcome=="pass" else (50.0 if outcome=="warn" else 0.0)
+        total    = check.get("metrics", {}).get("row_count", 0) or 0
+        anomalies= int(check.get("metrics", {}).get("value", 0) or 0)
+
+        # Recuperation SQL genere par Soda Core
+        sql_gen = next(
+            (q.get("sql","") for q in results.get("queries",[])
+             if qid in q.get("name","")), ""
+        )
+        exec_ok = (outcome != "error")
+        virt_path = "dq_results.consolidated_all_column_history"
+
+        # -- Table 1 : consolidated_all_column_history --
+        history_rows.append(Row(
+            run_id          = run_id,
+            query_id        = qid,
+            colonne_controlee = col,
+            chemin_source   = f"raw_nova_referentieltiers.{dataset}",
+            table_dataset   = dataset,
+            domaine_metier  = attrs.get("domaine", "Tiers"),
+            type_regle_dq   = attrs.get("dimension", "completeness"),
+            volume_total    = total,
+            lignes_conformes = total - anomalies,
+            score_qualite_pct = score,
+            statut          = outcome.upper(),
+            date_execution  = now,
+            criticite       = attrs.get("criticite", "HAUTE")
         ))
 
-    # Creation des DataFrames
-    df_history = spark.createDataFrame(history_data, 
-        ["run_id", "query_id", "colonne_controlee", "score_qualite_pct", 
-         "statut", "anomalies_count"])
-         
-    df_config = spark.createDataFrame(config_data, 
-        ["run_id", "query_id", "sql_query", "check_name", 
-         "dimension", "criticite"])
-         
-    # La logique pour le log d'execution (df_exec) suit le meme principe.
-    
-    # 7. Persistance physique dans Hive (Append Mode)
-    df_history.write.mode("append") \
-        .saveAsTable("dq_results.consolidated_all_column_history")
-    df_config.write.mode("append") \
-        .saveAsTable("dq_results.consolidated_all_checks_config")
-    # df_exec.write...
+        # -- Table 2 : consolidated_all_checks_config --
+        config_rows.append(Row(
+            run_id    = run_id,
+            query_id  = qid,
+            run_date  = run_date,
+            table     = dataset,
+            domain    = attrs.get("domaine", "Tiers"),
+            rule      = check.get("name", ""),
+            virt_col  = col,
+            virt_full_path = virt_path,
+            raw_col   = col,
+            sql       = sql_gen,
+            updated_at = now,
+            criticite = attrs.get("criticite", "HAUTE")
+        ))
+
+        # -- Table 3 : consolidated_execution_log --
+        log_rows.append(Row(
+            run_id          = run_id,
+            query_id        = qid,
+            run_date        = run_date,
+            table           = dataset,
+            domain          = attrs.get("domaine", "Tiers"),
+            rule            = check.get("name", ""),
+            virt_col        = col,
+            virt_full_path  = virt_path,
+            raw_col         = col,
+            check_execution_status = "SUCCESS" if exec_ok else "ERROR",
+            check_error_message    = "" if exec_ok else str(check.get("error","")),
+            check_timestamp        = now,
+            run_execution_status   = "SUCCESS",
+            run_error_message      = "",
+            updated_at             = now
+        ))
+
+    # --- 4. APPEND dans les 3 tables Hive physiques ---
+    spark.createDataFrame(history_rows).write.mode("append") \
+         .saveAsTable("dq_results.consolidated_all_column_history")
+
+    spark.createDataFrame(config_rows).write.mode("append") \
+         .saveAsTable("dq_results.consolidated_all_checks_config")
+
+    spark.createDataFrame(log_rows).write.mode("append") \
+         .saveAsTable("dq_results.consolidated_execution_log")
 
     spark.stop()
+    print(f"[DQ OK] Run {run_id} | {len(history_rows)} checks persistes.")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run_date", default=str(date.today()))
+    args = parser.parse_args()
+    run_dq_checks(args.run_date)
 \end{lstlisting}
-Cette implémentation métier sur-mesure nous octroie une maîtrise totale de nos historiques de qualité et respecte strictement la modélisation à trois tables définie lors de la phase de conception.
 
-% =========================
+Le mode \texttt{append} est fondamental : à chaque exécution nocturne du DAG \texttt{daily\_dq\_00}, une nouvelle tranche de résultats est ajoutée aux trois tables sans écraser les données historiques. Cette accumulation constitue la base temporelle qui alimente les tendances et analyses dans le dashboard Tableau.
 
-% =========================
 \section{Création des tables Hive physiques de persistance}
 
 Les trois tables de persistance, définies lors de la conception, sont créées physiquement dans la base Hive \texttt{dq\_results}. Ces tables stockent l'intégralité des métriques : les scores de qualité, les définitions SQL générées, et les statuts d'exécution. L'utilisation du format ORC avec compression Snappy garantit de très hautes performances lors des requêtes analytiques ultérieures.
