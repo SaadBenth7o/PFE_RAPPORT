@@ -327,11 +327,11 @@ TBLPROPERTIES ('orc.compress'='SNAPPY');
 \end{lstlisting}
 
 % =========================
-\section{Création du DAG Airflow indépendant \texttt{daily\_dq\_00}}
+\section{Création du DAG Airflow indépendant \texttt{daily\allowbreak\_dq\allowbreak\_00}}
 
 \subsection{Ajout de la tâche DQ}
 
-Un nouveau DAG nommé \texttt{daily\_dq\_00} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite l'orchestrateur pour déclencher le pipeline Python Soda Core, garantissant une exécution modulaire et isolée du moteur de qualité sur le nœud Edge.
+Un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été créé pour automatiser les contrôles de qualité de façon totalement indépendante de l'ingestion. Placé à 00h00, ce DAG exploite l'orchestrateur pour déclencher le pipeline Python Soda Core, garantissant une exécution modulaire et isolée du moteur de qualité sur le nœud Edge.
 
 \begin{lstlisting}[language=Python]
 # DAG indépendant daily_dq_00 (Airflow)
@@ -367,19 +367,19 @@ dq_tiers_task = PythonOperator(
 
 \subsection{Planification et monitoring}
 
-Ce nouveau DAG \texttt{daily\_dq\_00} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} déclenche l'exécution du job PySpark de validation de données. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
+Ce nouveau DAG \texttt{daily\allowbreak\_dq\allowbreak\_00} s'exécute quotidiennement à \textbf{00h00}, deux heures après l'ingestion. La tâche \texttt{BashOperator} déclenche l'exécution du job PySpark de validation de données. Les logs Airflow permettent de suivre l'exécution et de détecter toute anomalie dans le pipeline DQ.
 
 % =========================
 \section{Exposition et virtualisation sous Dremio}
 
 Pour exposer les indicateurs de qualité stockés dans Hive vers l'outil BI Tableau sans déplacement physique de données, nous utilisons Dremio en tant que couche de virtualisation de données dans un schéma dédié. Dremio se connecte directement au catalogue Hive Metastore et effectue une jointure sur les clés \texttt{run\_id} et \texttt{query\_id} des trois tables physiques générées par Soda Core.
 
-Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\_tiers\_dq\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données). La figure \ref{fig:screenshot_dremio} montre le lignage réel des données au sein de la plateforme Dremio.
+Le résultat est exposé sous forme d'un unique dataset virtuel nommé \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated} de 21 colonnes. Dremio sert ainsi de passerelle d'exposition performante grâce à ses accélérations matérielles (réflexions de données). La figure \ref{fig:screenshot_dremio} montre le lignage réel des données au sein de la plateforme Dremio.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
-    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\_tiers\_dq\_consolidated}}
+    \caption{Lignage des données dans Dremio montrant la création de la vue sémantique \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated}}
     \label{fig:screenshot_dremio}
 \end{figure}
 
@@ -390,7 +390,7 @@ Afin d'optimiser les performances de requêtage, aucune pré-agrégation lourde 
 
 \subsection{Connexion Tableau à Dremio et traitement analytique}
 
-Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle \texttt{fact\_tiers\_dq\_consolidated} est importée comme source de données unique dans Tableau Desktop. 
+Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated} est importée comme source de données unique dans Tableau Desktop. 
 
 Tous les filtres (par date d'exécution, par domaine KYC/CSP, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
 

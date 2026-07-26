@@ -220,7 +220,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         
     \end{tikzpicture}
     }
-    \caption{Modélisation de la grande table de faits \texttt{fact\_tiers\_dq\_consolidated} et ses 3 tables sources}
+    \caption{Modélisation de la grande table de faits \texttt{fact\allowbreak\_tiers\allowbreak\_dq\allowbreak\_consolidated} et ses 3 tables sources}
     \label{fig:fact_dq}
 \end{figure}
 
@@ -431,7 +431,7 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
     \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, box/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=2.8cm, minimum height=1cm, align=center, drop shadow}]
         % Orchestrators
         \node (dag_ing) [box, fill=orange!10, draw=orange!60!black] {DAG \texttt{dailyow22} \\ \scriptsize(Ingestion à 22h00)};
-        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, below=of dag_ing, yshift=-1.0cm] {DAG \texttt{daily\_dq\_00} \\ \scriptsize(Qualité à 00h00)};
+        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, below=of dag_ing, yshift=-1.0cm] {DAG \texttt{daily\allowbreak\_dq\allowbreak\_00} \\ \scriptsize(Qualité à 00h00)};
         
         % Components
         \node (ingest) [box, right=of dag_ing, xshift=1.5cm] {Module d'Ingestion \\ \scriptsize(Apache Sqoop)};
@@ -466,7 +466,7 @@ Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifi
     \item \textbf{Encapsulation PySpark et Vues Temporaires} : Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (\textbf{\uline{parmi la quinzaine de tables du périmètre \texttt{CCM\_*}, telles que \texttt{ccm\_npdescription} et \texttt{ccm\_job} citées en exemple}}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques ,
     \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les fichiers sont séparés logiquement par domaine : \texttt{checks\_kyc.yml} pour le KYC, \texttt{checks\_csp.yml} pour les données socio-professionnelles, et \texttt{checks\_pipeline.yml} pour les indicateurs techniques et la fraîcheur ,
     \item \textbf{Extraction programmatique et typage des métadonnées} : Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle ,
-    \item \textbf{Persistance partitionnée dans trois tables Hive} : Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\_all\_column\_history} pour les résultats, \texttt{consolidated\_all\_checks\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\_execution\_log} pour la journalisation technique.
+    \item \textbf{Persistance partitionnée dans trois tables Hive} : Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\allowbreak\_all\allowbreak\_column\allowbreak\_history} pour les résultats, \texttt{consolidated\allowbreak\_all\allowbreak\_checks\allowbreak\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\allowbreak\_execution\allowbreak\_log} pour la journalisation technique.
 \end{itemize}
 
 \subsubsection{Conception de l'orchestration Airflow}
