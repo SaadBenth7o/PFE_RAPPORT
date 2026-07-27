@@ -482,32 +482,7 @@ Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'archit
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}[
-        node distance=0.8cm and 1.2cm, 
-        >=stealth, 
-        every node/.style={font=\scriptsize},
-        box/.style={
-            draw=blue!60!black, 
-            fill=blue!5, 
-            rounded corners=4pt, 
-            minimum width=3.0cm, 
-            minimum height=1.1cm, 
-            align=center, 
-            line width=0.8pt
-        }
-    ]
-        % Nodes
-        \node (client) [box] {\textbf{Poste Data Steward} \\ \tiny Tableau Desktop / Web};
-        \node (edge) [box, right=of client] {\textbf{Edge Node (Gateway)} \\ \tiny Airflow / Dremio Coordinator \\ \tiny Hive Metastore};
-        \node (master) [box, above right=of edge, yshift=-0.3cm] {\textbf{Master Nodes (x3)} \\ \tiny HDFS NameNode \\ \tiny YARN ResourceManager};
-        \node (worker) [box, below right=of edge, yshift=0.3cm] {\textbf{Worker Nodes (x3)} \\ \tiny HDFS DataNodes \\ \tiny YARN NodeManagers};
-
-        % Connectors with style
-        \draw [<->, thick, blue!80!black] (client) -- (edge);
-        \draw [<->, thick, blue!80!black] (edge) -- (master.west);
-        \draw [<->, thick, blue!80!black] (edge) -- (worker.west);
-        \draw [<->, thick, dashed, gray] (master) -- (worker);
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth, keepaspectratio]{figures/architecture_materielle.png}
     \caption{Architecture matérielle et déploiement dans le cluster Big Data}
     \label{fig:deploy_dq}
 \end{figure}
