@@ -1,14 +1,20 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Chiffres clés de CIH BANK (31/12/2024)}}{4}{figure.caption.11}%
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Gouvernance de CIH BANK}}{5}{figure.caption.12}%
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Organigramme de CIH BANK}}{6}{figure.caption.13}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Chiffres clés de CIH BANK (31/12/2024)}}{4}{figure.caption.12}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Organigramme de CIH BANK}}{5}{figure.caption.14}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Architecture matérielle Big Data}}{7}{figure.caption.15}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Planning prévisionnel du projet}}{10}{figure.caption.16}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Architecture du pipeline de données Référentiel Tiers PP Clients}}{12}{figure.caption.18}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Diagramme global des cas d'utilisation de la solution DQ Tiers}}{14}{figure.caption.18}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Architecture globale de la solution de Data Quality}}{18}{figure.caption.19}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Positionnement de la tâche DQ dans le DAG dailyow22}}{24}{figure.caption.24}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Diagramme de séquences du pipeline de contrôle et restitution DQ}}{18}{figure.caption.25}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Diagramme d'activités du workflow de remédiation DQ}}{18}{figure.caption.26}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Modélisation de la grande table de faits \texttt {fact\allowbreak \_tiers\allowbreak \_dq\allowbreak \_consolidated} et ses 3 tables sources}}{20}{figure.caption.27}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Diagramme de composants logiciels de la solution DQ}}{25}{figure.caption.34}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Architecture matérielle et déploiement dans le cluster Big Data}}{27}{figure.caption.38}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Dashboard Tableau — Vue Exécutive : scores DQ globaux KYC et CSP}}{34}{figure.caption.27}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Dashboard Tableau — Détail KYC : score par colonne et dimension DQ}}{35}{figure.caption.28}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Dashboard Tableau — Détail CSP : taux de nullité et valeurs parasites}}{35}{figure.caption.29}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Interface MobaXterm utilisée pour l'accès SSH au n\oe {}ud Edge du cluster Cloudera}}{31}{figure.caption.40}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Lignage des données dans Dremio montrant la création de la vue sémantique à partir des 3 tables Hive}}{39}{figure.caption.42}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Dashboard Tableau — Vue d'ensemble de la qualité des données}}{40}{figure.caption.43}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Dashboard Tableau — Heatmap Qualité par colonne et par date}}{41}{figure.caption.44}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Dashboard Tableau — Top anomalies et colonnes en échec}}{42}{figure.caption.45}%

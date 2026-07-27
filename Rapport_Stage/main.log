@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  4 JUN 2026 15:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  27 JUL 2026 00:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -31,6 +31,41 @@ Package: inputenc 2024/02/08 v1.3d Input encoding file
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\lmodern.sty
+Package: lmodern 2015/05/01 v1.6.1 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
 Package: babel 2025/12/11 v25.17 The multilingual framework for LuaLaTeX, pdfLa
@@ -167,19 +202,81 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
-) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
+) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/colortbl\colortbl.sty
+Package: colortbl 2024/10/29 v1.0k Color table columns (DPC)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen169
+\ar@mcellbox=\box53
+\extrarowheight=\dimen170
+\NC@list=\toks22
+\extratabsurround=\skip51
+\backup@length=\skip52
+\ar@cellbox=\box54
+)
+\everycr=\toks23
+\minrowclearance=\skip53
+\rownum=\count296
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
 Package: titlesec 2025/01/04 v2.17 Sectioning titles
-\ttl@box=\box53
-\beforetitleunit=\skip51
-\aftertitleunit=\skip52
-\ttl@plus=\dimen169
-\ttl@minus=\dimen170
-\ttl@toksa=\toks22
-\titlewidth=\dimen171
-\titlewidthlast=\dimen172
-\titlewidthfirst=\dimen173
-) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
+\ttl@box=\box55
+\beforetitleunit=\skip54
+\aftertitleunit=\skip55
+\ttl@plus=\dimen171
+\ttl@minus=\dimen172
+\ttl@toksa=\toks24
+\titlewidth=\dimen173
+\titlewidthlast=\dimen174
+\titlewidthfirst=\dimen175
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.sty
+Package: microtype 2026/03/01 v3.2d Micro-typographical refinements (RS)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count297
+)
+\MT@toks=\toks25
+\MT@tempbox=\box56
+\MT@count=\count298
+LaTeX Info: Redefining \noprotrusionifhmode on input line 1084.
+LaTeX Info: Redefining \leftprotrusion on input line 1085.
+\MT@prot@toks=\toks26
+LaTeX Info: Redefining \rightprotrusion on input line 1104.
+LaTeX Info: Redefining \textls on input line 1449.
+\MT@outer@kern=\dimen176
+LaTeX Info: Redefining \microtypecontext on input line 2053.
+LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
+\MT@listname@count=\count299
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype-pdf
+tex.def
+File: microtype-pdftex.def 2026/03/01 v3.2d Definitions specific to pdftex (RS)
+
+LaTeX Info: Redefining \lsstyle on input line 944.
+LaTeX Info: Redefining \lslig on input line 944.
+\MT@outer@space=\skip56
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.cfg
+File: microtype.cfg 2026/03/01 v3.2d microtype main configuration file (RS)
+)
+LaTeX Info: Redefining \microtypesetup on input line 3065.
+) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/ulem\ulem.sty
+\UL@box=\box57
+\UL@hyphenbox=\box58
+\UL@skip=\skip57
+\UL@hook=\toks27
+\UL@height=\dimen177
+\UL@pe=\count300
+\UL@pixel=\dimen178
+\ULC@box=\box59
+Package: ulem 2019/11/18
+\ULdepth=\dimen179
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.
 sty
@@ -188,13 +285,13 @@ sty
 y
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
 -common.tex
-\pgfutil@everybye=\toks23
-\pgfutil@tempdima=\dimen174
-\pgfutil@tempdimb=\dimen175
+\pgfutil@everybye=\toks28
+\pgfutil@tempdima=\dimen180
+\pgfutil@tempdimb=\dimen181
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
 -latex.def
-\pgfutil@abb=\box54
+\pgfutil@abb=\box60
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.
 code.tex
@@ -213,33 +310,33 @@ Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
 .code.tex
-\pgfkeys@pathtoks=\toks24
-\pgfkeys@temptoks=\toks25
+\pgfkeys@pathtoks=\toks29
+\pgfkeys@temptoks=\toks30
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
 libraryfiltered.code.tex
-\pgfkeys@tmptoks=\toks26
+\pgfkeys@tmptoks=\toks31
 ))
-\pgf@x=\dimen176
-\pgf@y=\dimen177
-\pgf@xa=\dimen178
-\pgf@ya=\dimen179
-\pgf@xb=\dimen180
-\pgf@yb=\dimen181
-\pgf@xc=\dimen182
-\pgf@yc=\dimen183
-\pgf@xd=\dimen184
-\pgf@yd=\dimen185
+\pgf@x=\dimen182
+\pgf@y=\dimen183
+\pgf@xa=\dimen184
+\pgf@ya=\dimen185
+\pgf@xb=\dimen186
+\pgf@yb=\dimen187
+\pgf@xc=\dimen188
+\pgf@yc=\dimen189
+\pgf@xd=\dimen190
+\pgf@yd=\dimen191
 \w@pgf@writea=\write3
 \r@pgf@reada=\read3
-\c@pgf@counta=\count296
-\c@pgf@countb=\count297
-\c@pgf@countc=\count298
-\c@pgf@countd=\count299
-\t@pgf@toka=\toks27
-\t@pgf@tokb=\toks28
-\t@pgf@tokc=\toks29
-\pgf@sys@id@count=\count300
+\c@pgf@counta=\count301
+\c@pgf@countb=\count302
+\c@pgf@countc=\count303
+\c@pgf@countd=\count304
+\t@pgf@toka=\toks32
+\t@pgf@tokb=\toks33
+\t@pgf@tokc=\toks34
+\pgf@sys@id@count=\count305
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.c
 fg
@@ -258,8 +355,8 @@ File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
 ssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfsyssoftpath@smallbuffer@items=\count301
-\pgfsyssoftpath@bigbuffer@items=\count302
+\pgfsyssoftpath@smallbuffer@items=\count306
+\pgfsyssoftpath@bigbuffer@items=\count307
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
 sprotocol.code.tex
@@ -275,12 +372,12 @@ Package: pgfcore 2025-08-29 v3.1.11a (3.1.11a)
 code.tex)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparse
 r.code.tex
-\pgfmath@dimen=\dimen186
-\pgfmath@count=\count303
-\pgfmath@box=\box55
-\pgfmath@toks=\toks30
-\pgfmath@stack@operand=\toks31
-\pgfmath@stack@operation=\toks32
+\pgfmath@dimen=\dimen192
+\pgfmath@count=\count308
+\pgfmath@box=\box61
+\pgfmath@toks=\toks35
+\pgfmath@stack@operand=\toks36
+\pgfmath@stack@operation=\toks37
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
 ions.code.tex)
@@ -304,59 +401,59 @@ ions.integerarithmetics.code.tex)
 code.tex)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat
 .code.tex
-\c@pgfmathroundto@lastzeros=\count304
+\c@pgfmathroundto@lastzeros=\count309
 ))
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.
 tex)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 epoints.code.tex
 File: pgfcorepoints.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@picminx=\dimen187
-\pgf@picmaxx=\dimen188
-\pgf@picminy=\dimen189
-\pgf@picmaxy=\dimen190
-\pgf@pathminx=\dimen191
-\pgf@pathmaxx=\dimen192
-\pgf@pathminy=\dimen193
-\pgf@pathmaxy=\dimen194
-\pgf@xx=\dimen195
-\pgf@xy=\dimen196
-\pgf@yx=\dimen197
-\pgf@yy=\dimen198
-\pgf@zx=\dimen199
-\pgf@zy=\dimen256
+\pgf@picminx=\dimen193
+\pgf@picmaxx=\dimen194
+\pgf@picminy=\dimen195
+\pgf@picmaxy=\dimen196
+\pgf@pathminx=\dimen197
+\pgf@pathmaxx=\dimen198
+\pgf@pathminy=\dimen199
+\pgf@pathmaxy=\dimen256
+\pgf@xx=\dimen257
+\pgf@xy=\dimen258
+\pgf@yx=\dimen259
+\pgf@yy=\dimen260
+\pgf@zx=\dimen261
+\pgf@zy=\dimen262
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 epathconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@path@lastx=\dimen257
-\pgf@path@lasty=\dimen258
+\pgf@path@lastx=\dimen263
+\pgf@path@lasty=\dimen264
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 epathusage.code.tex
 File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@shorten@end@additional=\dimen259
-\pgf@shorten@start@additional=\dimen260
+\pgf@shorten@end@additional=\dimen265
+\pgf@shorten@start@additional=\dimen266
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 escopes.code.tex
 File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfpic=\box56
-\pgf@hbox=\box57
-\pgf@layerbox@main=\box58
-\pgf@picture@serial@count=\count305
+\pgfpic=\box62
+\pgf@hbox=\box63
+\pgf@layerbox@main=\box64
+\pgf@picture@serial@count=\count310
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 egraphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgflinewidth=\dimen261
+\pgflinewidth=\dimen267
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 etransformations.code.tex
 File: pgfcoretransformations.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@pt@x=\dimen262
-\pgf@pt@y=\dimen263
-\pgf@pt@temp=\dimen264
+\pgf@pt@x=\dimen268
+\pgf@pt@y=\dimen269
+\pgf@pt@temp=\dimen270
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 equick.code.tex
@@ -373,14 +470,14 @@ File: pgfcorepathprocessing.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 earrows.code.tex
 File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowsep=\dimen265
+\pgfarrowsep=\dimen271
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 eshade.code.tex
 File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@max=\dimen266
-\pgf@sys@shading@range@num=\count306
-\pgf@shadingcount=\count307
+\pgf@max=\dimen272
+\pgf@sys@shading@range@num=\count311
+\pgf@shadingcount=\count312
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 eimage.code.tex
@@ -389,7 +486,7 @@ File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 eexternal.code.tex
 File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfexternal@startupbox=\box59
+\pgfexternal@startupbox=\box65
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 elayers.code.tex
@@ -410,7 +507,7 @@ File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 shapes.code.tex
 File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodeparttextbox=\box60
+\pgfnodeparttextbox=\box66
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 plot.code.tex
@@ -419,8 +516,8 @@ File: pgfmoduleplot.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
 mp-version-0-65.sty
 Package: pgfcomp-version-0-65 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@nodesepstart=\dimen267
-\pgf@nodesepend=\dimen268
+\pgf@nodesepstart=\dimen273
+\pgf@nodesepend=\dimen274
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
 mp-version-1-18.sty
@@ -438,10 +535,10 @@ ty
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.
 code.tex
 Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
-\pgffor@iter=\dimen269
-\pgffor@skip=\dimen270
-\pgffor@stack=\toks33
-\pgffor@toks=\toks34
+\pgffor@iter=\dimen275
+\pgffor@skip=\dimen276
+\pgffor@stack=\toks38
+\pgffor@toks=\toks39
 ))
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z\tikz.code.tex
@@ -450,39 +547,91 @@ Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
 aryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@plot@mark@count=\count308
-\pgfplotmarksize=\dimen271
+\pgf@plot@mark@count=\count313
+\pgfplotmarksize=\dimen277
 )
-\tikz@lastx=\dimen272
-\tikz@lasty=\dimen273
-\tikz@lastxsaved=\dimen274
-\tikz@lastysaved=\dimen275
-\tikz@lastmovetox=\dimen276
-\tikz@lastmovetoy=\dimen277
-\tikzleveldistance=\dimen278
-\tikzsiblingdistance=\dimen279
-\tikz@figbox=\box61
-\tikz@figbox@bg=\box62
-\tikz@tempbox=\box63
-\tikz@tempbox@bg=\box64
-\tikztreelevel=\count309
-\tikznumberofchildren=\count310
-\tikznumberofcurrentchild=\count311
-\tikz@fig@count=\count312
+\tikz@lastx=\dimen278
+\tikz@lasty=\dimen279
+\tikz@lastxsaved=\dimen280
+\tikz@lastysaved=\dimen281
+\tikz@lastmovetox=\dimen282
+\tikz@lastmovetoy=\dimen283
+\tikzleveldistance=\dimen284
+\tikzsiblingdistance=\dimen285
+\tikz@figbox=\box67
+\tikz@figbox@bg=\box68
+\tikz@tempbox=\box69
+\tikz@tempbox@bg=\box70
+\tikztreelevel=\count314
+\tikznumberofchildren=\count315
+\tikznumberofcurrentchild=\count316
+\tikz@fig@count=\count317
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 matrix.code.tex
 File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfmatrixcurrentrow=\count313
-\pgfmatrixcurrentcolumn=\count314
-\pgf@matrix@numberofcolumns=\count315
+\pgfmatrixcurrentrow=\count318
+\pgfmatrixcurrentcolumn=\count319
+\pgf@matrix@numberofcolumns=\count320
 )
-\tikz@expandcount=\count316
+\tikz@expandcount=\count321
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/shapes\
+pgflibraryshapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryshapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/shapes\
+pgflibraryshapes.multipart.code.tex
+File: pgflibraryshapes.multipart.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfnodepartlowerbox=\box71
+\pgfnodeparttwobox=\box72
+\pgfnodepartthreebox=\box73
+\pgfnodepartfourbox=\box74
+\pgfnodeparttwentybox=\box75
+\pgfnodepartnineteenbox=\box76
+\pgfnodeparteighteenbox=\box77
+\pgfnodepartseventeenbox=\box78
+\pgfnodepartsixteenbox=\box79
+\pgfnodepartfifteenbox=\box80
+\pgfnodepartfourteenbox=\box81
+\pgfnodepartthirteenbox=\box82
+\pgfnodeparttwelvebox=\box83
+\pgfnodepartelevenbox=\box84
+\pgfnodeparttenbox=\box85
+\pgfnodepartninebox=\box86
+\pgfnodeparteightbox=\box87
+\pgfnodepartsevenbox=\box88
+\pgfnodepartsixbox=\box89
+\pgfnodepartfivebox=\box90
+))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfarrowinset=\dimen286
+\pgfarrowlength=\dimen287
+\pgfarrowwidth=\dimen288
+\pgfarrowlinewidth=\dimen289
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
 Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
 
@@ -501,46 +650,110 @@ Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen280
-\captionmargin=\dimen281
-\caption@leftmargin=\dimen282
-\caption@rightmargin=\dimen283
-\caption@width=\dimen284
-\caption@indent=\dimen285
-\caption@parindent=\dimen286
-\caption@hangindent=\dimen287
+\caption@tempdima=\dimen290
+\captionmargin=\dimen291
+\caption@leftmargin=\dimen292
+\caption@rightmargin=\dimen293
+\caption@width=\dimen294
+\caption@indent=\dimen295
+\caption@parindent=\dimen296
+\caption@hangindent=\dimen297
 Package caption Info: Standard document class detected.
 Package caption Info: french babel package is loaded.
 )
-\c@caption@flags=\count317
-\c@continuedfloat=\count318
+\c@caption@flags=\count322
+\c@continuedfloat=\count323
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count319
-\float@exts=\toks35
-\float@box=\box65
-\@float@everytoks=\toks36
-\@floatcapt=\box66
+\c@float@type=\count324
+\float@exts=\toks40
+\float@box=\box91
+\@float@everytoks=\toks41
+\@floatcapt=\box92
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
 Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
-\LTleft=\skip53
-\LTright=\skip54
-\LTpre=\skip55
-\LTpost=\skip56
-\LTchunksize=\count320
-\LTcapwidth=\dimen288
-\LT@head=\box67
-\LT@firsthead=\box68
-\LT@foot=\box69
-\LT@lastfoot=\box70
-\LT@gbox=\box71
-\LT@cols=\count321
-\LT@rows=\count322
-\c@LT@tables=\count323
-\c@LT@chunks=\count324
-\LT@p@ftn=\toks37
+\LTleft=\skip58
+\LTright=\skip59
+\LTpre=\skip60
+\LTpost=\skip61
+\LTchunksize=\count325
+\LTcapwidth=\dimen298
+\LT@head=\box93
+\LT@firsthead=\box94
+\LT@foot=\box95
+\LT@lastfoot=\box96
+\LT@gbox=\box97
+\LT@cols=\count326
+\LT@rows=\count327
+\c@LT@tables=\count328
+\c@LT@chunks=\count329
+\LT@p@ftn=\toks42
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgfgantt\pgfgantt.sty
+Package: pgfgantt 2024/06/19 v5.0a Draw Gantt diagrams with TikZ
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryarrows.code.tex
+File: tikzlibraryarrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryarrows.code.tex
+File: pgflibraryarrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\arrowsize=\dimen299
+))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarybackgrounds.code.tex
+File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@layerbox@background=\box98
+\pgf@layerboxsaved@background=\box99
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarypatterns.code.tex
+File: tikzlibrarypatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+arypatterns.code.tex
+File: pgflibrarypatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfcalend
+ar.sty
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfcale
+ndar.code.tex
+File: pgfcalendar.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfcalendarcurrentjulian=\count330
+\pgf@cal@easter@Y=\count331
+\pgf@cal@easter@G=\count332
+\pgf@cal@easter@C=\count333
+\pgf@cal@easter@X=\count334
+\pgf@cal@easter@Z=\count335
+\pgf@cal@easter@D=\count336
+\pgf@cal@easter@E=\count337
+\pgf@cal@easter@N=\count338
+\pgf@cal@easter@M=\count339
+\pgf@cal@easter@julianday=\count340
+))
+\gtt@currentline=\count341
+\gtt@lasttitleline=\count342
+\gtt@currgrid=\count343
+\gtt@chartwidth=\count344
+\gtt@lasttitleslot=\count345
+\gtt@elementid=\count346
+\gtt@today@slot=\count347
+\gtt@startjulian=\count348
+\gtt@endjulian=\count349
+\gtt@chartid=\count350
+\gtt@vrule@slot=\count351
+\gtt@calendar@slots=\count352
+\gtt@calendar@weeknumber=\count353
+\gtt@calendar@startofweek=\count354
+\gtt@left@slot=\count355
+\gtt@right@slot=\count356
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
@@ -588,20 +801,16 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count325
-)
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
-Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count326
+\c@section@level=\count357
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.s
 ty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen289
-\Hy@linkcounter=\count327
-\Hy@pagecounter=\count328
+\@linkdim=\dimen300
+\Hy@linkcounter=\count358
+\Hy@pagecounter=\count359
  (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -609,7 +818,7 @@ Now handling font encoding PD1 ...
 ) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count329
+\Hy@SavedSpaceFactor=\count360
  (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -622,14 +831,9 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count330
-
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
-\Urlmuskip=\muskip17
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
+\c@Hy@tempcnt=\count361
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen290
+\XeTeXLinkMargin=\dimen301
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -639,9 +843,9 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count331
-\Field@Width=\dimen291
-\Fld@charsize=\dimen292
+\Fld@menulength=\count362
+\Field@Width=\dimen302
+\Fld@charsize=\dimen303
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -649,16 +853,16 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count332
-\c@Item=\count333
-\c@Hfootnote=\count334
+\Hy@abspage=\count363
+\c@Item=\count364
+\c@Hfootnote=\count365
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count335
-\c@bookmark@seq@number=\count336
+\Fld@listcount=\count366
+\c@bookmark@seq@number=\count367
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
 echeck.sty
@@ -671,32 +875,32 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 84.
 )
-\Hy@SectionHShift=\skip57
+\Hy@SectionHShift=\skip62
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 24.
+Package hyperref Info: Option `colorlinks' set `true' on input line 31.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
-\lst@mode=\count337
-\lst@gtempboxa=\box72
-\lst@token=\toks38
-\lst@length=\count338
-\lst@currlwidth=\dimen293
-\lst@column=\count339
-\lst@pos=\count340
-\lst@lostspace=\dimen294
-\lst@width=\dimen295
-\lst@newlines=\count341
-\lst@lineno=\count342
-\lst@maxwidth=\dimen296
+\lst@mode=\count368
+\lst@gtempboxa=\box100
+\lst@token=\toks43
+\lst@length=\count369
+\lst@currlwidth=\dimen304
+\lst@column=\count370
+\lst@pos=\count371
+\lst@lostspace=\dimen305
+\lst@width=\dimen306
+\lst@newlines=\count372
+\lst@lineno=\count373
+\lst@maxwidth=\dimen307
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstpatch.sty
 File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-\c@lstnumber=\count343
-\lst@skipnumbers=\count344
-\lst@framebox=\box73
+\c@lstnumber=\count374
+\lst@skipnumbers=\count375
+\lst@framebox=\box101
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
 File: listings.cfg 2025/11/14 1.11b listings configuration
@@ -708,51 +912,55 @@ Package: listings 2025/11/14 1.11b (Carsten Heinz)
     but found:
         2025/11/14 1.11b (Carsten Heinz)
     so I'm assuming it got fixed.
-
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 96
+.
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
+File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count345
+\l__color_backend_stack_int=\count376
 ) (main.aux
 Package babel Info: 'french' activates 'french' shorthands.
 (babel)             Reported on input line 11.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Info: Redefining \degres on input line 83.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 96.
+LaTeX Font Info:    ... okay on input line 96.
+LaTeX Info: Redefining \degres on input line 96.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count346
-\scratchdimen=\dimen297
-\scratchbox=\box74
-\nofMPsegments=\count347
-\nofMParguments=\count348
-\everyMPshowfont=\toks39
-\MPscratchCnt=\count349
-\MPscratchDim=\dimen298
-\MPnumerator=\count350
-\makeMPintoPDFobject=\count351
-\everyMPtoPDFconversion=\toks40
+\scratchcounter=\count377
+\scratchdimen=\dimen308
+\scratchbox=\box102
+\nofMPsegments=\count378
+\nofMParguments=\count379
+\everyMPshowfont=\toks44
+\MPscratchCnt=\count380
+\MPscratchDim=\dimen309
+\MPnumerator=\count381
+\makeMPintoPDFobject=\count382
+\everyMPtoPDFconversion=\toks45
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -798,57 +1006,104 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+LaTeX Info: Redefining \microtypecontext on input line 96.
+Package microtype Info: Applying patch `item' on input line 96.
+Package microtype Info: Applying patch `toc' on input line 96.
+Package microtype Info: Applying patch `eqnum' on input line 96.
+Package microtype Info: Applying patch `footnote' on input line 96.
+Package microtype Info: Applying patch `verbatim' on input line 96.
+LaTeX Info: Redefining \microtypesetup on input line 96.
+Package microtype Info: Generating PDF output.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: Automatic font expansion enabled (level 2),
+(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
+Package microtype Info: Using default expansion set `alltext-nott'.
+Package microtype Info: Patching command `\showhyphens'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of interword spacing.
+Package microtype Info: No adjustment of character kerning.
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
+(RS)
+)
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
+
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 83.
+Package hyperref Info: Link coloring ON on input line 96.
 
 (main.out) (main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-\c@lstlisting=\count352
-<logos/unica.png, id=358, 707.64375pt x 180.675pt>
+\c@lstlisting=\count383
+<logos/unica.png, id=286, 707.64375pt x 180.675pt>
 File: logos/unica.png Graphic file (type png)
 <use logos/unica.png>
-Package pdftex.def Info: logos/unica.png  used on input line 92.
+Package pdftex.def Info: logos/unica.png  used on input line 105.
 (pdftex.def)             Requested size: 127.46756pt x 32.5449pt.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 94.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 94.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 94.
-<logos/cih.png, id=360, 321.2pt x 321.2pt>
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
+07.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
+File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
+07.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
+File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+107.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
+File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+107.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
+File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 107.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 107.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 107.
+<logos/cih.png, id=288, 321.2pt x 321.2pt>
 File: logos/cih.png Graphic file (type png)
 <use logos/cih.png>
-Package pdftex.def Info: logos/cih.png  used on input line 98.
+Package pdftex.def Info: logos/cih.png  used on input line 111.
 (pdftex.def)             Requested size: 127.4681pt x 127.4681pt.
-<logos/emsi.png, id=361, 863.225pt x 863.225pt>
+<logos/emsi.png, id=289, 863.225pt x 863.225pt>
 File: logos/emsi.png Graphic file (type png)
 <use logos/emsi.png>
-Package pdftex.def Info: logos/emsi.png  used on input line 103.
+Package pdftex.def Info: logos/emsi.png  used on input line 116.
 (pdftex.def)             Requested size: 127.46289pt x 127.46289pt.
 
-Overfull \hbox (1.0pt too wide) in paragraph at lines 114--115
+Overfull \hbox (1.0pt too wide) in paragraph at lines 127--128
  [][] 
  []
 
 
-Overfull \hbox (1.0pt too wide) in paragraph at lines 122--123
+Overfull \hbox (1.0pt too wide) in paragraph at lines 135--136
  [][] 
  []
 
 [1
 
-{C:/Users/benda/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./logos/unic
-a.png> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
+{C:/Users/benda/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/bend
+a/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc} <./logos/unica.pn
+g> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
 (sections/remerciements.tex [1
 
 ]) (sections/resume.tex [2
@@ -860,612 +1115,1288 @@ a.png> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
 
 ] (main.toc [5
 
-] [6])
+]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7
+2.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+)
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [7] (main.lof)
+ [6]
+(main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
- [8
+ [7
 
 ] (main.lot)
 \tf@lot=\write7
 \openout7 = `main.lot'.
 
- [9
+ [8
 
-] (sections/abbreviations.tex) [10
+] (sections/abbreviations.tex) [9
 
-] (sections/introduction.tex)
-(sections/chapitre1.tex
+]
+(sections/introduction.tex) (sections/chapitre1.tex
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.1 \chapter
-            {PrÃ©sentation de l'organisme d'accueil} [1
+            {PrÃ©sentation du cadre de projet} [1
 
 ]
 Chapitre 1.
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/12'.
+(microtype)             Ignoring protrusion settings for this character.
 [2
 
 ]
-<figures/chiffresCles.png, id=561, 1466.47874pt x 1080.035pt>
+<figures/chiffresCles.png, id=482, 1466.47874pt x 1080.035pt>
 File: figures/chiffresCles.png Graphic file (type png)
 <use figures/chiffresCles.png>
-Package pdftex.def Info: figures/chiffresCles.png  used on input line 94.
+Package pdftex.def Info: figures/chiffresCles.png  used on input line 119.
 (pdftex.def)             Requested size: 364.19667pt x 268.21176pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [3] [4 <./figures/chiffresCles.png (PNG copy)>]
-<figures/Gouvernance.png, id=571, 1186.4325pt x 1335.99126pt>
-File: figures/Gouvernance.png Graphic file (type png)
-<use figures/Gouvernance.png>
-Package pdftex.def Info: figures/Gouvernance.png  used on input line 140.
-(pdftex.def)             Requested size: 409.71692pt x 461.36597pt.
- [5 <./figures/Gouvernance.png (PNG copy)>]
-<figures/Organigramme.png, id=577, 1504.62125pt x 1052.93375pt>
+<figures/Organigramme.png, id=494, 1504.62125pt x 1052.93375pt>
 File: figures/Organigramme.png Graphic file (type png)
 <use figures/Organigramme.png>
-Package pdftex.def Info: figures/Organigramme.png  used on input line 152.
+Package pdftex.def Info: figures/Organigramme.png  used on input line 154.
 (pdftex.def)             Requested size: 1504.61758pt x 1052.93118pt.
- [6 <./figures/Organigramme.png (PNG copy)>] [7])
-(sections/chapitre2.tex [8]
+ [5 <./figures/Organigramme.png (PNG copy)>] [6]
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 197.
+<figures/Architecture et pipeline de donnÃ©es.png, id=503, 1541.76pt x 1027.84p
+t>
+File: figures/Architecture et pipeline de donnÃ©es.png Graphic file (type png)
+<use figures/Architecture et pipeline de donnÃ©es.png>
+Package pdftex.def Info: figures/Architecture et pipeline de donnÃ©es.png  used
+ on input line 207.
+(pdftex.def)             Requested size: 432.48051pt x 288.31079pt.
+ [7 <./figures/Architecture et pipeline de donnÃ©es.png (PNG copy)>] [8] [9]) (
+sections/chapitre2.tex [10]
 Chapitre 2.
-[9
+[11
 
-]
-Underfull \hbox (badness 7814) in paragraph at lines 73--74
-[]\T1/cmr/m/n/12 Numéro FATCA (clients
- []
-
-
-Overfull \hbox (15.75081pt too wide) in paragraph at lines 55--78
- [][] 
- []
-
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
-[]\T1/cmr/m/n/12 Catégorie socio-
- []
-
-
-Underfull \hbox (badness 5519) in paragraph at lines 97--98
-[]\T1/cmr/m/n/12 SAL, FON, TRI, AUT,
- []
-
-
-Overfull \hbox (47.38469pt too wide) in paragraph at lines 87--106
- [][] 
- []
-
-[11]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 181.
- [12]
-Overfull \hbox (152.71303pt too wide) in paragraph at lines 187--188
-[]\T1/cmr/m/n/12 Un job \T1/cmr/bx/n/12 Apache Spark \T1/cmr/m/n/12 (DAG \T1/cm
-tt/m/n/12 referentieltiers_ingestion\T1/cmr/m/n/12 , script \T1/cmtt/m/n/12 sta
-ging_novareferentieltiersclients.sh\T1/cmr/m/n/12 )
- []
-
-
-Overfull \hbox (139.95352pt too wide) in paragraph at lines 191--192
-[]\T1/cmr/bx/n/12 Dremio \T1/cmr/m/n/12 ex-pose les don-nées de sta-ging via \T
-1/cmr/bx/n/12 10 vues vir-tuelles \T1/cmr/m/n/12 dans le schéma \T1/cmtt/m/n/12
- staging-nova-referentieltiers \T1/cmr/m/n/12 : 
- []
-
-
-Overfull \hbox (36.38551pt too wide) in paragraph at lines 218--219
-[]\T1/cmr/bx/n/12 Données CSP mas-si-ve-ment nulles ou pa-ra-sites \T1/cmr/m/n/
-12 : les co-lonnes \T1/cmtt/m/n/12 professional_sector\T1/cmr/m/n/12 ,
- []
-
-
-Overfull \hbox (1.88457pt too wide) in paragraph at lines 218--219
-\T1/cmtt/m/n/12 occupation \T1/cmr/m/n/12 et \T1/cmtt/m/n/12 socioprofessional_
-category \T1/cmr/m/n/12 pré-sentent des taux de va-leurs nulles
- []
-
-[13] [14]
-Overfull \hbox (0.52931pt too wide) in paragraph at lines 279--280
-[]\T1/cmtt/m/n/12 dq_tiers_anomalies \T1/cmr/m/n/12 : en-re-gistre le dé-tail d
-es en-re-gis-tre-ments clients (\T1/cmtt/m/n/12 identifier\T1/cmr/m/n/12 ,
- []
-
-) (sections/chapitre3.tex [15] [16]
+] [12] [13]
+<figures/usecaseGeneral.png, id=542, 1122.1925pt x 588.1975pt>
+File: figures/usecaseGeneral.png Graphic file (type png)
+<use figures/usecaseGeneral.png>
+Package pdftex.def Info: figures/usecaseGeneral.png  used on input line 98.
+(pdftex.def)             Requested size: 432.48051pt x 226.67662pt.
+ [14 <./figures/usecaseGeneral.png>] [15])
+(sections/chapitre3.tex [16]
 Chapitre 3.
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+This error message was generated by an \errmessage
+command, so I can't give any explicit help.
+Pretend that you're Hercule Poirot: Examine all clues,
+and deduce the truth by order and method.
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60     }
+          
+(That was another \errmessage.)
+
 [17
 
 ]
-Underfull \hbox (badness 5908) in paragraph at lines 90--91
-[]\T1/cmr/m/n/12 Open source, com-pa-tible
- []
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
 
 
-Underfull \hbox (badness 5022) in paragraph at lines 92--93
-[]\T1/cmr/m/n/12 Data Vir-tua-li-za-tion exis-
- []
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
 
 
-Overfull \hbox (1.30574pt too wide) in paragraph at lines 76--97
- [][] 
- []
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.101     }
+           
+(That was another \errmessage.)
 
 [18]
-<figures/logos/logo_oracle.png, id=646, 501.875pt x 501.875pt>
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.216     }
+           
+(That was another \errmessage.)
+
+! Undefined control sequence.
+<recently read> \midrule 
+                         
+l.216     }
+           
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<recently read> \midrule 
+                         
+l.216     }
+           
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<recently read> \midrule 
+                         
+l.216     }
+           
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.216     }
+           
+(That was another \errmessage.)
+
+
+Overfull \hbox (19.19168pt too wide) in paragraph at lines 216--216
+ [][]\T1/lmr/bx/n/10.95 (-20) consolidated_all_column_history 
+ []
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.216     }
+           
+(That was another \errmessage.)
+
+
+Overfull \hbox (8.20584pt too wide) in paragraph at lines 216--216
+ [][]\T1/lmr/bx/n/10.95 (-20) consolidated_all_checks_config 
+ []
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.216     }
+           
+(That was another \errmessage.)
+
+[19] [20]
+Underfull \hbox (badness 4492) in paragraph at lines 264--264
+[]|\T1/lmr/m/n/12 (+20) Requête SQL exé-cu-tée par le mo-teur
+ []
+
+[21]
+Overfull \hbox (61.11247pt too wide) in paragraph at lines 274--275
+[]\T1/lmr/bx/n/12 (-20) La co-hé-rence condi-tion-nelle FATCA \T1/lmr/m/n/12 (-
+20) : L'iden-ti-fiant FATCA (\T1/lmtt/m/n/12 fatcaidentificationnumber\T1/lmr/m
+/n/12 (-20) )
+ []
+
+
+Overfull \hbox (47.7325pt too wide) in paragraph at lines 274--275
+\T1/lmr/m/n/12 (-20) est ma-jo-ri-tai-re-ment nul, ce qui est co-hé-rent pour l
+es ci-toyens ma-ro-cains (\T1/lmtt/m/n/12 nationalitycountry
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 284--284
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 280--286
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 289--289
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 286--291
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 298--298
+[]|\T1/lmtt/m/n/12 nationality_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 300--300
+[]|\T1/lmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 302--303
+[]|\T1/lmr/m/n/12 (+20) Préciser la pro-fes-sion
+ []
+
+
+Overfull \hbox (19.48512pt too wide) in paragraph at lines 304--304
+[]|\T1/lmtt/m/n/12 socioprofessional_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 306--306
+[]|\T1/lmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 310--310
+[]|\T1/lmtt/m/n/12 politically_
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 291--312
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 321--321
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 317--323
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 326--326
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 323--328
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 8113) in paragraph at lines 329--329
+[]|\T1/lmr/m/n/12 (+20) Longueur $\OMS/lmsy/m/n/12 ^^U$ \T1/lmr/m/n/12 (+20) 2,
+ au-cun
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 339--339
+[]|\T1/lmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 7981) in paragraph at lines 339--339
+[]|\T1/lmr/m/n/12 (+20) Code nu-mé-rique va-lide
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 341--341
+[]|\T1/lmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 1062) in paragraph at lines 341--341
+\T1/lmr/m/n/12 (+20) FON, TRI, AUT, EMP,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 343--344
+[]|\T1/lmr/m/n/12 (+20) Normaliser : map-per
+ []
+
+
+Underfull \hbox (badness 1558) in paragraph at lines 343--344
+\T1/lmr/m/n/12 (+20) 'LUI ME-ME' vers auto-
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 328--345
+ [] [] [] [] 
+ []
+
+[22]
+Underfull \hbox (badness 10000) in paragraph at lines 354--354
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 350--356
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 359--359
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 356--361
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 364--364
+[]|\T1/lmtt/m/n/12 fatca_
+ []
+
+
+Overfull \hbox (0.96011pt too wide) in paragraph at lines 364--364
+\T1/lmtt/m/n/12 identification_
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 366--366
+[]|\T1/lmtt/m/n/12 employer \T1/lmr/m/n/12 (+20) +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 366--366
+\T1/lmtt/m/n/12 professional_
+ []
+
+
+Underfull \hbox (badness 7012) in paragraph at lines 366--367
+[]|\T1/lmr/m/n/12 (+20) Annuler le nom d'em-
+ []
+
+
+Underfull \hbox (badness 2970) in paragraph at lines 366--367
+\T1/lmr/m/n/12 (+20) ployeur in-co-hé-rent dans
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 361--368
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 377--377
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 373--379
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 382--382
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 379--384
+ [] [] [] [] 
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 384--389
+ [] [] [] [] 
+ []
+
+[23{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.e
+nc}{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--398
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 394--400
+ [] [] [] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 403--403
+[]|\T1/lmr/bx/n/12 (+20) Description Règle /
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 400--405
+ [] [] [] [] 
+ []
+
+
+Overfull \hbox (22.6864pt too wide) in alignment at lines 405--412
+ [] [] [] [] 
+ []
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+
+! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
+ng to ignore it. Perhaps you misspelled it.
+
+See the pgfkeys package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.450     }
+           
+(That was another \errmessage.)
+
+[24]
+Overfull \hbox (29.71902pt too wide) in paragraph at lines 463--464
+\T1/lmtt/m/n/12 _all_checks_config \T1/lmr/m/n/12 (-20) pour la confi-gu-ra-tio
+n et les re-quêtes SQL gé-né-rées, et \T1/lmtt/m/n/12 consolidated
+ []
+
+[25] [26]
+<figures/logos/logo_oracle.png, id=624, 501.875pt x 65.24374pt>
 File: figures/logos/logo_oracle.png Graphic file (type png)
 <use figures/logos/logo_oracle.png>
-Package pdftex.def Info: figures/logos/logo_oracle.png  used on input line 106.
+Package pdftex.def Info: figures/logos/logo_oracle.png  used on input line 540.
 
-(pdftex.def)             Requested size: 45.51906pt x 45.52458pt.
-<figures/logos/logo_sqoop.png, id=647, 262.9825pt x 262.9825pt>
+(pdftex.def)             Requested size: 54.6244pt x 7.10117pt.
+ [27]
+<figures/logos/logo_mobaxterm.png, id=632, 513.92pt x 497.86pt>
+File: figures/logos/logo_mobaxterm.png Graphic file (type png)
+<use figures/logos/logo_mobaxterm.png>
+Package pdftex.def Info: figures/logos/logo_mobaxterm.png  used on input line 5
+53.
+(pdftex.def)             Requested size: 29.36745pt x 28.44972pt.
+<figures/logos/logo_sqoop.png, id=633, 262.9825pt x 262.9825pt>
 File: figures/logos/logo_sqoop.png Graphic file (type png)
 <use figures/logos/logo_sqoop.png>
-Package pdftex.def Info: figures/logos/logo_sqoop.png  used on input line 119.
-(pdftex.def)             Requested size: 45.52103pt x 45.52458pt.
-<figures/logos/logo_airflow.png, id=648, 1204.5pt x 1204.5pt>
-File: figures/logos/logo_airflow.png Graphic file (type png)
-<use figures/logos/logo_airflow.png>
-Package pdftex.def Info: figures/logos/logo_airflow.png  used on input line 132
-.
-(pdftex.def)             Requested size: 45.5068pt x 45.52458pt.
-<figures/logos/logo_hadoop.png, id=649, 501.875pt x 501.875pt>
-File: figures/logos/logo_hadoop.png Graphic file (type png)
-<use figures/logos/logo_hadoop.png>
-Package pdftex.def Info: figures/logos/logo_hadoop.png  used on input line 145.
-
-(pdftex.def)             Requested size: 45.51906pt x 45.52458pt.
-<figures/logos/logo_spark.png, id=650, 80.3pt x 80.3pt>
+Package pdftex.def Info: figures/logos/logo_sqoop.png  used on input line 566.
+(pdftex.def)             Requested size: 28.45064pt x 28.45064pt.
+<figures/logos/logo_hive.png, id=634, 963.6pt x 867.24pt>
+File: figures/logos/logo_hive.png Graphic file (type png)
+<use figures/logos/logo_hive.png>
+Package pdftex.def Info: figures/logos/logo_hive.png  used on input line 579.
+(pdftex.def)             Requested size: 31.61215pt x 28.45094pt.
+<figures/logos/logo_spark.png, id=635, 377.41pt x 200.75pt>
 File: figures/logos/logo_spark.png Graphic file (type png)
 <use figures/logos/logo_spark.png>
-Package pdftex.def Info: figures/logos/logo_spark.png  used on input line 158.
-(pdftex.def)             Requested size: 45.52518pt x 45.52458pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 162--164
-\T1/cmr/m/n/10.95 Mo-teur de trai-te-ment dis-tri-bué en mé-moire. Trans-forme 
-et
- []
-
-
-Underfull \hbox (badness 6608) in paragraph at lines 162--164
-\T1/cmr/m/n/10.95 charge les don-nées de la zone RAW vers la zone STA-GING
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 162--164
-\T1/cmr/m/n/10.95 (\T1/cmtt/m/n/10.95 staging_nova_referentieltiers\T1/cmr/m/n/
-10.95 ). Mo-bi-lisé éga-le-ment par Soda
- []
-
-<figures/logos/logo_soda.png, id=651, 338.26375pt x 338.26375pt>
+Package pdftex.def Info: figures/logos/logo_spark.png  used on input line 592.
+(pdftex.def)             Requested size: 53.48778pt x 28.45094pt.
+<figures/logos/logo_soda.png, id=636, 338.26375pt x 338.26375pt>
 File: figures/logos/logo_soda.png Graphic file (type png)
 <use figures/logos/logo_soda.png>
-Package pdftex.def Info: figures/logos/logo_soda.png  used on input line 171.
-(pdftex.def)             Requested size: 45.52426pt x 45.52458pt.
-[19 <./figures/logos/logo_oracle.png> <./figures/logos/logo_sqoop.png> <./figur
-es/logos/logo_airflow.png> <./figures/logos/logo_hadoop.png> <./figures/logos/l
-ogo_spark.png>]
-<figures/logos/logo_dremio.png, id=665, 513.92pt x 513.92pt>
+Package pdftex.def Info: figures/logos/logo_soda.png  used on input line 605.
+(pdftex.def)             Requested size: 28.45009pt x 28.45009pt.
+<figures/logos/logo_airflow.png, id=637, 1204.5pt x 1204.5pt>
+File: figures/logos/logo_airflow.png Graphic file (type png)
+<use figures/logos/logo_airflow.png>
+Package pdftex.def Info: figures/logos/logo_airflow.png  used on input line 618
+.
+(pdftex.def)             Requested size: 28.45094pt x 28.45094pt.
+<figures/logos/logo_dremio.png, id=638, 513.92pt x 513.92pt>
 File: figures/logos/logo_dremio.png Graphic file (type png)
 <use figures/logos/logo_dremio.png>
-Package pdftex.def Info: figures/logos/logo_dremio.png  used on input line 184.
+Package pdftex.def Info: figures/logos/logo_dremio.png  used on input line 631.
 
-(pdftex.def)             Requested size: 45.52151pt x 45.52458pt.
-<figures/logos/logo_tableau.png, id=666, 341.275pt x 341.275pt>
+(pdftex.def)             Requested size: 28.44997pt x 28.44997pt.
+<figures/logos/logo_tableau.png, id=639, 578.16pt x 119.7273pt>
 File: figures/logos/logo_tableau.png Graphic file (type png)
 <use figures/logos/logo_tableau.png>
-Package pdftex.def Info: figures/logos/logo_tableau.png  used on input line 197
+Package pdftex.def Info: figures/logos/logo_tableau.png  used on input line 644
 .
-(pdftex.def)             Requested size: 45.52335pt x 45.52458pt.
-
-Overfull \hbox (37.23636pt too wide) in alignment at lines 225--230
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (37.23636pt too wide) in alignment at lines 230--234
- [] [] [] [] [] 
- []
-
-
-Underfull \hbox (badness 3098) in paragraph at lines 239--240
-[]|\T1/cmr/m/n/12 Compléter via NOVA
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 241--241
-[]|\T1/cmr/m/n/12 Taux dates au
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 241--242
-[]|\T1/cmr/m/n/12 Flagger \T1/cmtt/m/n/12 date_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 241--242
-\T1/cmtt/m/n/12 naissance_approx
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 243--243
-[]|\T1/cmr/m/n/12 Valeurs IN (M.,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 243--243
-\T1/cmr/m/n/12 MME, MLLE)
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 247--247
-[]|\T1/cmtt/m/n/12 gender \T1/cmr/m/n/12 +
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 247--247
-[]|\T1/cmr/m/n/12 Genre M $\OMS/cmsy/m/n/12 6\OT1/cmr/m/n/12 =$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 247--247
-\T1/cmr/m/n/12 MME/MLLE ;
- []
-
-
-Underfull \hbox (badness 4805) in paragraph at lines 247--248
-[]|\T1/cmr/m/n/12 Audit croisé ^^V cor-
- []
-
-
-Underfull \hbox (badness 2165) in paragraph at lines 247--248
-\T1/cmr/m/n/12 rec-tion ma-nuelle dans
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 249--249
-[]|\T1/cmtt/m/n/12 nationality_
- []
-
-
-Underfull \hbox (badness 3098) in paragraph at lines 249--250
-[]|\T1/cmr/m/n/12 Compléter via NOVA
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 251--251
-[]|\T1/cmtt/m/n/12 fatca_
- []
-
-
-Overfull \hbox (10.66179pt too wide) in paragraph at lines 251--251
-\T1/cmtt/m/n/12 identification_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 251--251
-[]|\T1/cmr/m/n/12 Clients US ou
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 251--251
-\T1/cmr/m/n/12 double-nationalité
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 251--252
-[]|\T1/cmr/m/n/12 Remonter im-mé-dia-te-
- []
-
-
-Underfull \hbox (badness 6592) in paragraph at lines 253--254
-[]|\T1/cmr/m/n/12 Mapper codes nu-mé-
- []
-
-
-Underfull \hbox (badness 3557) in paragraph at lines 253--254
-\T1/cmr/m/n/12 table ré-fé-ren-tiel villes
- []
-
-
-Overfull \hbox (37.23636pt too wide) in alignment at lines 234--255
- [] [] [] [] [] 
- []
-
-ignored error: Infinite glue shrinkage found in box being split [20 <./figures/
-logos/logo_soda.png> <./figures/logos/logo_dremio.png> <./figures/logos/logo_ta
-bleau.png>]
-Overfull \hbox (37.23636pt too wide) in alignment at lines 261--266
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (37.23636pt too wide) in alignment at lines 266--270
- [] [] [] [] [] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 271--271
-[]|\T1/cmtt/m/n/12 professional_
- []
-
-
-Overfull \hbox (29.18227pt too wide) in paragraph at lines 275--275
-[]|\T1/cmtt/m/n/12 socioprofessional_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\T1/cmtt/m/n/12 professional_
- []
-
-
-Underfull \hbox (badness 2134) in paragraph at lines 277--277
-[]|\T1/cmr/m/n/12 Valeurs IN (SAL,
- []
-
-
-Underfull \hbox (badness 1721) in paragraph at lines 277--277
-\T1/cmr/m/n/12 FON, TRI, AUT,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 279--280
-[]|\T1/cmr/m/n/12 Normaliser : map-per
- []
-
-
-Underfull \hbox (badness 1442) in paragraph at lines 281--281
-[]|\T1/cmr/m/n/12 Secteur + Pro-fes-
- []
-
-
-Underfull \hbox (badness 2443) in paragraph at lines 281--281
-\T1/cmr/m/n/12 sion + CSP non
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 281--282
-[]|\T1/cmr/m/n/12 Vérifier co-hé-rence et
- []
-
-
-Underfull \hbox (badness 2111) in paragraph at lines 283--283
-[]|\T1/cmtt/m/n/12 ordnum \T1/cmr/m/n/12 (multi-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 283--283
-[]|\T1/cmr/m/n/12 Doublons avec
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 283--283
-\T1/cmtt/m/n/12 main=0 \T1/cmr/m/n/12 do-cu-men-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 283--284
-[]|\T1/cmr/m/n/12 Sélectionner em-ploi
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 283--284
-\T1/cmr/m/n/12 prin-ci-pal (main=1)
- []
-
-
-Underfull \hbox (badness 5260) in paragraph at lines 283--284
-\T1/cmr/m/n/12 dans la join-ture CI-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 285--285
-[]|\T1/cmtt/m/n/12 politically_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 285--286
-[]|\T1/cmr/m/n/12 Demander dé-cla-ra-tion
- []
-
-
-Overfull \hbox (37.23636pt too wide) in alignment at lines 270--287
- [] [] [] [] [] 
- []
-
-ignored error: Infinite glue shrinkage found in box being split [21]
-Underfull \hbox (badness 10000) in paragraph at lines 297--297
-[]\T1/cmtt/m/n/12 batch_
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 297--297
-\T1/cmtt/m/n/12 datetime_
- []
-
-
-Underfull \hbox (badness 1205) in paragraph at lines 299--299
-[]\T1/cmr/m/n/12 0 client sans seg-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 299--300
-[]\T1/cmr/m/n/12 Assigner seg-ment
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 299--300
-\T1/cmr/m/n/12 par dé-faut se-lon
- []
-
-
-Overfull \hbox (37.23636pt too wide) in paragraph at lines 293--302
- [][] 
- []
-
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 308.
-
-Underfull \hbox (badness 10000) in paragraph at lines 324--325
-[]\T1/cmr/m/n/12 Nom du DAG dé-clen-cheur
- []
-
-
-Underfull \hbox (badness 1231) in paragraph at lines 332--333
-[]\T1/cmr/m/n/12 Dimension DQ : com-ple-te-ness,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 334--335
-[]\T1/cmr/m/n/12 CRITIQUE / HAUTE /
- []
-
-[22] [23]
-Overfull \hbox (76.79408pt too wide) in paragraph at lines 419--420
-\T1/cmr/m/n/12 d'in-ges-tion des tables \T1/cmtt/m/n/12 CCM_*\T1/cmr/m/n/12 . E
-lle ne bloque pas le pi-pe-line en cas d'er-reur (mode \T1/cmtt/m/n/12 TriggerR
-ule.ALL_DONE\T1/cmr/m/n/12 )
- []
-
-<figures/architecture_dq_pipeline.png, id=691, 803.0pt x 200.75pt>
-File: figures/architecture_dq_pipeline.png Graphic file (type png)
-<use figures/architecture_dq_pipeline.png>
-Package pdftex.def Info: figures/architecture_dq_pipeline.png  used on input li
-ne 425.
-(pdftex.def)             Requested size: 386.96027pt x 96.74179pt.
-
-Underfull \hbox (badness 3547) in paragraph at lines 441--442
-[]\T1/cmr/m/n/12 Historique des scores ^^V
- []
-
-
-Underfull \hbox (badness 2376) in paragraph at lines 441--442
-\T1/cmr/m/n/12 courbes de ten-dance Ta-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 443--443
-[]\T1/cmtt/m/n/12 dq_tiers_scores
- []
-
-
-Underfull \hbox (badness 3657) in paragraph at lines 443--444
-[]\T1/cmr/m/n/12 KPIs glo-baux KYC/CSP
- []
-
-[24 <./figures/architecture_dq_pipeline.png (PNG copy)>])
-(sections/chapitre4.tex [25]
+(pdftex.def)             Requested size: 54.62581pt x 11.31209pt.
+<figures/logos/logo_gitlab.png, id=640, 513.92pt x 513.92pt>
+File: figures/logos/logo_gitlab.png Graphic file (type png)
+<use figures/logos/logo_gitlab.png>
+Package pdftex.def Info: figures/logos/logo_gitlab.png  used on input line 658.
+
+(pdftex.def)             Requested size: 49.78745pt x 49.78745pt.
+) (sections/chapitre4.tex [28 <./figures/logos/logo_oracle.png> <./figures/logo
+s/logo_mobaxterm.png> <./figures/logos/logo_sqoop.png> <./figures/logos/logo_hi
+ve.png> <./figures/logos/logo_spark.png> <./figures/logos/logo_soda.png> <./fig
+ures/logos/logo_airflow.png> <./figures/logos/logo_dremio.png> <./figures/logos
+/logo_tableau.png> <./figures/logos/logo_gitlab.png>] [29]
 Chapitre 4.
-[26
+<figures/mobaxterminterface.png, id=659, 1135.24126pt x 718.18312pt>
+File: figures/mobaxterminterface.png Graphic file (type png)
+<use figures/mobaxterminterface.png>
+Package pdftex.def Info: figures/mobaxterminterface.png  used on input line 19.
 
-]
+(pdftex.def)             Requested size: 455.24411pt x 288.00238pt.
+[30
+
+] [31 <./figures/mobaxterminterface.png>]
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-Overfull \hbox (30.54568pt too wide) in paragraph at lines 67--67
-|[]\T1/cmr/bx/n/14.4 Fichier de confi-gu-ra-tion YAML ^^V Règles KYC (\T1/cmtt/
-m/n/14.4 checks_kyc.yml\T1/cmr/bx/n/14.4 )| 
- []
-
-[27]
-Overfull \hbox (25.8101pt too wide) in paragraph at lines 139--139
-|[]\T1/cmr/bx/n/14.4 Fichier de confi-gu-ra-tion YAML ^^V Règles CSP (\T1/cmtt/
-m/n/14.4 checks_csp.yml\T1/cmr/bx/n/14.4 )| 
- []
-
-[28]
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-[29]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 204.
- [30]
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 302.
-
-[31]
-Overfull \hbox (33.84505pt too wide) in paragraph at lines 342--343
-[]\T1/cmr/m/n/12 Le DAG \T1/cmtt/m/n/12 dailyow22 \T1/cmr/m/n/12 s'exé-cute quo
--ti-dien-ne-ment à \T1/cmr/bx/n/12 22h00\T1/cmr/m/n/12 . La tâche DQ \T1/cmtt/m
-/n/12 run_dq_tiers_checks
- []
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 68.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 99.
 
 [32] [33]
-<figures/dashboard_vue_exec.png, id=1045, 803.0pt x 401.5pt>
-File: figures/dashboard_vue_exec.png Graphic file (type png)
-<use figures/dashboard_vue_exec.png>
-Package pdftex.def Info: figures/dashboard_vue_exec.png  used on input line 428
-.
-(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
-<figures/dashboard_kyc.png, id=1047, 803.0pt x 401.5pt>
-File: figures/dashboard_kyc.png Graphic file (type png)
-<use figures/dashboard_kyc.png>
-Package pdftex.def Info: figures/dashboard_kyc.png  used on input line 447.
-(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
- [34 <./figures/dashboard_vue_exec.png (PNG copy)>]
-<figures/dashboard_csp.png, id=1063, 803.0pt x 401.5pt>
-File: figures/dashboard_csp.png Graphic file (type png)
-<use figures/dashboard_csp.png>
-Package pdftex.def Info: figures/dashboard_csp.png  used on input line 458.
-(pdftex.def)             Requested size: 455.24411pt x 227.62596pt.
- [35 <./figures/dashboard_kyc.png (PNG copy)> <./figures/dashboard_csp.png (PNG
- copy)>])
-(sections/chapitre5.tex) (sections/conclusion.tex) [36] (main.aux)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+[34]
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+[35] [36] [37] [38]
+Overfull \hbox (31.72493pt too wide) in paragraph at lines 396--397
+[]\T1/lmr/m/n/12 (-20) Une fois les trois tables phy-siques ali-men-tées dans H
+ive (\T1/lmtt/m/n/12 consolidated_all_column_history\T1/lmr/m/n/12 (-20) ,
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+00.
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Overfull \hbox (18.9981pt too wide) in paragraph at lines 400--401
+[]\T1/lmr/m/n/12 (-20) Dans Dre-mio, nous créons un da-ta-set vir-tuel (VDS) no
+mmé \T1/lmtt/m/n/12 fact_tiers_dq_consolidated\T1/lmr/m/n/12 (-20) .
+ []
+
+<figures/lignage_dremio.png, id=943, 1746.525pt x 907.39pt>
+File: figures/lignage_dremio.png Graphic file (type png)
+<use figures/lignage_dremio.png>
+Package pdftex.def Info: figures/lignage_dremio.png  used on input line 404.
+(pdftex.def)             Requested size: 455.24411pt x 236.5112pt.
+[39{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}
+ <./figures/lignage_dremio.png (PNG copy)>]
+<figures/vuehome.png, id=961, 1541.76pt x 1027.84pt>
+File: figures/vuehome.png Graphic file (type png)
+<use figures/vuehome.png>
+Package pdftex.def Info: figures/vuehome.png  used on input line 427.
+(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
+ [40 <./figures/vuehome.png (PNG copy)>]
+<figures/HEATMAP5.png, id=967, 1541.76pt x 1027.84pt>
+File: figures/HEATMAP5.png Graphic file (type png)
+<use figures/HEATMAP5.png>
+Package pdftex.def Info: figures/HEATMAP5.png  used on input line 447.
+(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
+<figures/anomaly.png, id=969, 1541.76pt x 1027.84pt>
+File: figures/anomaly.png Graphic file (type png)
+<use figures/anomaly.png>
+Package pdftex.def Info: figures/anomaly.png  used on input line 464.
+(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
+ [41 <./figures/HEATMAP5.png (PNG copy)>]) (sections/conclusion.tex
+[42 <./figures/anomaly.png (PNG copy)>]
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\global).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...ture essentielle sur laquelle reposent l\'Ã
+                                                  ©valuation des risques et ...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\egroup).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...ture essentielle sur laquelle reposent l\'Ã
+                                                  ©valuation des risques et ...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...ture essentielle sur laquelle reposent l\'Ã
+                                                  ©valuation des risques et ...
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Bad space factor (0).
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...ture essentielle sur laquelle reposent l\'Ã
+                                                  ©valuation des risques et ...
+I allow only values in the range 1..32767 here.
+
+
+! LaTeX Error: Invalid UTF-8 byte "A9.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...ure essentielle sur laquelle reposent l\'Ã©
+                                                  valuation des risques et l...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\global).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...mitÃ© rÃ©glementaire, ce Projet de Fin d\'Ã
+                                                  ‰tudes s\'est fixÃ© pour o...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\egroup).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...mitÃ© rÃ©glementaire, ce Projet de Fin d\'Ã
+                                                  ‰tudes s\'est fixÃ© pour o...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...mitÃ© rÃ©glementaire, ce Projet de Fin d\'Ã
+                                                  ‰tudes s\'est fixÃ© pour o...
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Bad space factor (0).
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...mitÃ© rÃ©glementaire, ce Projet de Fin d\'Ã
+                                                  ‰tudes s\'est fixÃ© pour o...
+I allow only values in the range 1..32767 here.
+
+
+! LaTeX Error: Invalid UTF-8 byte "89.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...itÃ© rÃ©glementaire, ce Projet de Fin d\'Ã‰
+                                                  tudes s\'est fixÃ© pour ob...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Â\global).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...uelles coÃ»teuses, souvent qualifiÃ©es d\'Â
+                                                  « usines Ã  donnÃ©es fantÃ...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Â\egroup).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...uelles coÃ»teuses, souvent qualifiÃ©es d\'Â
+                                                  « usines Ã  donnÃ©es fantÃ...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...uelles coÃ»teuses, souvent qualifiÃ©es d\'Â
+                                                  « usines Ã  donnÃ©es fantÃ...
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Bad space factor (0).
+<to be read again> 
+                   \accent@spacefactor 
+l.4 ...uelles coÃ»teuses, souvent qualifiÃ©es d\'Â
+                                                  « usines Ã  donnÃ©es fantÃ...
+I allow only values in the range 1..32767 here.
+
+
+! LaTeX Error: Invalid UTF-8 byte "AB.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4 ...elles coÃ»teuses, souvent qualifiÃ©es d\'Â«
+                                                   usines Ã  donnÃ©es fantÃ´...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\global).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.8 ...dÃ©niable, certaines limites mÃ©ritent d\'Ã
+                                                  ªtre soulignÃ©es. La maint...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte sequence (Ã\egroup).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.8 ...dÃ©niable, certaines limites mÃ©ritent d\'Ã
+                                                  ªtre soulignÃ©es. La maint...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \accent@spacefactor 
+l.8 ...dÃ©niable, certaines limites mÃ©ritent d\'Ã
+                                                  ªtre soulignÃ©es. La maint...
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Bad space factor (0).
+<to be read again> 
+                   \accent@spacefactor 
+l.8 ...dÃ©niable, certaines limites mÃ©ritent d\'Ã
+                                                  ªtre soulignÃ©es. La maint...
+I allow only values in the range 1..32767 here.
+
+
+! LaTeX Error: Invalid UTF-8 byte "AA.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.8 ...Ã©niable, certaines limites mÃ©ritent d\'Ãª
+                                                  tre soulignÃ©es. La mainte...
+
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+) (sections/bibliographie.tex [43
+
+]
+Overfull \hbox (72.50044pt too wide) in paragraph at lines 7--8
+[][][]$\T1/lmtt/m/n/12 https : / / scielo . org . za / scielo . php ? script = 
+sci _ arttext & pid = S2304 -[] 82632024000200007$[][] \T1/lmr/m/n/12 (-20) :
+ []
+
+
+Overfull \hbox (3.9185pt too wide) in paragraph at lines 8--9
+[][][]$\T1/lmtt/m/n/12 https : / / www . ewsolutions . com / financial -[] data
+ -[] quality -[] management/$[][] \T1/lmr/m/n/12 (-20) : Fi-nan-
+ []
+
+
+Overfull \hbox (4.90814pt too wide) in paragraph at lines 9--10
+[][][]$\T1/lmtt/m/n/12 https : / / www . ibm . com / new / product -[] blog / b
+cbs239 -[] compliance$[][] \T1/lmr/m/n/12 (-20) : BCBS 239 com-
+ []
+
+
+Overfull \hbox (36.31735pt too wide) in paragraph at lines 10--11
+[][][]$\T1/lmtt/m/n/12 https : / / www . researchgate . net / publication / 389
+700967 _ Assessing _ Data _ Quality _
+ []
+
+
+Overfull \hbox (41.13243pt too wide) in paragraph at lines 10--11
+\T1/lmtt/m/n/12 Challenges _ on _ International _ Banking _ In _ Case _ of _ Co
+mmercial _ Bank _ of _ Ethiopia$[][] \T1/lmr/m/n/12 (-20) :
+ []
+
+
+Overfull \hbox (42.50636pt too wide) in paragraph at lines 12--13
+[][][]$\T1/lmtt/m/n/12 https : / / www . researchgate . net / publication / 282
+829737 _ Data _ quality _ in _ banking _
+ []
+
+
+Overfull \hbox (42.54337pt too wide) in paragraph at lines 13--14
+[][][]$\T1/lmtt/m/n/12 https : / / sbs -[] software . com / insights / artifici
+al -[] intelligence -[] data / data -[] driven -[]
+ []
+
+
+Overfull \hbox (17.84335pt too wide) in paragraph at lines 14--15
+[][][]$\T1/lmtt/m/n/12 https : / / www . actian . com / blog / data -[] managem
+ent / the -[] costly -[] consequences -[] of -[]
+ []
+
+
+Overfull \hbox (18.93242pt too wide) in paragraph at lines 18--19
+[][][]$\T1/lmtt/m/n/12 https : / / www . integrate . io / blog / data -[] quali
+ty -[] improvement -[] stats -[] from -[] etl/$[][] \T1/lmr/m/n/12 (-20) :
+ []
+
+[44
+
+]
+Overfull \hbox (12.16835pt too wide) in paragraph at lines 21--22
+[][][]$\T1/lmtt/m/n/12 https : / / veridion . com / blog -[] posts / banking -[
+] capital -[] markets -[] data -[] strategy -[]
+ []
+
+
+Overfull \hbox (37.45042pt too wide) in paragraph at lines 26--27
+[][][]$\T1/lmtt/m/n/12 https : / / www . fluxforce . ai / regulations / bcbs -[
+] bcbs -[] 239 -[] risk -[] data -[] aggregation/$[][] \T1/lmr/m/n/12 (-20) :
+ []
+
+
+Overfull \hbox (5.99335pt too wide) in paragraph at lines 27--28
+[][][]$\T1/lmtt/m/n/12 https : / / www . collibra . com / blog / how -[] to -[]
+ achieve -[] data -[] quality -[] excellence -[]
+ []
+
+
+Overfull \hbox (4.99335pt too wide) in paragraph at lines 28--29
+[][][]$\T1/lmtt/m/n/12 https : / / www . ey . com / en _ nl / industries / bank
+ing -[] capital -[] markets / why -[] bcbs -[]
+ []
+
+
+Overfull \hbox (32.16336pt too wide) in paragraph at lines 30--31
+[][][]$\T1/lmtt/m/n/12 https : / / iason -[] onigiri -[] prod . s3 . eu -[] sou
+th -[] 1 . amazonaws . com / Credit _ Risk _ Basel _
+ []
+
+
+Overfull \hbox (49.71837pt too wide) in paragraph at lines 31--32
+[][][]$\T1/lmtt/m/n/12 https : / / kpmg . com / xx / en / our -[] insights / ec
+b -[] office / ecb -[] ratchets -[] up -[] the -[] pressure -[]
+ []
+
+
+Overfull \hbox (47.71837pt too wide) in paragraph at lines 32--33
+[][][]$\T1/lmtt/m/n/12 https : / / www . oliverwyman . com / our -[] expertise 
+/ insights / 2024 / jul / data -[] management -[]
+ []
+
+
+Overfull \hbox (5.84586pt too wide) in paragraph at lines 33--34
+[][][]$\T1/lmtt/m/n/12 https : / / www . grantthornton . com . cy / insights / 
+quantitative -[] risk -[] articles /
+ []
+
+
+Overfull \hbox (12.43214pt too wide) in paragraph at lines 33--34
+\T1/lmtt/m/n/12 ECB -[] Guide -[] on -[] effective -[] risk -[] data -[] aggreg
+ation -[] and -[] risk -[] reporting/$[][] \T1/lmr/m/n/12 (-20) : ECB
+ []
+
+
+Overfull \hbox (26.10042pt too wide) in paragraph at lines 34--35
+[][][]$\T1/lmtt/m/n/12 https : / / validio . io / blog / bcbs -[] 239 -[] from 
+-[] regulatory -[] burden -[] to -[] data -[] quality$[][] \T1/lmr/m/n/12 (-20)
+ :
+ []
+
+
+Overfull \hbox (24.50435pt too wide) in paragraph at lines 35--36
+[][][]$\T1/lmtt/m/n/12 https : / / www . bairdholm . com / blog / citigroup -[]
+ fined -[] 136 -[] million -[] totaling -[] 536 -[]
+ []
+
+
+Overfull \hbox (1.75134pt too wide) in paragraph at lines 36--37
+[][][]$\T1/lmtt/m/n/12 https : / / www . bankingsupervision . europa . eu / pre
+ss / pr / date / 2026 / html / ssm .
+ []
+
+
+Overfull \hbox (49.21837pt too wide) in paragraph at lines 38--39
+[][][]$\T1/lmtt/m/n/12 https : / / www . banque -[] france . fr / en / press -[
+] release / ecb -[] sanctions -[] bofa -[] securities -[]
+ []
+
+[45]
+Overfull \hbox (51.15837pt too wide) in paragraph at lines 39--40
+[][][]$\T1/lmtt/m/n/12 https : / / www . federalreserve . gov / newsevents / pr
+essreleases / enforcement20240710a .
+ []
+
+
+Overfull \hbox (4.49335pt too wide) in paragraph at lines 40--41
+[][][]$\T1/lmtt/m/n/12 https : / / www . experian . co . uk / blogs / latest -[
+] thinking / data -[] quality / hidden -[]
+ []
+
+
+Overfull \hbox (6.69899pt too wide) in paragraph at lines 42--43
+[][][]$\T1/lmtt/m/n/12 https : / / www . ibm . com / think / insights / cost -[
+] of -[] poor -[] data -[] quality$[][] \T1/lmr/m/n/12 (-20) : The True
+ []
+
+
+Overfull \hbox (48.71837pt too wide) in paragraph at lines 43--44
+[][][]$\T1/lmtt/m/n/12 https : / / www . querysurge . com / resource -[] center
+ / white -[] papers / the -[] data -[] validation -[]
+ []
+
+
+Overfull \hbox (52.30743pt too wide) in paragraph at lines 43--44
+\T1/lmtt/m/n/12 deficit -[] analyzing -[] banking -[] pain -[] points -[] and -
+[] the -[] quest -[] for -[] effective -[] solutions$[][] \T1/lmr/m/n/12 (-20) 
+:
+ []
+
+
+Overfull \hbox (1.0972pt too wide) in paragraph at lines 45--46
+[][][]$\T1/lmtt/m/n/12 https : / / ideas . repec . org / p / bdi / opques / qef
+ _ 666 _ 22 . html$[][] \T1/lmr/m/n/12 (-20) : A decision-making
+ []
+
+
+Overfull \hbox (0.31134pt too wide) in paragraph at lines 46--47
+[][][]$\T1/lmtt/m/n/12 https : / / barrmoses . medium . com / citigroup -[] fin
+ed -[] 136m -[] for -[] bad -[] data -[] what -[]
+ []
+
+) [46] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2D2A930FCCE9B1B9CDC637A305E0FA85;20306.
- ) 
+(rerunfilecheck)             Checksum: 88659246206F53EE1330127331CCFD68;14828.
+ )
+(\end occurred inside a group at level 4)
+
+### simple group (level 4) entered at line 8 ({)
+### simple group (level 3) entered at line 4 ({)
+### simple group (level 2) entered at line 4 ({)
+### simple group (level 1) entered at line 4 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 26447 strings out of 467871
- 486811 string characters out of 5418377
- 1461743 words of memory out of 5000000
- 54403 multiletter control sequences out of 15000+600000
- 643895 words of font info for 71 fonts, out of 8000000 for 9000
+ 32601 strings out of 467871
+ 628221 string characters out of 5418377
+ 1846741 words of memory out of 5000000
+ 60226 multiletter control sequences out of 15000+600000
+ 709806 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,10n,94p,928b,2145s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt
-1728.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
-0\ecit1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
-/dpi600\ecrm0600.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknap
-pen/ec/dpi600\ectt1440.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour
-/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/
-ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\benda\AppData\Local\MiKTeX\fon
-ts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\benda\AppData\Local\MiKT
-eX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\benda\AppData\Loca
-l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk> <C:\Users\benda\AppDat
-a\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1200.pk> <C:\Users\benda\
-AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\
-benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\
-Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk
-> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1
-200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600
-\ecrm1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/
-dpi600\ecti1200.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/jknapp
-en/ec/dpi600\ecbx2488.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/ljfour/
-jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\benda\AppData\Local\MiKTeX\fonts/pk/l
-jfour/jknappen/ec/dpi600\ecbx1440.pk><C:/Users/benda/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/benda/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (47 pages, 3027846 bytes).
+ 84i,12n,94p,1325b,2146s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/lm/lmbx10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/lm/lmbx12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/lm/lmbx8.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/lm/lmcsc10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/lm/lmr10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/lm/lmr12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmr6.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmr8.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mri10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mri12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+msy10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mtk10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mtt10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mtt12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
+mtti10.pfb>
+Output written on main.pdf (56 pages, 9459490 bytes).
 PDF statistics:
- 2134 PDF objects out of 2487 (max. 8388607)
- 487 named destinations out of 1000 (max. 500000)
- 807 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1279 PDF objects out of 1440 (max. 8388607)
+ 480 named destinations out of 1000 (max. 500000)
+ 48811 words of extra memory for PDF output out of 51595 (max. 10000000)
 

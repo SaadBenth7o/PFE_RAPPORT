@@ -3,89 +3,82 @@
 \contentsline {chapter}{Remerciements}{ii}{chapter*.2}%
 \contentsline {chapter}{Résumé}{iii}{chapter*.3}%
 \contentsline {chapter}{Abstract}{iv}{chapter*.4}%
-\contentsline {chapter}{Liste des abréviations}{x}{chapter*.8}%
+\contentsline {chapter}{Liste des abréviations}{ix}{chapter*.8}%
 \contentsline {chapter}{Introduction Générale}{1}{chapter*.9}%
-\contentsline {chapter}{\numberline {1}Présentation de l'organisme d'accueil}{2}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Présentation de CIH BANK}{2}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Missions de CIH BANK}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Secteurs d’activité}{3}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Filiales}{3}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Actionnariat}{3}{section.1.5}%
-\contentsline {section}{\numberline {1.6}Chiffres clés}{3}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Conformité}{4}{section.1.7}%
-\contentsline {subsection}{\numberline {1.7.1}Éthique et Déontologie}{4}{subsection.1.7.1}%
-\contentsline {subsection}{\numberline {1.7.2}Périmètre d’action du « Pôle Conformité » au niveau de CIH Bank}{4}{subsection.1.7.2}%
-\contentsline {section}{\numberline {1.8}Gouvernance}{5}{section.1.8}%
-\contentsline {section}{\numberline {1.9}Organigramme}{6}{section.1.9}%
-\contentsline {subsection}{\numberline {1.9.1}Structure hiérarchique de CIH BANK}{6}{subsection.1.9.1}%
-\contentsline {section}{\numberline {1.10}Data Office}{8}{section.1.10}%
-\contentsline {chapter}{\numberline {2}Contexte, Problématique et Solution Proposée}{9}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Contexte général : la donnée au cœur de la banque digitale}{9}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}La transformation digitale du secteur bancaire}{9}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}La qualité des données : un enjeu stratégique et réglementaire}{9}{subsection.2.1.2}%
-\contentsline {section}{\numberline {2.2}Le domaine Tiers : périmètre métier du projet}{10}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Définition du Référentiel Tiers}{10}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Les colonnes KYC et CSP : données critiques du Référentiel Tiers}{10}{subsection.2.2.2}%
-\contentsline {subsubsection}{Données KYC (\textit {Know Your Customer})}{10}{subsubsection*.14}%
-\contentsline {subsubsection}{Données CSP (\textit {Catégorie Socio-Professionnelle})}{11}{subsubsection*.16}%
-\contentsline {section}{\numberline {2.3}Le pipeline de données existant : de NOVA à Tableau}{11}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Vue d'ensemble de l'architecture}{11}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Étape 1 — Système opérant : Oracle NOVA}{12}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Étape 2 — Ingestion RAW vers HDFS/Hive}{12}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}Étape 3 — Transformation STAGING}{13}{subsection.2.3.4}%
-\contentsline {subsection}{\numberline {2.3.5}Étape 4 — Virtualisation Dremio}{13}{subsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.3.6}Étape 5 — Vue finale CIHONE (28 colonnes)}{13}{subsection.2.3.6}%
-\contentsline {section}{\numberline {2.4}Problématique}{13}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Absence de contrôle qualité automatisé sur le pipeline}{13}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Absence d'historisation et de traçabilité}{14}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Absence d'outillage pour les Data Stewards}{14}{subsection.2.4.3}%
-\contentsline {section}{\numberline {2.5}Solution proposée}{14}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Vue d'ensemble de la solution}{14}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}Soda Core : bibliothèque Python de Data Quality}{14}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}Périmètre des contrôles : la zone RAW uniquement}{15}{subsection.2.5.3}%
-\contentsline {subsection}{\numberline {2.5.4}Déclenchement automatique post-ingestion}{15}{subsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.5.5}Historisation et traçabilité quotidienne}{15}{subsection.2.5.5}%
+\contentsline {chapter}{\numberline {1}Présentation du cadre de projet}{2}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Présentation de l'organisme d'accueil}{2}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Missions de CIH BANK}{2}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Secteurs d’activité}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Filiales}{3}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Actionnariat}{3}{subsection.1.1.4}%
+\contentsline {subsection}{\numberline {1.1.5}Chiffres clés}{3}{subsection.1.1.5}%
+\contentsline {subsection}{\numberline {1.1.6}Organigramme}{4}{subsection.1.1.6}%
+\contentsline {subsubsection}{Structure hiérarchique de CIH BANK}{4}{subsubsection*.13}%
+\contentsline {subsection}{\numberline {1.1.7}Data Office}{5}{subsection.1.1.7}%
+\contentsline {section}{\numberline {1.2}Étude de l'existant}{6}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Description de l'existant}{6}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Critique de l'existant}{8}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Solution proposée}{8}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}Choix du modèle de développement}{9}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Planning prévisionnel}{9}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Analyse des Besoins et Spécification}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Besoins fonctionnels}{11}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Automatisation et planification des contrôles}{11}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Configuration déclarative des règles de qualité}{11}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Historisation et traçabilité des indicateurs}{12}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Restitution visuelle et aide à la décision}{12}{subsection.2.1.4}%
+\contentsline {section}{\numberline {2.2}Besoins non fonctionnels}{12}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Performance}{12}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Disponibilité}{13}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Maintenabilité}{13}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Sécurité}{13}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Conformité Réglementaire et Normative}{13}{subsection.2.2.5}%
+\contentsline {section}{\numberline {2.3}Modélisation des cas d'utilisation}{14}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Acteurs du système}{14}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Diagramme global des cas d'utilisation}{14}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Description textuelle des cas d'utilisation principaux}{15}{subsection.2.3.3}%
+\contentsline {subsubsection}{Cas d'utilisation 01 : Définir et formaliser les règles de qualité}{15}{subsubsection*.19}%
+\contentsline {subsubsection}{Cas d'utilisation 02 : Exécuter le scan de qualité (automatique)}{15}{subsubsection*.21}%
+\contentsline {subsubsection}{Cas d'utilisation 03 : Consulter le dashboard et remédier aux anomalies}{16}{subsubsection*.23}%
 \contentsline {chapter}{\numberline {3}Conception de la Solution}{17}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Architecture globale de la solution}{17}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Vue d'ensemble}{17}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Outils et technologies}{18}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Catalogue des règles de Data Quality}{20}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Principes de conception des règles}{20}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Règles DQ sur les colonnes KYC}{20}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Règles DQ sur les colonnes CSP}{21}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Règles DQ Pipeline (Fraîcheur)}{22}{subsection.3.2.4}%
-\contentsline {section}{\numberline {3.3}Modèle de données DQ (Persistance)}{22}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Base Hive \texttt {dq\_results}}{22}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Table \texttt {dq\_tiers\_scores} — Historique des scores}{22}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Table \texttt {dq\_tiers\_anomalies} — Détail des anomalies}{23}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Partitionnement et format de stockage}{23}{subsection.3.3.4}%
-\contentsline {section}{\numberline {3.4}Conception du moteur DQ — Soda Core}{24}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Architecture du script \texttt {dq\_tiers\_checks.py}}{24}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Fichiers de configuration YAML}{24}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Conception de l'orchestration Airflow}{24}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Intégration dans le DAG \texttt {dailyow22}}{24}{subsection.3.5.1}%
-\contentsline {section}{\numberline {3.6}Conception des vues Dremio DQ}{24}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Conception du dashboard Tableau}{25}{section.3.7}%
-\contentsline {chapter}{\numberline {4}Réalisation de la Solution}{26}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Environnement technique de développement}{26}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Environnement Hadoop et cluster}{26}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Installation de Soda Core}{27}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Implémentation du moteur DQ — Soda Core}{27}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Structure des fichiers du projet DQ}{27}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Fichier de configuration YAML — Règles KYC (\texttt {checks\_kyc.yml})}{27}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Fichier de configuration YAML — Règles CSP (\texttt {checks\_csp.yml})}{28}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Script Python principal (\texttt {dq\_tiers\_checks.py})}{29}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Création des tables Hive de persistance}{31}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Intégration dans le DAG Airflow \texttt {dailyow22}}{32}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Ajout de la tâche DQ}{32}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Planification et monitoring}{32}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Création des vues Dremio}{32}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Vue \texttt {v.dq\_scores\_history}}{33}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Vue \texttt {v.dq\_kpis\_summary}}{33}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Vue \texttt {v.dq\_anomalies\_detail}}{33}{subsection.4.5.3}%
-\contentsline {section}{\numberline {4.6}Réalisation du dashboard Tableau}{34}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Connexion Tableau à Dremio}{34}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Onglet 1 — Vue Exécutive}{34}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}Onglet 2 — Détail KYC}{35}{subsection.4.6.3}%
-\contentsline {subsection}{\numberline {4.6.4}Onglet 3 — Détail CSP}{35}{subsection.4.6.4}%
-\contentsline {subsection}{\numberline {4.6.5}Onglet 4 — Anomalies et Remédiation}{35}{subsection.4.6.5}%
+\contentsline {section}{\numberline {3.1}Modélisation dynamique}{17}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Diagramme de séquences}{17}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Diagramme d'activités}{18}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Modélisation statique}{19}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Modélisation de la table de faits}{19}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Modèle relationnel}{21}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Dictionnaire de données}{21}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Catalogue des règles de qualité}{21}{subsection.3.2.4}%
+\contentsline {subsubsection}{Dimension Complétude}{22}{subsubsection*.29}%
+\contentsline {subsubsection}{Dimension Conformité}{22}{subsubsection*.30}%
+\contentsline {subsubsection}{Dimension Cohérence}{23}{subsubsection*.31}%
+\contentsline {subsubsection}{Dimension Unicité}{23}{subsubsection*.32}%
+\contentsline {subsubsection}{Dimension Actualité et Pipeline}{24}{subsubsection*.33}%
+\contentsline {section}{\numberline {3.3}Architecture de l'application}{24}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Architecture logicielle (diagramme de composants)}{24}{subsection.3.3.1}%
+\contentsline {subsubsection}{Conception du moteur DQ — Soda Core}{25}{subsubsection*.35}%
+\contentsline {subsubsection}{Conception de l'orchestration Airflow}{26}{subsubsection*.36}%
+\contentsline {subsubsection}{Conception du dashboard Tableau}{26}{subsubsection*.37}%
+\contentsline {subsection}{\numberline {3.3.2}Architecture matérielle (diagramme de déploiement)}{26}{subsection.3.3.2}%
+\contentsline {subsubsection}{Orchestration technique et protocole de sécurité Kerberos}{27}{subsubsection*.39}%
+\contentsline {subsection}{\numberline {3.3.3}Technologies de l'écosystème utilisées}{27}{subsection.3.3.3}%
+\contentsline {chapter}{\numberline {4}Réalisation de la Solution}{30}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Environnement technique de développement}{30}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Environnement Hadoop et accès distant}{30}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Installation hors-ligne de Soda Core}{31}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Implémentation du moteur DQ — Soda Core et Spark}{32}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Arborescence du projet DQ}{32}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Principe de fonctionnement de Soda Core avec Spark}{32}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Fichier de configuration YAML (\texttt {checks\_tiers.yml} — exemplaire)}{33}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Traduction des règles SodaCL en Spark SQL}{34}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Script Python principal (\texttt {dq\_tiers\_checks.py})}{35}{subsection.4.2.5}%
+\contentsline {section}{\numberline {4.3}Création des tables Hive physiques de persistance}{38}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Création du DAG Airflow indépendant}{38}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Exposition et virtualisation sous Dremio}{39}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Réalisation du dashboard Tableau}{40}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Connexion Tableau à Dremio et traitement analytique}{40}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Onglet 1 — Vue d'ensemble (Dashboard Global)}{40}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Onglet 2 — Heatmap Qualité}{41}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Onglet 3 — Top Anomalies}{41}{subsection.4.6.4}%
+\contentsline {chapter}{Conclusion générale}{43}{chapter*.46}%
+\contentsline {chapter}{Bibliographie et Nétographie}{44}{chapter*.47}%

@@ -1,16 +1,18 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {1.1}{\ignorespaces Informations générales sur le groupe CIH BANK [10]}}{2}{table.caption.10}%
+\contentsline {table}{\numberline {2}{\ignorespaces Informations générales sur le groupe CIH BANK [10]}}{2}{table.caption.10}%
+\contentsline {table}{\numberline {3}{\ignorespaces Répartition du capital de CIH BANK [4]}}{3}{table.caption.11}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces Colonnes KYC du Référentiel Tiers PP}}{11}{table.caption.15}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Colonnes CSP du Référentiel Tiers PP}}{11}{table.caption.17}%
+\contentsline {table}{\numberline {4}{\ignorespaces Acteurs du système de Data Quality}}{14}{table.caption.17}%
+\contentsline {table}{\numberline {5}{\ignorespaces Description du cas d'utilisation 01}}{15}{table.caption.20}%
+\contentsline {table}{\numberline {6}{\ignorespaces Description du cas d'utilisation 02}}{15}{table.caption.22}%
+\contentsline {table}{\numberline {7}{\ignorespaces Description du cas d'utilisation 03}}{16}{table.caption.24}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Outils et technologies de la solution DQ Tiers}}{19}{table.caption.20}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Règles DQ — Colonnes KYC}}{20}{table.3.2}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Règles DQ — Colonnes CSP}}{21}{table.3.3}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Règles DQ — Fraîcheur et Pipeline}}{22}{table.caption.21}%
-\contentsline {table}{\numberline {3.5}{\ignorespaces Modèle de la table \texttt {dq\_results.dq\_tiers\_scores}}}{23}{table.caption.22}%
-\contentsline {table}{\numberline {3.6}{\ignorespaces Modèle de la table \texttt {dq\_results.dq\_tiers\_anomalies}}}{23}{table.caption.23}%
-\contentsline {table}{\numberline {3.7}{\ignorespaces Vues Dremio du schéma \texttt {dq-tiers}}}{25}{table.caption.25}%
+\contentsline {table}{\numberline {8}{\ignorespaces Dictionnaire simplifié des tables de faits de Qualité des Données}}{21}{table.caption.28}%
+\contentsline {table}{\numberline {9}{\ignorespaces Dimension Complétude — Données Tiers (Référentiel Tiers)}}{22}{table.3.9}%
+\contentsline {table}{\numberline {10}{\ignorespaces Dimension Conformité — Données Tiers (Référentiel Tiers)}}{23}{table.3.10}%
+\contentsline {table}{\numberline {11}{\ignorespaces Dimension Cohérence — Données Tiers (Référentiel Tiers)}}{23}{table.3.11}%
+\contentsline {table}{\numberline {12}{\ignorespaces Dimension Unicité — Données Tiers (Référentiel Tiers)}}{24}{table.3.12}%
+\contentsline {table}{\numberline {13}{\ignorespaces Dimension Actualité et Pipeline — Flux Batch}}{24}{table.3.13}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Versions des composants de l'environnement technique}}{26}{table.caption.26}%
+\contentsline {table}{\numberline {14}{\ignorespaces Versions des composants de l'environnement technique}}{31}{table.caption.41}%
