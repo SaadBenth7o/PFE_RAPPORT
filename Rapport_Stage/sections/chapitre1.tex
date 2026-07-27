@@ -211,10 +211,10 @@ L'ensemble des données ingérées au sein de CIH BANK, incluant celles du domai
 
 L'architecture matérielle et logicielle de cette plateforme de production s'articule autour d'un \textbf{cluster Cloudera et Dremio} composé de 8 nœuds (3 Masters, 3 Workers, 2 Gateways). Le flux global des données, de la source à l'exploitation, suit un cycle de vie standardisé en plusieurs étapes :
 \begin{enumerate}
-    \item \textbf{Ingestion} : Les données brutes issues des systèmes opérants (tels qu'Oracle NOVA) sont ingérées massivement (souvent via Sqoop ou Kafka) et stockées dans la zone RAW du HDFS.
-    \item \textbf{Transformation} : Des jobs de traitement distribué (généralement via Apache Spark) nettoient, enrichissent et modélisent ces données brutes pour les charger dans la zone de STAGING.
-    \item \textbf{Virtualisation et Métadonnées} : Le moteur de données Dremio se connecte aux catalogues (Hive Metastore) pour virtualiser les tables. Il offre une couche sémantique puissante permettant de croiser et d'interroger les données sans les dupliquer.
-    \item \textbf{Exposition et Datamarts} : Les données transformées sont consolidées et exposées sous forme de Datamarts (ou vues métiers spécifiques). Ces ensembles de données prêts à l'emploi alimentent les outils de restitution (comme Tableau) pour répondre aux besoins analytiques des métiers.
+    \item \textbf{Ingestion} : Les données brutes issues des systèmes opérants (Oracle NOVA, PowerCard, etc.) sont ingérées massivement via des scripts \textbf{Apache Sqoop} organisés par domaine métier. Les tables sont stockées au format \textbf{ORC} dans la zone RAW de Hive via HCatalog. L'authentification aux sources s'effectue par \textbf{Kerberos} (\texttt{kinit} avec keytab) ,
+    \item \textbf{Transformation} : Des pipelines PySpark packagés sous forme de fichiers \textbf{Wheel} (\texttt{.whl}), construits via le gestionnaire \textbf{PDM}, effectuent le nettoyage, le renommage des colonnes et l'enrichissement des données brutes pour les charger dans la zone de STAGING. Chaque écriture est tracée par une colonne d'audit \texttt{batch\_time} ,
+    \item \textbf{Virtualisation et Métadonnées} : Le moteur de données Dremio se connecte aux catalogues (Hive Metastore) pour virtualiser les tables. Un outil d'automatisation interne (\texttt{dlfin}) pilote le rafraîchissement des métadonnées et le contrôle des engines Dremio via son API REST ,
+    \item \textbf{Exposition et Datamarts} : Les données transformées sont consolidées et exposées sous forme de Datamarts (ou vues métiers spécifiques). Ces ensembles de données prêts à l'emploi alimentent les outils de restitution (Tableau) pour répondre aux besoins analytiques des métiers.
 \end{enumerate}
 
 \subsection{Critique de l'existant}

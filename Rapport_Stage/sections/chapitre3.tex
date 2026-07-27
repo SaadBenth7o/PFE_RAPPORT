@@ -464,7 +464,7 @@ Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifi
 \end{itemize}
 
 \subsubsection{Conception de l'orchestration Airflow}
-La planification, le déclenchement et le monitoring des scans de qualité sont gérés par un \textbf{nouveau DAG Airflow indépendant}, spécifiquement dédié au contrôle DQ. Afin de découpler totalement l'ingestion de la vérification de la qualité, ce nouveau DAG est planifié pour s'exécuter quotidiennement à \textbf{00h00}. Cela laisse une marge de sécurité de deux heures après le déclenchement du DAG d'ingestion Sqoop principal (\texttt{dailyow22}, prévu à 22h00). L'architecture d'exécution repose sur un déclenchement direct du moteur d'évaluation Python Soda Core depuis Airflow. Cette séparation modulaire assure qu'une défaillance dans le DAG d'ingestion ne bloque pas ou ne corrompt pas la supervision de la qualité.
+La planification, le déclenchement et le monitoring des scans de qualité sont gérés par un \textbf{nouveau DAG Airflow indépendant}, spécifiquement dédié au contrôle DQ. Conformément aux standards de l'équipe Data Office, ce DAG est intégré dans le projet d'orchestration \texttt{errays} et packagé sous forme de fichier Wheel (\texttt{.whl}) via le gestionnaire \textbf{PDM}, avant d'être déployé dans le répertoire \texttt{\$DAGS\_FOLDER} d'Airflow. Afin de découpler totalement l'ingestion de la vérification de la qualité, ce nouveau DAG est planifié pour s'exécuter quotidiennement à \textbf{00h00}. Cela laisse une marge de sécurité de deux heures après le déclenchement du DAG d'ingestion Sqoop principal (\texttt{dailyow22}, prévu à 22h00). L'architecture d'exécution repose sur la soumission du moteur DQ via \texttt{spark-submit} avec le fichier Wheel du projet DQ en argument \texttt{--py-files}, suivant le même pattern de déploiement que les projets de transformation existants (\texttt{py-khawarizmi}, \texttt{sddiqi}). Cette séparation modulaire assure qu'une défaillance dans le DAG d'ingestion ne bloque pas ou ne corrompt pas la supervision de la qualité.
 
 
 \subsubsection{Conception du dashboard Tableau}
@@ -568,7 +568,7 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \hspace{0.03\textwidth}
 \begin{minipage}[c]{0.83\textwidth}
     \textbf{Apache Sqoop} --- Ingestion batch Oracle vers HDFS\\
-    {\small Technologie d'ingestion permettant le transfert en masse des tables NOVA vers l'infrastructure Hadoop de manière planifiée.}
+    {\small Technologie d'ingestion permettant le transfert en masse des tables NOVA vers l'infrastructure Hadoop. Les scripts sont organisés par domaine métier et par mode d'ingestion (remplacement complet ou incrémental par \textit{timestamp}). L'écriture s'effectue via HCatalog au format ORC, avec authentification Kerberos préalable.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
@@ -581,7 +581,7 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \hspace{0.03\textwidth}
 \begin{minipage}[c]{0.83\textwidth}
     \textbf{HDFS / Apache Hive} --- Plateforme de stockage et de requêtage\\
-    {\small HDFS assure le stockage persistant distribué tandis que Hive structure ces répertoires sous forme de tables SQL relationnelles cibles pour nos contrôles.}
+    {\small HDFS assure le stockage persistant distribué tandis que Hive structure ces répertoires sous forme de tables SQL relationnelles. Les tables sont stockées au format \textbf{ORC} avec compression, et chaque écriture est tracée par une colonne d'audit \texttt{batch\_time} conformément aux standards de l'équipe Data.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
@@ -619,8 +619,8 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \end{minipage}
 \hspace{0.03\textwidth}
 \begin{minipage}[c]{0.83\textwidth}
-    \textbf{Apache Airflow} --- Orchestrateur de tâches\\
-    {\small Outil d'orchestration permettant de planifier, ordonnancer et superviser l'exécution du flux d'ingestion et des scans de qualité de manière centralisée.}
+    \textbf{Apache Airflow 2.2.5} --- Orchestrateur de tâches\\
+    {\small Outil d'orchestration central du Data Office. Les DAGs sont structurés en tant que packages Python, construits via \textbf{PDM} en fichiers Wheel (\texttt{.whl}) et déployés dans le répertoire \texttt{\$DAGS\_FOLDER} via \texttt{pip install}. Les opérateurs utilisés incluent \texttt{BashOperator}, \texttt{PythonOperator} et \texttt{BranchPythonOperator}.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}

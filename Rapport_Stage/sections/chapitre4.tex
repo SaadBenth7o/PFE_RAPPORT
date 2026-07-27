@@ -12,7 +12,7 @@ Nous détaillerons successivement l'environnement technique de développement et
 
 Le développement et les tests ont été réalisés dans l'environnement Hadoop sécurisé de CIH Bank. L'accès aux serveurs du cluster (nœud Edge) et l'exécution des commandes en ligne de commande (CLI) s'effectuent via l'outil \textbf{MobaXterm}. MobaXterm est un terminal avancé qui fournit toutes les fonctionnalités réseaux nécessaires (SSH, SFTP) pour se connecter au cluster Big Data. 
 
-Une fois connecté au nœud Edge, l'authentification sécurisée est garantie par le protocole \textbf{Kerberos} (commande \texttt{kinit}). L'accès aux tables Hive et aux fichiers HDFS est effectué en utilisant les comptes de service existants du domaine Tiers.
+Une fois connecté au nœud Edge, l'authentification sécurisée est garantie par le protocole \textbf{Kerberos}. Conformément aux pratiques de l'équipe (identiques à celles utilisées dans les scripts Sqoop), l'accès aux tables Hive et aux fichiers HDFS s'effectue via la commande \texttt{kinit} avec un fichier keytab chiffré associé au compte de service du domaine Tiers.
 
 \begin{figure}[H]
     \centering
@@ -74,15 +74,21 @@ pip install --no-index --find-links=./soda_wheels soda-core-spark
 
 \subsection{Arborescence du projet DQ}
 
-Le moteur de Data Quality est structuré en un projet Python autonome, déployé sur le nœud Edge du cluster. L'arborescence suivante présente une vue simplifiée des fichiers essentiels :
+Le moteur de Data Quality est structuré en un projet Python autonome, suivant les standards de packaging de l'équipe Data Office (même architecture que les projets \texttt{py-khawarizmi} et \texttt{sddiqi}). Il est packagé via \textbf{PDM} et livré sous forme de fichier \textbf{Wheel} (\texttt{.whl}). L'arborescence suivante présente une vue simplifiée des fichiers essentiels :
 
 \begin{lstlisting}
-dq_tiers/               (Projet DQ - Noeud Edge)
-|-- dq_tiers_checks.py  # Script principal : orchestration & persistance
-|-- checks/
-|   +-- checks_tiers.yml   # Regles DQ (KYC + CSP) en SodaCL
-+-- utils/
-    +-- hive_writer.py      # Module de persistance des 3 tables Hive
+dq_tiers/                  (Projet DQ - Noeud Edge)
+|-- pyproject.toml         # Configuration PDM et metadonnees du build
+|-- dq_endpoint.py         # Point d'entree spark-submit
+|-- src/sodadq/
+|   |-- configuration/
+|   |   +-- checks_tiers.yml  # Regles DQ (KYC + CSP) en SodaCL
+|   |-- context/
+|   |   |-- scan_runner.py     # Execution des scans Soda Core
+|   |   +-- result_writer.py   # Persistance des 3 tables Hive
+|   +-- checks/
+|       |-- kyc/               # Regles du domaine KYC
+|       +-- csp/               # Regles du domaine CSP
 \end{lstlisting}
 
 \subsection{Principe de fonctionnement de Soda Core avec Spark}
