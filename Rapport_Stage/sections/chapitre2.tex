@@ -6,11 +6,11 @@ Après avoir décrit le cadre général du projet et analysé le fonctionnement 
 % =========================
 \section{Besoins fonctionnels}
 
-Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le domaine Tiers. Ces problématiques, transverses à l'ensemble des tables du référentiel, seront illustrées par la table \texttt{np\_description} et ses 40 colonnes (\texttt{name}, \texttt{firstname}, \texttt{civility}, \texttt{sex}, \texttt{birthdate}, \texttt{nationalitycountry}, \texttt{fatcaidentificationnumber}, etc.). Les besoins se répartissent en quatre fonctionnalités majeures :
+Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le domaine Tiers. Ces problématiques, transverses à l'ensemble des tables du référentiel, seront principalement illustrées par les tables \texttt{np\_description} (et ses 40 colonnes telles que \texttt{name}, \texttt{firstname}, \texttt{civility}, \texttt{fatcaidentificationnumber}, etc.) et \texttt{jobs}. Les besoins se répartissent en quatre fonctionnalités majeures :
 
 \subsection{Automatisation et planification des contrôles}
 \begin{itemize}
-    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\uline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) (via un nouveau DAG dédié s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00) ,
+    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\uline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) (via un nouveau DAG dédié nommé \texttt{dq\_tiers\_daily00} s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00) ,
     \item \textbf{Sous-besoin 1.2 : Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
 \end{itemize}
 
