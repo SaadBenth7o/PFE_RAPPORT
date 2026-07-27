@@ -78,17 +78,12 @@ Le moteur de Data Quality est structuré en un projet Python autonome, suivant l
 
 \begin{lstlisting}
 dq_tiers/                  (Projet DQ - Noeud Edge)
-|-- pyproject.toml         # Configuration PDM et metadonnees du build
-|-- dq_endpoint.py         # Point d'entree spark-submit
-|-- src/sodadq/
-|   |-- configuration/
-|   |   +-- checks_tiers.yml  # Regles DQ (KYC + CSP) en SodaCL
-|   |-- context/
-|   |   |-- scan_runner.py     # Execution des scans Soda Core
-|   |   +-- result_writer.py   # Persistance des 3 tables Hive
-|   +-- checks/
-|       |-- kyc/               # Regles du domaine KYC
-|       +-- csp/               # Regles du domaine CSP
+|-- dq_endpoint.py         # Point d'entree (Script principal Python)
+|-- configuration/
+|   +-- checks_tiers.yml   # Fichier YAML contenant toutes les regles DQ
++-- context/
+    |-- scan_runner.py     # Module d'execution des scans Soda Core
+    +-- result_writer.py   # Script/Module Python contenant la fonction de persistance
 \end{lstlisting}
 
 \subsection{Principe de fonctionnement de Soda Core avec Spark}
