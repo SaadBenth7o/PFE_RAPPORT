@@ -54,7 +54,18 @@
     urlcolor=blue,
     pdftitle={Rapport de Stage - Saad BENDAHOU},
     pdfpagemode=FullScreen,
+    bookmarksnumbered=true, % Add numbers to bookmarks
 }
+
+% Ajouter le préfixe "Chapitre" dans la Table des Matières et les Bookmarks
+\usepackage{tocloft}
+\renewcommand{\cftchappresnum}{Chapitre }
+\renewcommand{\cftchapaftersnum}{ : }
+\addtolength{\cftchapnumwidth}{2.5cm}
+
+\makeatletter
+\renewcommand{\Hy@chapapp}{Chapitre} % Ajoute "Chapitre" aux bookmarks PDF
+\makeatother
 
 % Configuration des marges
 \geometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
