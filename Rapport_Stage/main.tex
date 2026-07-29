@@ -233,10 +233,20 @@
 \pagenumbering{arabic}
 \input{sections/introduction.tex}
 
+% --- Configuration des pages de garde pour les 4 chapitres ---
+\titleformat{\chapter}[display]
+  {\vspace*{\fill}\normalfont\huge\bfseries\centering}{\chaptertitlename\ \thechapter}{20pt}{\Huge}[\vspace*{\fill}\clearpage]
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}
+
 \input{sections/chapitre1.tex}
 \input{sections/chapitre2.tex}
 \input{sections/chapitre3.tex}
 \input{sections/chapitre4.tex}
+
+% --- Restauration du format classique pour la suite (Conclusion, Biblio) ---
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{50pt}{40pt}
 
 % --- Back Matter ---
 \input{sections/conclusion.tex}
