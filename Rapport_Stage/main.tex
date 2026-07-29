@@ -26,21 +26,21 @@
 \pagestyle{fancy}
 \fancyhf{} % Nettoie les en-têtes et pieds de page par défaut
 
-% Force la largeur de la ligne à être exactement celle du texte (alignement parfait à gauche et à droite)
-\setlength{\headwidth}{\textwidth}
+% Élargit les traits de 1.5 cm à gauche et à droite par rapport au texte
+\fancyhfoffset[L,R]{1.5cm}
 
 % En-tête : nom du chapitre à GAUCHE au-dessus du trait
 \fancyhead[L]{\leftmark}
 \renewcommand{\headrulewidth}{0.4pt} % Ligne en haut
 
-% Pied de page : numéro de page à DROITE au-dessous du trait
-\fancyfoot[R]{\thepage}
+% Pied de page : numéro de page au CENTRE au-dessous du trait
+\fancyfoot[C]{\thepage}
 \renewcommand{\footrulewidth}{0.4pt} % Ligne en bas
 
 % Redéfinir le style 'plain' (pour la 1ère page des chapitres)
 \fancypagestyle{plain}{
     \fancyhf{}
-    \fancyfoot[R]{\thepage} 
+    \fancyfoot[C]{\thepage} 
     \renewcommand{\headrulewidth}{0pt}
     \renewcommand{\footrulewidth}{0pt}
 }
