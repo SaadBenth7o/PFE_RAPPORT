@@ -20,6 +20,25 @@
 \usepackage{longtable}
 \usepackage{pgfgantt}
 
+% --- Configuration des en-têtes et pieds de page (fancyhdr) ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % Nettoie les en-têtes et pieds de page par défaut
+% En-tête : ligne en dessous du nom du chapitre
+\fancyhead[C]{\leftmark} % Nom du chapitre au centre
+\renewcommand{\headrulewidth}{0.4pt} % Ligne en haut
+% Pied de page : ligne au-dessus du numéro de page
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt} % Ligne en bas
+
+% Redéfinir le style 'plain' utilisé pour la première page des chapitres
+\fancypagestyle{plain}{
+    \fancyhf{} % Pas d'en-tête sur la première page d'un chapitre
+    \fancyfoot[C]{\thepage} % Garde juste le numéro de page
+    \renewcommand{\headrulewidth}{0pt} % Pas de ligne en haut
+    \renewcommand{\footrulewidth}{0pt} % Pas de ligne en bas pour faire propre (ou 0.4pt si on veut forcer la ligne)
+}
+
 \usepackage[hyphens]{url}
 \usepackage{hyperref}
 \hypersetup{
