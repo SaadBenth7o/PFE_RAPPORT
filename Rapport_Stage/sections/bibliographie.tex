@@ -1,7 +1,32 @@
-\chapter*{Bibliographie et Nétographie}
-\addcontentsline{toc}{chapter}{Bibliographie et Nétographie}
+\chapter*{Bibliographie et Webographie}
+\addcontentsline{toc}{chapter}{Bibliographie et Webographie}
 
-\section*{Nétographie (Webographie)}
+\makeatletter
+\renewenvironment{thebibliography}[1]
+     {\list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+
+\section*{Bibliographie}
+\begin{thebibliography}{99}
+    \bibitem{dama_dmbok} DAMA International, \textit{DAMA-DMBOK: Data Management Body of Knowledge}, 2nd ed. Basking Ridge, NJ, USA: Technics Publications, 2017.
+\end{thebibliography}
+
+\section*{Webographie}
 \begin{thebibliography}{99}
     \bibitem{b1} \url{https://innowise.com/blog/data-analytics-in-banking/} : How data analytics is transforming the banking and financial services industry - Innowise.
     \bibitem{b2} \url{https://scielo.org.za/scielo.php?script=sci_arttext&pid=S2304-82632024000200007} : Artificial intelligence technology to enhance data quality management practices in the banking industry in South Africa.
