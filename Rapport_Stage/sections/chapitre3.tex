@@ -509,12 +509,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_oracle.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_oracle.png}
+    \captionof{figure}{Logo de Oracle NOVA}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Oracle NOVA} --- Système opérant source\\
     {\small Base de données relationnelle hébergeant le Core Banking de la banque. Il s'agit du point d'entrée unique des données des clients physiques et moraux (Référentiel Tiers) et de la cible finale de correction.}
 \end{minipage}
@@ -522,12 +523,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_mobaxterm.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_mobaxterm.png}
+    \captionof{figure}{Logo de MobaXterm}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{MobaXterm} --- Client SSH et terminal distant\\
     {\small Outil d'administration système tout-en-un fournissant un terminal avancé pour accéder de manière sécurisée aux serveurs Linux de la banque. Il s'avère indispensable pour configurer l'environnement, déployer les scripts et tester les pipelines en ligne de commande directement sur le nœud Edge du cluster.}
 \end{minipage}
@@ -535,12 +537,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_sqoop.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_sqoop.png}
+    \captionof{figure}{Logo de Apache Sqoop}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Apache Sqoop} --- Ingestion batch Oracle vers HDFS\\
     {\small Technologie d'ingestion permettant le transfert en masse des tables NOVA vers l'infrastructure Hadoop. Les scripts sont organisés par domaine métier et par mode d'ingestion (remplacement complet ou incrémental par \textit{timestamp}). L'écriture s'effectue via HCatalog au format ORC, avec authentification Kerberos préalable.}
 \end{minipage}
@@ -548,12 +551,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_hive.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_hive.png}
+    \captionof{figure}{Logo de HDFS / Apache Hive}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{HDFS / Apache Hive} --- Plateforme de stockage et de requêtage\\
     {\small HDFS assure le stockage persistant distribué tandis que Hive structure ces répertoires sous forme de tables SQL relationnelles. Les tables sont stockées au format \textbf{ORC} avec compression, et chaque écriture est tracée par une colonne d'audit \texttt{batch\_time} conformément aux standards de l'équipe Data.}
 \end{minipage}
@@ -561,12 +565,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_spark.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_spark.png}
+    \captionof{figure}{Logo de Apache Spark (Spark SQL)}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Apache Spark (Spark SQL)} --- Moteur de traitement distribué\\
     {\small Framework de calcul distribué in-memory utilisé par Soda Core pour exécuter les requêtes de contrôle de qualité massives sur les données Hive avec des performances optimales.}
 \end{minipage}
@@ -574,12 +579,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_soda.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_soda.png}
+    \captionof{figure}{Logo de Soda Core}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Soda Core} --- Moteur de contrôle de la qualité (Python)\\
     {\small Framework de validation de données déclaratif basé sur des fichiers YAML de règles de gestion et exécuté programmatiquement sur les tables Hive RAW.}
 \end{minipage}
@@ -587,12 +593,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_airflow.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_airflow.png}
+    \captionof{figure}{Logo de Apache Airflow 2.2.5}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Apache Airflow 2.2.5} --- Orchestrateur de tâches\\
     {\small Outil d'orchestration central du Data Office. Les DAGs sont structurés en tant que packages Python, construits via \textbf{PDM} en fichiers Wheel (\texttt{.whl}) et déployés dans le répertoire \texttt{\$DAGS\_FOLDER} via \texttt{pip install}. Les opérateurs utilisés incluent \texttt{BashOperator}, \texttt{PythonOperator} et \texttt{BranchPythonOperator}.}
 \end{minipage}
@@ -600,12 +607,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_dremio.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_dremio.png}
+    \captionof{figure}{Logo de Dremio}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Dremio} --- Moteur de virtualisation et d'exposition\\
     {\small Permet de virtualiser les tables de résultats Hive et d'exposer des vues SQL rapides et sécurisées, éliminant le besoin de dupliquer ou de transférer physiquement les volumes de données.}
 \end{minipage}
@@ -613,12 +621,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_tableau.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_tableau.png}
+    \captionof{figure}{Logo de Tableau}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{Tableau} --- Outil d'analyse décisionnelle et Visualisation\\
     {\small Solution BI standard de CIH BANK, connectée en direct à Dremio pour fournir un reporting réactif sur la qualité des tiers à l'intention des Data Owners.}
 \end{minipage}
@@ -627,12 +636,13 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
-\begin{minipage}[c]{0.12\textwidth}
+\begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=\textwidth, height=1.75cm, keepaspectratio]{figures/logos/logo_gitlab.png}
+    \includegraphics[width=0.8\textwidth, height=1.5cm, keepaspectratio]{figures/logos/logo_gitlab.png}
+    \captionof{figure}{Logo de GitLab}
 \end{minipage}
 \hspace{0.03\textwidth}
-\begin{minipage}[c]{0.83\textwidth}
+\begin{minipage}[c]{0.73\textwidth}
     \textbf{GitLab} --- Gestion de versions, collaboration et suivi de projet\\
     {\small Plateforme DevOps centrale utilisée pour la gestion du code source (versioning Git), la revue de code (merge requests), et le suivi du backlog Data Engineering avec le Delivery Manager. GitLab centralise l'état d'avancement des tâches, assure la traçabilité des livraisons et garantit une gestion rigoureuse du cycle de vie des scripts DQ.}
 \end{minipage}
