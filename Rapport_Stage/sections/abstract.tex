@@ -1,10 +1,12 @@
 \chapter*{Abstract}
+\markboth{Abstract}{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-In the context of digital transformation within the banking sector, data has become a key strategic asset for decision-making, risk management, and overall performance improvement. However, data quality remains a major challenge, as incomplete, inconsistent, or erroneous data can significantly impact business processes and analytical outcomes.
+This final-year engineering project focuses on the design, development, and industrialization of an automated Data Quality pipeline within the Data Office of CIH BANK. In a banking ecosystem increasingly driven by data, the primary objective is to automate the validation and monitoring of Third-Party domain data (including KYC information and socio-professional categories CSP) to ensure regulatory compliance (such as BCBS 239) and eliminate time-consuming manual remediation processes.
 
-This project is part of the Data Governance initiatives at CIH Bank. Its objective is to design and implement an automated data quality control pipeline to ensure the reliability, traceability, and consistency of the data being used.
+The developed solution relies on a robust Big Data architecture and is built around a comprehensive pipeline: mass data ingestion from operational systems (Oracle NOVA) via Apache Sqoop, distributed execution of business quality rules (completeness, validity, integrity, freshness) through the integration of Soda Core with Apache Spark, and storage of the results in Hive tables using the ORC format. The semantic layer is managed by the Dremio virtualization engine, which directly feeds an interactive dashboard built with Tableau Desktop. This dashboard enables Data Stewards to monitor quality Key Performance Indicators (KPIs), track overall compliance rates, and instantly identify critical anomalies. The entire workflow is orchestrated on a daily, automated basis by Apache Airflow.
 
-The proposed solution is based on processing and controlling data from the Third-Party domain (KYC and CSP data) ingested into the Data Lake (as Hive/ORC tables), while applying a set of rules covering key data quality dimensions such as completeness, validity, consistency, and uniqueness.
+The results demonstrate that industrializing quality checks at the source significantly improves the reliability of the Data Lake, strengthens data governance, and ensures that business decision-makers have rapid access to verified and secure information. This architecture provides the bank with a scalable, high-performance solution that meets modern engineering standards.
 
-By automating these controls, the solution enables continuous monitoring of data quality and the generation of key performance indicators (KPIs), supporting efficient data governance and informed decision-making. This project therefore contributes to strengthening the organization's data management framework and enhancing its analytical capabilities.
+\vspace{1cm}
+\noindent\textbf{Keywords :} Data Quality, Big Data, Soda Core, Apache Spark, Hadoop, Hive, Dremio, Tableau, Apache Airflow, KYC, CSP, Data Governance, CIH BANK.
