@@ -22,21 +22,27 @@
 
 % --- Configuration des en-têtes et pieds de page (fancyhdr) ---
 \usepackage{fancyhdr}
+\setlength{\headheight}{15pt} % Corrige le warning de hauteur
 \pagestyle{fancy}
 \fancyhf{} % Nettoie les en-têtes et pieds de page par défaut
-% En-tête : ligne en dessous du nom du chapitre
-\fancyhead[C]{\leftmark} % Nom du chapitre au centre
+
+% Force la largeur de la ligne à être exactement celle du texte (alignement parfait à gauche et à droite)
+\setlength{\headwidth}{\textwidth}
+
+% En-tête : nom du chapitre à GAUCHE au-dessus du trait
+\fancyhead[L]{\leftmark}
 \renewcommand{\headrulewidth}{0.4pt} % Ligne en haut
-% Pied de page : ligne au-dessus du numéro de page
+
+% Pied de page : numéro de page au CENTRE au-dessous du trait
 \fancyfoot[C]{\thepage}
 \renewcommand{\footrulewidth}{0.4pt} % Ligne en bas
 
-% Redéfinir le style 'plain' utilisé pour la première page des chapitres
+% Redéfinir le style 'plain' (pour la 1ère page des chapitres)
 \fancypagestyle{plain}{
-    \fancyhf{} % Pas d'en-tête sur la première page d'un chapitre
-    \fancyfoot[C]{\thepage} % Garde juste le numéro de page
-    \renewcommand{\headrulewidth}{0pt} % Pas de ligne en haut
-    \renewcommand{\footrulewidth}{0pt} % Pas de ligne en bas pour faire propre (ou 0.4pt si on veut forcer la ligne)
+    \fancyhf{}
+    \fancyfoot[C]{\thepage} 
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
 }
 
 \usepackage[hyphens]{url}
