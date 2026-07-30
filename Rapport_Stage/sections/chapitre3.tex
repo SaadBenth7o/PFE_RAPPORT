@@ -421,33 +421,39 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
 
 \begin{figure}[H]
     \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, box/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=2.8cm, minimum height=1cm, align=center, drop shadow}]
-        % Orchestrators
+    \begin{tikzpicture}[>=stealth, every node/.style={font=\small}, box/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=3.5cm, minimum height=1.2cm, align=center, drop shadow}]
+        
+        % Orchestrators (Ligne 1)
         \node (dag_ing) [box, fill=orange!10, draw=orange!60!black] {DAG \texttt{dailyow22} \\ \scriptsize(Ingestion à 22h00)};
-        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, below=of dag_ing, yshift=-1.0cm] {DAG \texttt{daily\allowbreak\_dq\allowbreak\_00} \\ \scriptsize(Qualité à 00h00)};
+        \node (dag_dq) [box, fill=orange!10, draw=orange!60!black, right=of dag_ing, xshift=2.5cm] {DAG \texttt{daily\allowbreak\_dq\allowbreak\_00} \\ \scriptsize(Qualité à 00h00)};
         
-        % Components
-        \node (ingest) [box, right=of dag_ing, xshift=1.5cm] {Module d'Ingestion \\ \scriptsize(Apache Sqoop)};
-        \node (lake) [box, right=of ingest, xshift=0.5cm] {Zone de Stockage RAW \\ \scriptsize(Hive / HDFS)};
+        % Components (Ligne 2)
+        \node (ingest) [box, below=of dag_ing, yshift=-1.5cm] {Module d'Ingestion \\ \scriptsize(Apache Sqoop)};
+        \node (soda) [box, below=of dag_dq, yshift=-1.5cm] {Moteur DQ \\ \scriptsize(Soda Core / Python)};
         
-        \node (soda) [box, right=of dag_dq, xshift=1.5cm] {Moteur DQ \\ \scriptsize(Soda Core / Python)};
-        \node (res) [box, right=of soda, xshift=0.5cm] {Résultats DQ \\ \scriptsize(Hive / HDFS)};
+        % Data (Ligne 3)
+        \node (lake) [box, below=of ingest, yshift=-1.5cm] {Zone de Stockage RAW \\ \scriptsize(Hive / HDFS)};
+        \node (res) [box, below=of soda, yshift=-1.5cm] {Résultats DQ \\ \scriptsize(Hive / HDFS)};
         
-        \node (dremio) [box, below=of res, yshift=-0.5cm] {Couche de Virtualisation \\ \scriptsize(Dremio)};
-        \node (tableau) [box, left=of dremio, xshift=-1.5cm] {Dashboard \\ \scriptsize(Tableau)};
+        % Midpoint for centering (Ligne 4 et 5)
+        \path (lake) -- (res) coordinate[midway] (mid);
+        
+        % Virtualisation (Ligne 4)
+        \node (dremio) [box, below=of mid, yshift=-1.5cm] {Couche de Virtualisation \\ \scriptsize(Dremio)};
+        
+        % Restitution (Ligne 5)
+        \node (tableau) [box, below=of dremio, yshift=-1.5cm] {Dashboard \\ \scriptsize(Tableau)};
 
         % Connectors
-        \draw [->, line width=1pt, dashed, orange!80!black] (dag_ing) -- node[above, font=\scriptsize] {Déclenche} (ingest);
-        \draw [->, line width=1pt, dashed, orange!80!black] (dag_dq) -- node[above, font=\scriptsize] {Déclenche} (soda);
+        \draw [->, line width=1pt, dashed, orange!80!black] (dag_ing) -- node[left, font=\scriptsize] {Déclenche} (ingest);
+        \draw [->, line width=1pt, dashed, orange!80!black] (dag_dq) -- node[right, font=\scriptsize] {Déclenche} (soda);
         
-        \draw [->, line width=1pt, blue!70!black] (ingest) -- node[above, font=\scriptsize] {Écrit} (lake);
-        \draw [->, line width=1pt, blue!70!black] (soda) -- node[right, font=\scriptsize, align=center, pos=0.3] {Scan} (lake);
-        \draw [->, line width=1pt, blue!70!black] (soda) -- node[above, font=\scriptsize] {Enregistre} (res);
-        \draw [->, line width=1pt, blue!70!black] (dremio) -- node[right, font=\scriptsize] {Virtualise} (res);
-        \draw [->, line width=1pt, blue!70!black] (tableau) -- node[above, font=\scriptsize] {Requête} (dremio);
+        \draw [->, line width=1pt, blue!70!black] (ingest) -- node[left, font=\scriptsize] {Écrit} (lake);
+        \draw [->, line width=1pt, blue!70!black] (soda) -- node[above, font=\scriptsize, sloped] {Scan} (lake);
+        \draw [->, line width=1pt, blue!70!black] (soda) -- node[right, font=\scriptsize] {Enregistre} (res);
+        \draw [->, line width=1pt, blue!70!black] (dremio) -- node[below, font=\scriptsize, sloped] {Virtualise} (res);
+        \draw [->, line width=1pt, blue!70!black] (tableau) -- node[right, font=\scriptsize] {Requête} (dremio);
     \end{tikzpicture}
-    }
     \caption{Diagramme de composants logiciels de la solution DQ}
     \label{fig:components_dq}
 \end{figure}
