@@ -112,7 +112,7 @@ La modélisation statique définit la structure fixe du système, ses composants
 \subsection{Modélisation de la table de faits}
 Étant donné que la solution s'articule autour de la manipulation de données (Data Management) et non d'un développement orienté objet, nous remplaçons le diagramme de classes traditionnel par une modélisation explicite de la table de faits. 
 
-La figure \ref{fig:fact_dq} illustre la structure des données générée par notre moteur de qualité. Le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id} et \texttt{query\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une grande table de faits consolidée (20 colonnes) servant de source unique de vérité pour le reporting BI.
+La figure \ref{fig:fact_dq} illustre la structure des données générée par notre moteur de qualité. Le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id} et \texttt{query\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une grande table de faits consolidée (21 colonnes) servant de source unique de vérité pour le reporting BI.
 
 \begin{figure}[H]
     \centering
@@ -125,14 +125,15 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         
         % Central Fact Table
         \node (fact) [factbox] {
-            \centering \textbf{fact\_tiers\_dq\_consolidated} \\ (Vue Dremio - 20 colonnes)
+            \centering \textbf{fact\_tiers\_dq\_consolidated} \\ (Vue Dremio - 21 colonnes)
             \nodepart{second}
             \textbf{Clés de jointure :}\\
             - Run\_ID \hfill \textit{String}\\
             - Query\_ID \hfill \textit{String}\\
             \midrule
             \textbf{Indicateurs métier (History) :}\\
-            - Date d'exécution \hfill \textit{Date}\\
+            - Date de run \hfill \textit{Date}\\
+            - Date d'exécution \hfill \textit{Timestamp}\\
             - Table \hfill \textit{String}\\
             - Colonne \hfill \textit{String}\\
             - Domaine \hfill \textit{String}\\
