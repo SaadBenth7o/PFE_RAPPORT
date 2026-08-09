@@ -209,8 +209,8 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
 
         % Arrows pointing to the central fact table
         \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (colhist.south) -- node[right, font=\footnotesize\bfseries, text=gray!80] {Virtualisation Dremio} (fact.north);
-        \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (checks.north east) -- (fact.south west);
-        \draw[->, line width=1.5pt, draw=gray!80, >=stealth] (exec.north west) -- (fact.south east);
+        \draw[->, line width=1.5pt, draw=gray!80, >=stealth, rounded corners] (checks.north) |- (fact.west);
+        \draw[->, line width=1.5pt, draw=gray!80, >=stealth, rounded corners] (exec.north) |- (fact.east);
         
     \end{tikzpicture}
     }
