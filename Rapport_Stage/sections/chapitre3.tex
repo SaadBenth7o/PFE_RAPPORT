@@ -119,8 +119,8 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
     \resizebox{\textwidth}{!}{
     \begin{tikzpicture}[
         every node/.style={font=\small}, 
-        tablebox/.style={draw, rectangle split, rectangle split parts=2, fill=blue!5, rounded corners, align=left, drop shadow, text width=5.8cm},
-        factbox/.style={draw, rectangle split, rectangle split parts=2, fill=green!10, rounded corners, align=left, drop shadow, text width=6.5cm, line width=1.2pt, draw=green!50!black}
+        tablebox/.style={draw, rectangle split, rectangle split parts=2, fill=blue!5, rounded corners, align=left, drop shadow, text width=6.8cm},
+        factbox/.style={draw, rectangle split, rectangle split parts=2, fill=green!10, rounded corners, align=left, drop shadow, text width=7.2cm, line width=1.2pt, draw=green!50!black}
     ]
         
         % Central Fact Table
@@ -175,7 +175,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         };
 
         % Bottom Left Table (Checks Config)
-        \node (checks) [tablebox, below left=of fact, xshift=-1cm, yshift=-1.5cm] {
+        \node (checks) [tablebox, below left=of fact, xshift=-0.5cm, yshift=-0.3cm] {
             \centering \textbf{consolidated\_all\_checks\_config} \\ (Table physique Hive)
             \nodepart{second}
             + run\_id \textbf{[PK]} \hfill \textit{String}\\
@@ -190,7 +190,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         };
 
         % Bottom Right Table (Execution Log)
-        \node (exec) [tablebox, below right=of fact, xshift=1cm, yshift=-1.5cm] {
+        \node (exec) [tablebox, below right=of fact, xshift=0.5cm, yshift=-0.3cm] {
             \centering \textbf{consolidated\_execution\_log} \\ (Table physique Hive)
             \nodepart{second}
             + run\_id \textbf{[PK]} \hfill \textit{String}\\
