@@ -158,7 +158,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         };
 
         % Top Table (History)
-        \node (colhist) [tablebox, above=of fact, yshift=1.5cm] {
+        \node (colhist) [tablebox, above=of fact, yshift=0.5cm] {
             \centering \textbf{consolidated\_all\_column\_history} \\ (Table physique Hive)
             \nodepart{second}
             + run\_id \textbf{[PK]} \hfill \textit{String}\\
@@ -177,7 +177,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         };
 
         % Bottom Left Table (Checks Config)
-        \node (checks) [tablebox, below left=of fact, xshift=-0.5cm, yshift=-0.3cm] {
+        \node (checks) [tablebox, below left=of fact, xshift=-0.5cm, yshift=2cm] {
             \centering \textbf{consolidated\_all\_checks\_config} \\ (Table physique Hive)
             \nodepart{second}
             + run\_id \textbf{[PK]} \hfill \textit{String}\\
@@ -192,7 +192,7 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
         };
 
         % Bottom Right Table (Execution Log)
-        \node (exec) [tablebox, below right=of fact, xshift=0.5cm, yshift=-0.3cm] {
+        \node (exec) [tablebox, below right=of fact, xshift=0.5cm, yshift=2cm] {
             \centering \textbf{consolidated\_execution\_log} \\ (Table physique Hive)
             \nodepart{second}
             + run\_id \textbf{[PK]} \hfill \textit{String}\\
