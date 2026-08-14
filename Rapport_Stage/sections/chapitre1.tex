@@ -212,55 +212,9 @@ Contrairement à un projet classique, l'avancement n'a pas été strictement lin
 
 La figure \ref{fig:gantt} ci-dessous illustre ce déroulement sous forme d'un diagramme de Gantt, mettant en évidence la phase initiale de documentation, le cycle itératif de développement, et l'implication constante des acteurs métiers.
 
-\definecolor{ganttblue}{RGB}{68,114,196}
-\definecolor{ganttbluecell}{RGB}{155,187,227}
-\definecolor{ganttorange}{RGB}{237,125,49}
-\definecolor{ganttorangecell}{RGB}{248,203,173}
-\definecolor{ganttgreencell}{RGB}{169,208,142}
-\definecolor{ganttheader}{RGB}{68,114,196}
-
 \begin{figure}[H]
     \centering
-    \begin{ganttchart}[
-        expand chart=\textwidth,
-        y unit title=0.6cm,
-        y unit chart=0.55cm,
-        canvas/.append style={draw=black, line width=0.6pt},
-        hgrid style/.style={draw=black!70, line width=0.4pt},
-        vgrid={*1{draw=black!70, line width=0.4pt}},
-        title/.style={draw=black, fill=ganttheader, line width=0.6pt},
-        title label font=\bfseries\scriptsize\color{white},
-        bar height=1,
-        bar top shift=0,
-        bar/.append style={fill=ganttbluecell, draw=none},
-        group height=1,
-        group top shift=0,
-        group/.append style={draw=none, fill=ganttorangecell},
-        group right shift=0,
-        group left shift=0,
-        group peaks width=0,
-        group peaks height=0,
-        bar label font=\scriptsize,
-        group label font=\bfseries\scriptsize,
-        bar label node/.append style={draw=black!70, line width=0.4pt, fill=white, text width=4.8cm, align=left, inner xsep=3pt, inner ysep=0pt, minimum height=0.55cm, anchor=east},
-        group label node/.append style={draw=black!70, line width=0.4pt, fill=ganttorangecell!50, text width=4.8cm, align=left, inner xsep=3pt, inner ysep=0pt, minimum height=0.55cm, anchor=east},
-        include title in canvas=true,
-        time slot format=isodate-yearmonth,
-        time slot unit=month
-    ]{2026-02}{2026-08}
-        \gantttitlecalendar{year, month=shortname} \\
-        \ganttgroup{Appropriation \& Architecture}{2026-02}{2026-04} \\
-        \ganttbar{Compréhension de l'existant}{2026-02}{2026-03} \\
-        \ganttbar{Documentation technique}{2026-03}{2026-04} \\
-        \ganttgroup{Cycle Itératif (POC \& MVP)}{2026-04}{2026-07} \\
-        \ganttbar{Conception des règles DQ}{2026-04}{2026-05} \\
-        \ganttbar{Développement \& Tests itératifs}{2026-04}{2026-07} \\
-        \ganttgroup{Restitution \& Déploiement}{2026-06}{2026-08} \\
-        \ganttbar{Dashboards et livraison finale}{2026-06}{2026-08} \\
-        \ganttbar{Rédaction du rapport PFE}{2026-07}{2026-08} \\
-        \ganttgroup[group/.append style={fill=ganttgreencell}]{Collaboration Transverse}{2026-02}{2026-08} \\
-        \ganttbar[bar/.append style={fill=ganttgreencell}]{Points métiers (Data Steward \& SI)}{2026-02}{2026-08}
-    \end{ganttchart}
+    \includegraphics[width=1.0\textwidth]{figures/Gantt_CIH_Bank_Final.png}
     \caption{Planning prévisionnel du projet}
     \label{fig:gantt}
 \end{figure}
