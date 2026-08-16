@@ -522,7 +522,9 @@ Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'archit
         \node (workers) [server] at (6.5, -5) {\textbf{3 Nœuds Workers} \\[0.1cm] \scriptsize $\bullet$ HDFS DataNodes (RAW) \\ \scriptsize $\bullet$ YARN NodeManagers \\ \scriptsize $\bullet$ Dremio Executors};
 
         % Cluster background
-        \node (cluster_bg) [cluster, fit=(edge) (masters) (workers), label={[font=\bfseries, text=orange!80!black]above:Cluster Big Data Cloudera CDP (Production)}] {};
+        \begin{scope}[on background layer]
+            \node (cluster_bg) [cluster, fit=(edge) (masters) (workers), label={[font=\bfseries, text=orange!80!black]above:Cluster Big Data Cloudera CDP (Production)}] {};
+        \end{scope}
 
         % External Systems
         \node (oracle) [ext] at (-5.5, 0) {\textbf{Oracle NOVA} \\[0.1cm] \scriptsize Système Opérant \\ \scriptsize (Source de données)};

@@ -12,7 +12,7 @@
 \usepackage{microtype}
 \usepackage[normalem]{ulem}
 \usepackage{tikz}
-\usetikzlibrary{positioning, shapes.geometric, shapes.multipart, arrows.meta, calc, shadows, fit}
+\usetikzlibrary{positioning, shapes.geometric, shapes.multipart, arrows.meta, calc, shadows, fit, backgrounds}
 \usepackage{booktabs}
 \usepackage{pdflscape}
 \usepackage{caption}
@@ -56,6 +56,9 @@
     pdfpagemode=FullScreen,
     bookmarksnumbered=true, % Add numbers to bookmarks
 }
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 
 % Ajouter le préfixe "Chapitre" dans la Table des Matières et les Bookmarks
 \usepackage{tocloft}
