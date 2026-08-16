@@ -1,7 +1,7 @@
 \chapter{Conception de la Solution}
 
 \section*{Introduction}
-Après avoir défini les besoins fonctionnels et non fonctionnels de notre système de contrôle de la qualité des données, ce chapitre présente la conception détaillée de la solution. Dans un premier temps, nous décrivons la modélisation dynamique à travers des diagrammes de séquences et d'activités. Dans un second temps, nous présentons la modélisation statique comprenant la modélisation de la table de faits, le modèle relationnel, le dictionnaire de données et le catalogue complet des règles de qualité. Enfin, nous détaillons l'architecture logicielle (diagramme de composants) et matérielle (diagramme de déploiement) de l'application dans son environnement CIH BANK.
+Après avoir défini les besoins fonctionnels et non fonctionnels de notre système de contrôle de la qualité des données, ce chapitre présente la conception détaillée de la solution. Dans un premier temps, nous décrivons la modélisation dynamique à travers des diagrammes de séquences et d'activités. Dans un second temps, nous présentons la modélisation statique comprenant la modélisation de la table de faits, le modèle relationnel, le dictionnaire de données et le catalogue des règles de qualité (illustré sur deux tables exemplaires du périmètre). Enfin, nous détaillons l'architecture logicielle (diagramme de composants) et matérielle (diagramme de déploiement) de l'application dans son environnement CIH BANK.
 
 % =========================================================================
 \section{Modélisation dynamique}
@@ -24,19 +24,19 @@ Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux 
         \node (tableau) [draw=blue!80!black, fill=blue!10, rounded corners, minimum width=2.2cm, minimum height=1cm, drop shadow, right=of dremio] {\textbf{Tableau}};
 
         % Dotted lines
-        \draw [dashed, draw=gray, thick] (airflow) -- +(0,-18.0);
-        \draw [dashed, draw=gray, thick] (sqoop) -- +(0,-18.0);
-        \draw [dashed, draw=gray, thick] (hdfs) -- +(0,-18.0);
-        \draw [dashed, draw=gray, thick] (soda) -- +(0,-18.0);
-        \draw [dashed, draw=gray, thick] (dremio) -- +(0,-18.0);
-        \draw [dashed, draw=gray, thick] (tableau) -- +(0,-18.0);
+        \draw [dashed, draw=gray, thick] (airflow) -- +(0,-20.0);
+        \draw [dashed, draw=gray, thick] (sqoop) -- +(0,-20.0);
+        \draw [dashed, draw=gray, thick] (hdfs) -- +(0,-20.0);
+        \draw [dashed, draw=gray, thick] (soda) -- +(0,-20.0);
+        \draw [dashed, draw=gray, thick] (dremio) -- +(0,-20.0);
+        \draw [dashed, draw=gray, thick] (tableau) -- +(0,-20.0);
 
         % Execution arrows
         \draw [->, line width=1.2pt] ($(airflow)+(0,-1.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {1. DAG Ingestion (22h00)} ($(sqoop)+(0,-1.8)$);
         
         \draw [->, line width=1.2pt] ($(sqoop)+(0,-3.3)$) -- node[above, font=\small, text width=2.4cm, align=center] {2. Importer données} ($(hdfs)+(0,-3.3)$);
         
-        \draw [<-, dashed, line width=1.2pt, color=green!50!black] ($(sqoop)+(0,-4.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {3. OK (Succès)} ($(hdfs)+(0,-4.8)$);
+        \draw [<-, dashed, line width=1.2pt, color=green!50!black] ($(airflow)+(0,-4.8)$) -- node[above, font=\small, text width=5cm, align=center] {3. OK (Succès)} ($(hdfs)+(0,-4.8)$);
         
         \draw [->, line width=1.2pt] ($(airflow)+(0,-6.3)$) -- node[above, font=\small, text width=4.5cm, align=center] {4. DAG Qualité (00h00)} ($(soda)+(0,-6.3)$);
         
@@ -46,15 +46,17 @@ Le diagramme de séquences de la figure \ref{fig:sequence_dq} détaille le flux 
         
         \draw [->, line width=1.2pt] ($(soda)+(0,-10.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {7. Sauvegarder (3 tables)} ($(hdfs)+(0,-10.8)$);
         
-        \draw [->, line width=1.2pt] ($(tableau)+(0,-12.3)$) -- node[above, font=\small, text width=2.4cm, align=center] {8. Requêter le Dashboard} ($(dremio)+(0,-12.3)$);
+        \draw [<-, dashed, line width=1.2pt, color=green!50!black] ($(airflow)+(0,-12.3)$) -- node[above, font=\small, text width=3.5cm, align=center, pos=0.25] {8. OK (Succès)} ($(soda)+(0,-12.3)$);
+        
+        \draw [->, line width=1.2pt] ($(tableau)+(0,-13.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {9. Requêter le Dashboard} ($(dremio)+(0,-13.8)$);
         
         % Arrow from Dremio to HDFS (crosses Soda)
-        \draw [->, line width=1.2pt] ($(dremio)+(0,-13.8)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {9. Interroger les 3 tables} ($(hdfs)+(0,-13.8)$);
+        \draw [->, line width=1.2pt] ($(dremio)+(0,-15.3)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {10. Interroger les 3 tables} ($(hdfs)+(0,-15.3)$);
         
         % Arrow from HDFS to Dremio (crosses Soda)
-        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(dremio)+(0,-15.3)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {10. Virtualisation des données} ($(hdfs)+(0,-15.3)$);
+        \draw [<-, dashed, line width=1.2pt, color=gray!80!black] ($(dremio)+(0,-16.8)$) -- node[above, font=\small, text width=5cm, align=center, pos=0.7] {11. Virtualisation des données} ($(hdfs)+(0,-16.8)$);
         
-        \draw [<-, dashed, line width=1.2pt, color=blue!60!black] ($(tableau)+(0,-16.8)$) -- node[above, font=\small, text width=2.4cm, align=center] {11. Vues consolidées} ($(dremio)+(0,-16.8)$);
+        \draw [<-, dashed, line width=1.2pt, color=blue!60!black] ($(tableau)+(0,-18.3)$) -- node[above, font=\small, text width=2.4cm, align=center] {12. Vues consolidées} ($(dremio)+(0,-18.3)$);
         
     \end{tikzpicture}
     }
@@ -79,24 +81,39 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
         % Nodes
         \node (start) [draw, circle, fill=black, inner sep=3pt] at (0,0) {};
         \node (ingest) [block] at (0,-1.5) {\textbf{Ingestion HDFS RAW} \\ (Données Tiers via Sqoop)};
-        \node (scan) [block] at (0,-3.3) {\textbf{Exécution Soda Core} \\ (Évaluation des règles DQ)};
-        \node (dec) [decision] at (0,-5.5) {\textbf{Anomalies} \\ \textbf{détectées ?}};
-        \node (score_ok) [block, fill=green!10, draw=green!60!black] at (6,-5.5) {\textbf{Validation} \\ Score = 100\%};
-        \node (score_fail) [block, fill=red!10, draw=red!60!black] at (0,-7.8) {\textbf{Échec (Alerte)} \\ Historisation de l'anomalie};
-        \node (remed) [block, fill=purple!10, draw=purple!60!black] at (0,-9.8) {\textbf{Correction Manuelle} \\ (Action par le Data Steward \\ dans Oracle NOVA)};
-        \node (end) [draw, circle, double=black, fill=black, inner sep=3pt] at (6,-7.8) {};
-
+        
+        \node (scan_pipe) [block] at (0,-3.3) {\textbf{Contrôles Pipeline} \\ (Fraîcheur, Volumétrie)};
+        \node (dec_pipe) [decision] at (0,-5.5) {\textbf{Pipeline} \\ \textbf{Sain ?}};
+        \node (alert_pipe) [block, fill=red!10, draw=red!60!black] at (5,-5.5) {\textbf{Alerte Bloquante} \\ Arrêt du DAG};
+        \node (end_fail) [draw, circle, double=black, fill=black, inner sep=3pt] at (5,-7.5) {};
+        
+        \node (scan_biz) [block] at (0,-7.8) {\textbf{Exécution Règles Métier} \\ (Validité, Complétude...)};
+        \node (dec_biz) [decision] at (0,-10.0) {\textbf{Anomalies} \\ \textbf{détectées ?}};
+        
+        \node (score_ok) [block, fill=green!10, draw=green!60!black] at (5,-10.0) {\textbf{Validation} \\ Score = 100\%};
+        \node (end_ok) [draw, circle, double=black, fill=black, inner sep=3pt] at (5,-12.0) {};
+        
+        \node (score_fail) [block, fill=orange!10, draw=orange!60!black] at (0,-12.0) {\textbf{Historisation Anomalie}};
+        \node (remed) [block, fill=purple!10, draw=purple!60!black] at (0,-14.0) {\textbf{Correction Manuelle} \\ (Action Data Steward)};
+        
         % Arrows
         \draw [->, thick] (start) -- (ingest);
-        \draw [->, thick] (ingest) -- (scan);
-        \draw [->, thick] (scan) -- (dec);
-        \draw [->, thick, color=green!60!black] (dec) -- node[above, font=\small, text=green!60!black, font=\bfseries] {Non (0 erreur)} (score_ok);
-        \draw [->, thick, color=red!60!black] (dec) -- node[right, font=\small, text=red!60!black, font=\bfseries] {Oui (> 0)} (score_fail);
+        \draw [->, thick] (ingest) -- (scan_pipe);
+        \draw [->, thick] (scan_pipe) -- (dec_pipe);
+        \draw [->, thick, color=red!60!black] (dec_pipe) -- node[above, font=\small, font=\bfseries] {Non} (alert_pipe);
+        \draw [->, thick] (alert_pipe) -- (end_fail);
+        
+        \draw [->, thick, color=green!60!black] (dec_pipe) -- node[right, font=\small, font=\bfseries] {Oui} (scan_biz);
+        \draw [->, thick] (scan_biz) -- (dec_biz);
+        
+        \draw [->, thick, color=green!60!black] (dec_biz) -- node[above, font=\small, font=\bfseries] {Non (0 erreur)} (score_ok);
+        \draw [->, thick] (score_ok) -- (end_ok);
+        
+        \draw [->, thick, color=red!60!black] (dec_biz) -- node[right, font=\small, font=\bfseries] {Oui (> 0)} (score_fail);
         \draw [->, thick] (score_fail) -- (remed);
-        \draw [->, thick] (score_ok) -- (end);
         
         % Loop back
-        \draw [->, thick, dashed] (remed) .. controls (-4.5,-9.8) and (-4.5,-1.5) .. node[left, font=\small, align=center, xshift=-0.2cm] {Nouveau passage\\(J+1)} (ingest);
+        \draw [->, thick, dashed] (remed) .. controls (-4.5,-14.0) and (-4.5,-1.5) .. node[left, font=\small, align=center] {Nouveau passage\\(J+1)} (ingest);
     \end{tikzpicture}
     }
     \caption{Diagramme d'activités du workflow de remédiation DQ}
@@ -110,8 +127,6 @@ La modélisation statique définit la structure fixe du système, ses composants
 
 
 \subsection{Modélisation de la table de faits}
-Étant donné que la solution s'articule autour de la manipulation de données (Data Management) et non d'un développement orienté objet, nous remplaçons le diagramme de classes traditionnel par une modélisation explicite de la table de faits. 
-
 La figure \ref{fig:fact_dq} illustre la structure des données générée par notre moteur de qualité. Le moteur Soda Core produit un ensemble de trois tables physiques liées par l'identifiant d'exécution (\texttt{run\_id} et \texttt{query\_id}). Ces trois tables sont ensuite unifiées au sein de Dremio pour exposer une grande table de faits consolidée (21 colonnes) servant de source unique de vérité pour le reporting BI.
 
 \begin{figure}[H]
@@ -309,8 +324,6 @@ La dimension de complétude mesure le taux de renseignement des attributs obliga
 \hline
 \texttt{employer} & Taux de valeurs nulles < 10\% & HAUTE & Renseigner le nom de l'entreprise employeuse \\
 \hline
-\texttt{politically\_}\allowbreak\texttt{exposed} & 0 valeur nulle tolérée (PEP obligatoire) & CRITIQUE & Renseigner la déclaration d'exposition politique \\
-\hline
 \end{longtable}
 
 \subsubsection{Dimension Conformité}
@@ -409,8 +422,6 @@ La dimension de fraîcheur s'assure du bon cadencement de l'ingestion quotidienn
 \hline
 \texttt{row\_count} & Écart de volumétrie entre Oracle NOVA et Hive RAW < 0.1\% & CRITIQUE & Rejouer le DAG d'ingestion Sqoop \\
 \hline
-\texttt{code\_segment} & Cohérence entre segment client et code\_marche & HAUTE & Recalculer le segment par défaut \\
-\hline
 \end{longtable}
 
 % =========================================================================
@@ -493,7 +504,44 @@ Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'archit
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth, keepaspectratio]{figures/architecture_materielle.png}
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[
+        >=stealth,
+        font=\small,
+        server/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=4.5cm, minimum height=2.5cm, align=center, drop shadow, thick},
+        cluster/.style={draw=orange!80!black, rectangle, rounded corners, inner sep=15pt, fill=orange!5, dashed, thick},
+        ext/.style={draw=gray!80!black, cylinder, shape border rotate=90, aspect=0.25, fill=gray!10, minimum width=3.5cm, minimum height=2cm, align=center, drop shadow, thick},
+        bi/.style={draw=purple!80!black, rectangle, fill=purple!5, rounded corners, minimum width=3.5cm, minimum height=2cm, align=center, drop shadow, thick}
+    ]
+
+        % Coordinates for alignment
+        \node (edge) [server] at (0, 0) {\textbf{1 Nœud Edge (Gateway)} \\[0.1cm] \scriptsize $\bullet$ Apache Airflow (Workers) \\ \scriptsize $\bullet$ Soda Core (Python venv) \\ \scriptsize $\bullet$ Dremio Coordinator \\ \scriptsize $\bullet$ Hive Metastore};
+
+        \node (masters) [server] at (6.5, 0) {\textbf{3 Nœuds Masters} \\[0.1cm] \scriptsize $\bullet$ HDFS NameNodes (HA) \\ \scriptsize $\bullet$ YARN ResourceManager \\ \scriptsize $\bullet$ JournalNodes};
+
+        \node (workers) [server] at (6.5, -5) {\textbf{3 Nœuds Workers} \\[0.1cm] \scriptsize $\bullet$ HDFS DataNodes (RAW) \\ \scriptsize $\bullet$ YARN NodeManagers \\ \scriptsize $\bullet$ Dremio Executors};
+
+        % Cluster background
+        \node (cluster_bg) [cluster, fit=(edge) (masters) (workers), label={[font=\bfseries, text=orange!80!black]above:Cluster Big Data Cloudera CDP (Production)}] {};
+
+        % External Systems
+        \node (oracle) [ext] at (-5.5, 0) {\textbf{Oracle NOVA} \\[0.1cm] \scriptsize Système Opérant \\ \scriptsize (Source de données)};
+
+        \node (tableau) [bi] at (12.5, -5) {\textbf{Serveur Tableau} \\[0.1cm] \scriptsize Visualisation BI \\ \scriptsize (Dashboard DQ)};
+
+        % Connections
+        \draw [->, thick, color=blue!70!black] (oracle) -- node[above, font=\scriptsize, align=center] {Ingestion Sqoop} (edge);
+        
+        \draw [->, thick, color=blue!70!black] (edge) -- node[above, font=\scriptsize, align=center] {Ordonnancement\\\& Métadonnées} (masters);
+        
+        \draw [<->, thick, color=blue!70!black] (masters) -- node[right, font=\scriptsize, align=left] {Ressources\\(YARN)} (workers);
+        
+        \draw [->, thick, color=blue!70!black] (edge) |- node[above, font=\scriptsize, near end, xshift=-1cm] {Exécution distribuée (Spark / Dremio)} (workers);
+        
+        \draw [->, thick, color=blue!70!black] (workers) -- node[above, font=\scriptsize, align=center] {Flux ODBC} (tableau);
+
+    \end{tikzpicture}
+    }
     \caption{Architecture matérielle et déploiement dans le cluster Big Data}
     \label{fig:deploy_dq}
 \end{figure}
@@ -522,14 +570,14 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \noindent
 \begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_oracle.png}
+    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/dbeaver.png}
     \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
-    \captionof{figure}{Oracle}
+    \captionof{figure}{DBeaver}
 \end{minipage}
 \hspace{0.03\textwidth}
 \begin{minipage}[c]{0.73\textwidth}
-    \textbf{Oracle NOVA} --- Système opérant source\\
-    {\small Base de données relationnelle hébergeant le Core Banking de la banque. Il s'agit du point d'entrée unique des données des clients physiques et moraux (Référentiel Tiers) et de la cible finale de correction.}
+    \textbf{DBeaver} --- Outil d'exploration de base de données\\
+    {\small Client SQL universel utilisé durant la phase de cadrage. Suite à l'ouverture de flux par l'équipe réseau, DBeaver nous a permis d'accéder au système opérant en lecture seule afin d'explorer la structure des tables sources et d'analyser un échantillon de données pour définir nos règles de qualité.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
@@ -672,4 +720,4 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 
 % =========================================================================
 \section*{Conclusion}
-Ce chapitre a décrit la conception complète de la solution de contrôle de la qualité du domaine Tiers. Nous avons structuré la dynamique d'exécution de nos scans et le cycle de vie des anomalies identifiées. La modélisation statique a fourni la modélisation de notre table de faits, le schéma relationnel et le catalogue complet des règles métier de la solution. Enfin, l'architecture logicielle (composants) et matérielle (déploiement) a été détaillée au sein de l'environnement de production. Le chapitre suivant présente l'implémentation physique et les résultats opérationnels obtenus.
+Ce chapitre a décrit la conception complète de la solution de contrôle de la qualité du domaine Tiers. Nous avons structuré la dynamique d'exécution de nos scans et le cycle de vie des anomalies identifiées. La modélisation statique a fourni la modélisation de notre table de faits, le schéma relationnel et le catalogue des règles métier de la solution. Enfin, l'architecture logicielle (composants) et matérielle (déploiement) a été détaillée au sein de l'environnement de production. Le chapitre suivant présente l'implémentation physique et les résultats opérationnels obtenus.
