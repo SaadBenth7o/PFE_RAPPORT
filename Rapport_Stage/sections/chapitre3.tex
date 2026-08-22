@@ -451,11 +451,13 @@ La planification, le déclenchement et le monitoring des scans de qualité sont 
 
 \subsubsection{Conception du dashboard Tableau}
 La restitution visuelle est structurée dans un dashboard Tableau interactif connecté en direct au dataset virtuel unique de Dremio. L'intelligence analytique (calcul des scores quotidiens moyens, taux de conformité globaux, regroupements par dimension de qualité ou par date) est configurée à l'aide de feuilles de calcul (sheets) et de filtres dynamiques directement dans Tableau Desktop, tirant parti de la table de faits unique. Le dashboard est structuré en trois onglets fonctionnels :
-\begin{enumerate}
-    \item \textbf{Vue d'ensemble (Dashboard Global)} : Centralise les KPIs de haut niveau (score général, répartition par statut) et l'évolution globale de la qualité pour les Data Owners.
-    \item \textbf{Heatmap Qualité} : Fournit une vue matricielle détaillée et temporelle par indicateur et par règle, permettant de repérer rapidement des dégradations soudaines ou l'efficacité des remédiations.
-    \item \textbf{Top Anomalies} : Isole les règles et les colonnes présentant des taux d'anomalies élevés, orientant les Data Stewards vers les actions correctives prioritaires dans NOVA.
-\end{enumerate}
+
+\paragraph{Vue d'ensemble (Dashboard Global) :} Centralise les indicateurs de haut niveau (score général moyen, distribution des contrôles par statut de conformité) et présente l'évolution globale de la qualité pour les Data Owners.
+
+\paragraph{Heatmap Qualité :} Fournit une vue matricielle détaillée et temporelle par indicateur et par règle, permettant de repérer rapidement des dégradations soudaines ou de mesurer l'impact des actions de remédiation.
+
+\paragraph{Top Anomalies :} Isole les règles et les colonnes présentant des taux d'anomalies élevés, orientant ainsi les Data Stewards vers les actions correctives prioritaires dans l'application source NOVA.
+
 Pour des raisons évidentes de sécurité et de conformité réglementaire (notamment les directives de Bank Al-Maghrib et la protection des données personnelles), toutes les données nominatives et les radicaux clients affichés dans les onglets opérationnels font l'objet d'un masquage ou d'un floutage systématique, garantissant la stricte confidentialité des informations sensibles.
 
 

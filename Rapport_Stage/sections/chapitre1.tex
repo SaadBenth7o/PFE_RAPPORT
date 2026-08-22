@@ -145,15 +145,7 @@ Sur le plan économique, le coût de la non-qualité est très élevé. La « r�
 \subsubsection*{Le domaine Tiers : Cartographie et données}
 Historiquement, la vérification de la qualité des données au sein de CIH BANK était un processus réactif déclenché sur demande, ce qui a motivé la création de l'entité Data Management (DM). Notre projet s'inscrit dans cette volonté d'amélioration continue et cible plus particulièrement le \textbf{Référentiel Tiers}. Ce référentiel regroupe l'ensemble des informations relatives aux personnes physiques et morales en relation avec la banque.
 
-Dans le cadre de l'ingestion des données vers le Data Lake, l'équipe travaille sur plus d'une dizaine de tables du domaine Tiers. À titre d'exemple et d'illustration, voici quelques-unes des tables principales extraites du système opérant Oracle NOVA (\texttt{CCM}) qui structurent notre périmètre de base :
-\begin{itemize}
-    \item \texttt{identity} : Données relatives aux pièces d'identité (type, numéro, date d'expiration),
-    \item \texttt{legalentity} : Informations sur les personnes morales (raison sociale, forme juridique),
-    \item \texttt{person} : Informations générales sur le statut du client (marché, agence, type),
-    \item \texttt{professionaldescription} : Caractéristiques professionnelles et financières des entités,
-    \item \texttt{jobs} : Nomenclature et détails des professions et catégories socio-professionnelles (CSP),
-    \item \textbf{\texttt{np\_description} (Natural Person Description)} : Données d'état civil, d'identification et informations KYC (Know Your Customer) pour les personnes physiques.
-\end{itemize}
+Dans le cadre de l'ingestion des données vers le Data Lake, l'équipe travaille sur plus d'une dizaine de tables du domaine Tiers. À titre d'illustration, les tables principales extraites du système opérant Oracle NOVA (\texttt{CCM}) qui structurent notre périmètre de base sont : \texttt{identity} (pièces d'identité), \texttt{legalentity} (personnes morales), \texttt{person} (statut client), \texttt{professionaldescription} (caractéristiques professionnelles), \texttt{jobs} (catégories socio-professionnelles CSP), ainsi que la table centrale \textbf{\texttt{np\_description}} (Natural Person Description) regroupant les données d'état civil et les informations KYC pour les personnes physiques.
 
 Bien que le pipeline automatisé de qualité de données déployé couvre l'ensemble du domaine Tiers (soit une quinzaine de tables issues de NOVA), \textbf{pour des soucis de clarté et d'illustration, les implémentations techniques et les règles de Data Quality présentées dans la suite de ce rapport se focaliseront particulièrement sur les tables \texttt{np\_description} et \texttt{jobs}}. Ces tables sont éminemment stratégiques : \texttt{np\_description} concentre les données KYC indispensables à l'identification réglementaire du client (nom, prénom, date de naissance, genre, nationalité, etc.), tandis que \texttt{jobs} contient des informations essentielles pour la catégorisation socio-professionnelle (CSP).
 
@@ -168,12 +160,14 @@ L'ensemble des données ingérées au sein de CIH BANK, incluant celles du domai
 \end{figure}
 
 L'architecture matérielle et logicielle de cette plateforme de production s'articule autour d'un \textbf{cluster Cloudera et Dremio} composé de 8 nœuds (3 Masters, 3 Workers, 2 Gateways). Le flux global des données, de la source à l'exploitation, suit un cycle de vie standardisé en plusieurs étapes :
-\begin{enumerate}
-    \item \textbf{Ingestion} : Les données brutes issues des systèmes opérants (Oracle NOVA, PowerCard, etc.) sont ingérées massivement via des scripts \textbf{Apache Sqoop} organisés par domaine métier. Les tables sont stockées au format \textbf{ORC} dans la zone RAW de Hive via HCatalog. L'authentification aux sources s'effectue par \textbf{Kerberos} (\texttt{kinit} avec keytab) ,
-    \item \textbf{Transformation} : Des pipelines PySpark packagés sous forme de fichiers \textbf{Wheel} (\texttt{.whl}), construits via le gestionnaire \textbf{PDM}, effectuent le nettoyage, le renommage des colonnes et l'enrichissement des données brutes pour les charger dans la zone de STAGING. Chaque écriture est tracée par une colonne d'audit \texttt{batch\_time} ,
-    \item \textbf{Virtualisation et Métadonnées} : Le moteur de données Dremio se connecte aux catalogues (Hive Metastore) pour virtualiser les tables. Il offre une couche sémantique puissante permettant de croiser et d'interroger les données sans les dupliquer ,
-    \item \textbf{Exposition et Datamarts} : Les données transformées sont consolidées et exposées sous forme de Datamarts (ou vues métiers spécifiques). Ces ensembles de données prêts à l'emploi alimentent les outils de restitution (Tableau) pour répondre aux besoins analytiques des métiers.
-\end{enumerate}
+
+\paragraph{1. Ingestion :} Les données brutes issues des systèmes opérants (Oracle NOVA, PowerCard, etc.) sont ingérées massivement via des scripts \textbf{Apache Sqoop} organisés par domaine métier. Les tables sont stockées au format \textbf{ORC} dans la zone RAW de Hive via HCatalog. L'authentification aux sources s'effectue par \textbf{Kerberos} (\texttt{kinit} avec keytab).
+
+\paragraph{2. Transformation :} Des pipelines PySpark packagés sous forme de fichiers \textbf{Wheel} (\texttt{.whl}), construits via le gestionnaire \textbf{PDM}, effectuent le nettoyage, le renommage des colonnes et l'enrichissement des données brutes pour les charger dans la zone de STAGING. Chaque écriture est tracée par une colonne d'audit \texttt{batch\_time}.
+
+\paragraph{3. Virtualisation et Métadonnées :} Le moteur de données Dremio se connecte aux catalogues (Hive Metastore) pour virtualiser les tables. Il offre une couche sémantique puissante permettant de croiser et d'interroger les données sans les dupliquer.
+
+\paragraph{4. Exposition et Datamarts :} Les données transformées sont consolidées et exposées sous forme de Datamarts (ou vues métiers spécifiques). Ces ensembles de données prêts à l'emploi alimentent les outils de restitution (Tableau) pour répondre aux besoins analytiques des métiers.
 
 \subsection{Critique de l'existant}
 Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à l'ensemble des tables du domaine Tiers. Pour illustrer l'impact de ces problèmes, nous prenons l'exemple des tables \texttt{np\_description} et \texttt{jobs}, qui contiennent des données KYC et CSP particulièrement sensibles concernant les personnes physiques :

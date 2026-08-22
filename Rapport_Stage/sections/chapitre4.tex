@@ -55,14 +55,13 @@ Tableau Desktop & Professional Edition 2024.1.2 \\
 
 \subsection{Installation hors-ligne de Soda Core}
 
-La politique stricte de sécurité des systèmes d'information (PSSI) de CIH BANK impose une isolation réseau (air-gap) des serveurs du cluster Big Data, interdisant par conséquent tout accès direct à Internet. L'exécution standard de la commande \texttt{pip install} pour rapatrier les dépendances depuis le registre public PyPI est donc impossible.
+La politique stricte de sécurité des systèmes d'information (PSSI) de CIH BANK impose une isolation réseau (air-gap) des serveurs du cluster Big Data, interdisant par conséquent tout accès direct à Internet. L'exécution standard de la commande \texttt{pip install} pour rapatrier les dépendances depuis le registre public PyPI est donc impossible. L'installation de Soda Core et de son connecteur Spark a été réalisée via une procédure d'installation hors-ligne (\textit{Offline Wheel Installation}) articulée en trois étapes :
 
-L'installation de Soda Core et de son connecteur Spark a été réalisée via une procédure d'installation hors-ligne (Offline Wheel Installation) :
-\begin{enumerate}
-    \item \textbf{Téléchargement des archives (Wheels)} : Sur un poste de travail disposant d'un accès à Internet, les archives des paquets \texttt{soda-core} et \texttt{soda-core-spark} ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format \texttt{.whl} dans un dossier dédié via la commande \texttt{pip download}.
-    \item \textbf{Transfert sécurisé via MobaXterm} : Le dossier d'archives a été transféré de manière sécurisée en SFTP vers le nœud Edge du cluster grâce à l'interface graphique de MobaXterm.
-    \item \textbf{Installation locale} : Sur le nœud Edge, les paquets ont été déployés dans l'environnement virtuel Python (venv) alloué à l'orchestrateur Airflow à l'aide de la commande \texttt{pip}, en forçant la recherche locale :
-\end{enumerate}
+\paragraph{1. Téléchargement des archives (Wheels) :} Sur un poste de travail disposant d'un accès à Internet, les archives des paquets \texttt{soda-core} et \texttt{soda-core-spark} ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format \texttt{.whl} dans un dossier dédié via la commande \texttt{pip download}.
+
+\paragraph{2. Transfert sécurisé via MobaXterm :} Le dossier d'archives a été transféré de manière sécurisée en SFTP vers le nœud Edge du cluster grâce à l'interface graphique de MobaXterm.
+
+\paragraph{3. Installation locale :} Sur le nœud Edge, les paquets ont été déployés dans l'environnement virtuel Python (venv) alloué à l'orchestrateur Airflow à l'aide de la commande \texttt{pip}, en forçant la recherche locale :
 
 \begin{lstlisting}[language=bash]
 source /opt/airflow/venv_dq/bin/activate
@@ -88,14 +87,17 @@ dq_tiers/                  (Projet DQ - Noeud Edge)
 
 \subsection{Principe de fonctionnement de Soda Core avec Spark}
 
-Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire. Le principe de fonctionnement adopté est le suivant :
-\begin{enumerate}
-    \item Le script Python crée une \textbf{SparkSession} avec support Hive activé.
-    \item Il charge les tables Hive brutes de la zone RAW sous forme de \textbf{DataFrames PySpark}.
-    \item Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires Spark} via \texttt{createOrReplaceTempView}.
-    \item Soda Core lit le fichier de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL}, et exécute ces requêtes distribuées sur le cluster via YARN.
-    \item Les résultats sont extraits sous forme de dictionnaire Python, puis structurés et persistés dans \textbf{3 tables Hive physiques} en mode \texttt{append}.
-\end{enumerate}
+Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire. Le flux de fonctionnement adopté s'articule de la manière suivante :
+
+\paragraph{Initialisation de la session Spark :} Le script Python crée une \textbf{SparkSession} avec le support du catalogue Hive activé.
+
+\paragraph{Chargement en DataFrames :} Il charge les tables Hive brutes de la zone RAW sous forme de \textbf{DataFrames PySpark}.
+
+\paragraph{Enregistrement des vues temporaires :} Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires Spark} en mémoire via la méthode \texttt{createOrReplaceTempView}.
+
+\paragraph{Traduction et exécution distribuée :} Soda Core lit le catalogue déclaratif de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL optimisées}, et soumet ces requêtes distribuées aux exécuteurs du cluster via YARN.
+
+\paragraph{Persistance des métriques et logs :} Les résultats sont extraits sous forme de structures Python, puis formatés et persistés dans les \textbf{3 tables Hive physiques} en mode \texttt{append}.
 
 \subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml} — exemplaire)}
 
@@ -164,14 +166,17 @@ checks for ccm_job:
         domaine: Tiers
 \end{lstlisting}
 
-Les fonctions d'évaluation SodaCL mobilisées dans notre catalogue s'articulent ainsi :
-\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
-    \item \textbf{\texttt{missing\_count}} : Dénombre les enregistrements pour lesquels l'attribut est nul ou vide.
-    \item \textbf{\texttt{invalid\_count}} : Évalue la conformité par rapport à un dictionnaire de valeurs autorisées (\texttt{valid values}) ou une expression régulière (\texttt{valid regex}).
-    \item \textbf{\texttt{duplicate\_count}} : Identifie les doublons d'enregistrements sur les clés d'identification métier (ex: \texttt{radical}).
-    \item \textbf{\texttt{freshness}} : Mesure l'écart temporel entre la valeur maximale d'une colonne date et l'instant d'évaluation du scan.
-    \item \textbf{\texttt{failed rows}} : Permet d'injecter une requête SQL arbitraire pour vérifier des règles multi-colonnes ou des jointures complexes.
-\end{itemize}
+Les fonctions d'évaluation SodaCL mobilisées dans notre catalogue de règles s'articulent ainsi :
+
+\paragraph{\texttt{missing\_count} :} Dénombre les enregistrements pour lesquels l'attribut est nul ou vide, permettant de valider l'exhaustivité des champs obligatoires.
+
+\paragraph{\texttt{invalid\_count} :} Évalue la conformité par rapport à un dictionnaire de valeurs autorisées (\texttt{valid values}) ou une expression régulière (\texttt{valid regex}).
+
+\paragraph{\texttt{duplicate\_count} :} Identifie les doublons d'enregistrements sur les clés d'identification métier (telles que le \texttt{radical} client).
+
+\paragraph{\texttt{freshness} :} Mesure l'écart temporel entre la valeur maximale d'une colonne date et l'instant d'évaluation du scan, garantissant l'actualité des données.
+
+\paragraph{\texttt{failed rows} :} Permet d'injecter une requête SQL arbitraire pour vérifier des règles multi-colonnes ou des jointures complexes entre référentiels.
 
 \subsection{Traduction des règles SodaCL en Spark SQL}
 
@@ -456,13 +461,16 @@ La figure \ref{fig:vuehome} présente la page d'accueil du dashboard, offrant un
 \end{figure}
 
 Cet onglet centralise les indicateurs de pilotage de haut niveau nécessaires aux décideurs et aux Data Owners :
-\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
-    \item \textbf{Score Général de qualité} : Affiche l'indicateur global (ex: 88,70\%) ainsi que sa variation comparative par rapport à la semaine précédente.
-    \item \textbf{Répartition des contrôles par statut} : Dénombre et quantifie les tests validés (PASS), en avertissement (WARN) ou en échec critique (FAIL) avec leurs pourcentages respectifs.
-    \item \textbf{Périmètre et couverture} : Précise le volume de tables sous contrôle et le nombre total de règles de qualité déployées en production.
-    \item \textbf{Évolution temporelle du score} : Retrace la dynamique de qualité sur les 5 dernières semaines sous forme de courbe d'analyse de tendance.
-    \item \textbf{Score par table} : Classement interactif permettant d'identifier immédiatement les tables sources nécessitant des actions d'assainissement prioritaires.
-\end{itemize}
+
+\paragraph{Score Général de qualité :} Affiche l'indicateur global (ex: 88,70\%) ainsi que sa variation comparative par rapport à la semaine précédente.
+
+\paragraph{Répartition des contrôles par statut :} Dénombre et quantifie les tests validés (PASS), en avertissement (WARN) ou en échec critique (FAIL) avec leurs pourcentages respectifs.
+
+\paragraph{Périmètre et couverture :} Précise le volume de tables sous contrôle et le nombre total de règles de qualité déployées en production.
+
+\paragraph{Évolution temporelle du score :} Retrace la dynamique de qualité sur les 5 dernières semaines sous forme de courbe d'analyse de tendance.
+
+\paragraph{Score par table :} Classement interactif permettant d'identifier immédiatement les tables sources nécessitant des actions d'assainissement prioritaires.
 
 \subsection{Onglet 2 — Heatmap Qualité}
 
@@ -476,10 +484,10 @@ La figure \ref{fig:heatmap} présente la vue matricielle détaillée.
 \end{figure}
 
 Cet onglet permet une analyse granulaire et temporelle du niveau de qualité :
-\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
-    \item \textbf{Granularité par indicateur} : Liste exhaustivement chaque attribut sous contrôle (\texttt{birthdate}, \texttt{gender}, \texttt{city}, etc.) associé à sa règle et sa dimension DQ.
-    \item \textbf{Matrice thermique temporelle (Heatmap)} : Colore les résultats quotidiens selon un gradient allant du rouge (non-conformité) au vert (conformité totale). Cette représentation visuelle permet de détecter instantanément les incidents techniques ponctuels ou de valider l'impact positif des campagnes de remédiation.
-\end{itemize}
+
+\paragraph{Granularité par indicateur :} Liste exhaustivement chaque attribut sous contrôle (\texttt{birthdate}, \texttt{gender}, \texttt{city}, etc.) associé à sa règle et sa dimension DQ.
+
+\paragraph{Matrice thermique temporelle (Heatmap) :} Colore les résultats quotidiens selon un gradient allant du rouge (non-conformité) au vert (conformité totale). Cette représentation visuelle permet de détecter instantanément les incidents techniques ponctuels ou de valider l'impact positif des campagnes de remédiation.
 
 \subsection{Onglet 3 — Top Anomalies}
 
@@ -493,11 +501,12 @@ La figure \ref{fig:anomaly} présente la vue orientée sur l'analyse et la remé
 \end{figure}
 
 Ce dernier onglet constitue l'outil d'action opérationnelle pour les Data Stewards :
-\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
-    \item \textbf{Ciblage des défaillances critiques} : Isole les règles et attributs présentant les taux d'anomalies les plus sévères.
-    \item \textbf{Diagramme de distribution des scores} : Un graphique en barres horizontales met en exergue le niveau de sévérité des défaillances pour chaque indicateur.
-    \item \textbf{Filtrage dynamique contextuel} : Des filtres interactifs (par table, par attribut, par dimension ou par date) permettent d'isoler rapidement les causes racines pour engager les corrections requises dans le système source NOVA.
-\end{itemize}
+
+\paragraph{Ciblage des défaillances critiques :} Isole les règles et attributs présentant les taux d'anomalies les plus sévères.
+
+\paragraph{Diagramme de distribution des scores :} Un graphique en barres horizontales met en exergue le niveau de sévérité des défaillances pour chaque indicateur.
+
+\paragraph{Filtrage dynamique contextuel :} Des filtres interactifs (par table, par attribut, par dimension ou par date) permettent d'isoler rapidement les causes racines pour engager les corrections requises dans le système source NOVA.
 
 \section*{Conclusion}
 
