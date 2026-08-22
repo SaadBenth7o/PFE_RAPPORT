@@ -71,51 +71,7 @@ Le diagramme d'activités présenté dans la figure \ref{fig:activity_dq} décri
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.9\textwidth}{!}{
-    \begin{tikzpicture}[
-        >=stealth, 
-        every node/.style={font=\normalsize}, 
-        block/.style={draw=blue!80!black, rectangle, rounded corners, fill=blue!5, minimum width=4cm, minimum height=1.2cm, align=center, drop shadow, thick}, 
-        decision/.style={draw=orange!80!black, diamond, aspect=2.5, fill=yellow!10, minimum width=3cm, minimum height=1.5cm, align=center, drop shadow, thick}
-    ]
-        % Nodes
-        \node (start) [draw, circle, fill=black, inner sep=3pt] at (0,0) {};
-        \node (ingest) [block] at (0,-1.5) {\textbf{Ingestion HDFS RAW} \\ (Données Tiers via Sqoop)};
-        
-        \node (scan_pipe) [block] at (0,-3.3) {\textbf{Contrôles Pipeline} \\ (Fraîcheur, Volumétrie)};
-        \node (dec_pipe) [decision] at (0,-5.5) {\textbf{Pipeline} \\ \textbf{Sain ?}};
-        \node (alert_pipe) [block, fill=red!10, draw=red!60!black] at (5,-5.5) {\textbf{Alerte Bloquante} \\ Arrêt du DAG};
-        \node (end_fail) [draw, circle, double=black, fill=black, inner sep=3pt] at (5,-7.5) {};
-        
-        \node (scan_biz) [block] at (0,-7.8) {\textbf{Exécution Règles Métier} \\ (Validité, Complétude...)};
-        \node (dec_biz) [decision] at (0,-10.0) {\textbf{Anomalies} \\ \textbf{détectées ?}};
-        
-        \node (score_ok) [block, fill=green!10, draw=green!60!black] at (5,-10.0) {\textbf{Validation} \\ Score = 100\%};
-        \node (end_ok) [draw, circle, double=black, fill=black, inner sep=3pt] at (5,-12.0) {};
-        
-        \node (score_fail) [block, fill=orange!10, draw=orange!60!black] at (0,-12.0) {\textbf{Historisation Anomalie}};
-        \node (remed) [block, fill=purple!10, draw=purple!60!black] at (0,-14.0) {\textbf{Correction Manuelle} \\ (Action Data Steward)};
-        
-        % Arrows
-        \draw [->, thick] (start) -- (ingest);
-        \draw [->, thick] (ingest) -- (scan_pipe);
-        \draw [->, thick] (scan_pipe) -- (dec_pipe);
-        \draw [->, thick, color=red!60!black] (dec_pipe) -- node[above, font=\small, font=\bfseries] {Non} (alert_pipe);
-        \draw [->, thick] (alert_pipe) -- (end_fail);
-        
-        \draw [->, thick, color=green!60!black] (dec_pipe) -- node[right, font=\small, font=\bfseries] {Oui} (scan_biz);
-        \draw [->, thick] (scan_biz) -- (dec_biz);
-        
-        \draw [->, thick, color=green!60!black] (dec_biz) -- node[above, font=\small, font=\bfseries] {Non (0 erreur)} (score_ok);
-        \draw [->, thick] (score_ok) -- (end_ok);
-        
-        \draw [->, thick, color=red!60!black] (dec_biz) -- node[right, font=\small, font=\bfseries] {Oui (> 0)} (score_fail);
-        \draw [->, thick] (score_fail) -- (remed);
-        
-        % Loop back
-        \draw [->, thick, dashed] (remed) .. controls (-4.5,-14.0) and (-4.5,-1.5) .. node[left, font=\small, align=center] {Nouveau passage\\(J+1)} (ingest);
-    \end{tikzpicture}
-    }
+    \includegraphics[width=0.9\textwidth, keepaspectratio]{figures/activity_dq_swimlanes.png}
     \caption{Diagramme d'activités du workflow de remédiation DQ}
     \label{fig:activity_dq}
 \end{figure}
@@ -499,59 +455,22 @@ La restitution visuelle est structurée dans un dashboard Tableau interactif con
 Pour des raisons évidentes de sécurité et de conformité réglementaire (notamment les directives de Bank Al-Maghrib et la protection des données personnelles), toutes les données nominatives et les radicaux clients affichés dans les onglets opérationnels font l'objet d'un masquage ou d'un floutage systématique, garantissant la stricte confidentialité des informations sensibles.
 
 
-\subsection{Architecture matérielle (diagramme de déploiement)}
-Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise l'architecture système et l'infrastructure distribuée de production sur laquelle est déployée notre solution au sein de CIH BANK.
+\subsection{Architecture matérielle et diagramme de déploiement}
+Le diagramme de déploiement de la figure \ref{fig:deploy_dq} modélise, conformément aux normes du standard \textbf{UML 2.5}, l'architecture physique et l'infrastructure distribuée de production sur laquelle est déployée notre solution de gouvernance et de contrôle qualité au sein de CIH BANK. 
+
+Ce modèle formalise la distribution des composants à travers trois niveaux structurants (\textit{tiers}) : les systèmes sources et postes d'administration en amont, le cluster Big Data sécurisé au centre, et la plateforme de restitution décisionnelle en aval.
 
 \begin{figure}[H]
     \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[
-        >=stealth,
-        font=\small,
-        server/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners, minimum width=4.5cm, minimum height=2.5cm, align=center, drop shadow, thick},
-        cluster/.style={draw=orange!80!black, rectangle, rounded corners, inner sep=15pt, fill=orange!5, dashed, thick},
-        ext/.style={draw=gray!80!black, cylinder, shape border rotate=90, aspect=0.25, fill=gray!10, minimum width=3.5cm, minimum height=2cm, align=center, drop shadow, thick},
-        bi/.style={draw=purple!80!black, rectangle, fill=purple!5, rounded corners, minimum width=3.5cm, minimum height=2cm, align=center, drop shadow, thick}
-    ]
-
-        % Coordinates for alignment
-        \node (edge) [server] at (0, 0) {\textbf{1 Nœud Edge (Gateway)} \\[0.1cm] \scriptsize $\bullet$ Apache Airflow (Workers) \\ \scriptsize $\bullet$ Soda Core (Python venv) \\ \scriptsize $\bullet$ Dremio Coordinator \\ \scriptsize $\bullet$ Hive Metastore};
-
-        \node (masters) [server] at (6.5, 0) {\textbf{3 Nœuds Masters} \\[0.1cm] \scriptsize $\bullet$ HDFS NameNodes (HA) \\ \scriptsize $\bullet$ YARN ResourceManager \\ \scriptsize $\bullet$ JournalNodes};
-
-        \node (workers) [server] at (6.5, -5) {\textbf{3 Nœuds Workers} \\[0.1cm] \scriptsize $\bullet$ HDFS DataNodes (RAW) \\ \scriptsize $\bullet$ YARN NodeManagers \\ \scriptsize $\bullet$ Dremio Executors};
-
-        % Cluster background
-        \begin{scope}[on background layer]
-            \node (cluster_bg) [cluster, fit=(edge) (masters) (workers), label={[font=\bfseries, text=orange!80!black]above:Cluster Big Data Cloudera CDP (Production)}] {};
-        \end{scope}
-
-        % External Systems
-        \node (oracle) [ext] at (-5.5, 0) {\textbf{Oracle NOVA} \\[0.1cm] \scriptsize Système Opérant \\ \scriptsize (Source de données)};
-
-        \node (tableau) [bi] at (12.5, -5) {\textbf{Serveur Tableau} \\[0.1cm] \scriptsize Visualisation BI \\ \scriptsize (Dashboard DQ)};
-
-        % Connections
-        \draw [->, thick, color=blue!70!black] (oracle) -- node[above, font=\scriptsize, align=center] {Ingestion Sqoop} (edge);
-        
-        \draw [->, thick, color=blue!70!black] (edge) -- node[above, font=\scriptsize, align=center] {Ordonnancement\\\& Métadonnées} (masters);
-        
-        \draw [<->, thick, color=blue!70!black] (masters) -- node[right, font=\scriptsize, align=left] {Ressources\\(YARN)} (workers);
-        
-        \draw [->, thick, color=blue!70!black] (edge) |- node[above, font=\scriptsize, near end, xshift=-1cm] {Exécution distribuée (Spark / Dremio)} (workers);
-        
-        \draw [->, thick, color=blue!70!black] (workers) -- node[above, font=\scriptsize, align=center] {Flux ODBC} (tableau);
-
-    \end{tikzpicture}
-    }
-    \caption{Architecture matérielle et déploiement dans le cluster Big Data}
+    \includegraphics[width=0.98\textwidth]{figures/deployment_uml_formal.png}
+    \caption{Diagramme de déploiement UML 2.5 de la solution Data Quality}
     \label{fig:deploy_dq}
 \end{figure}
 
-Le cluster Big Data Cloudera CDP 7.1.7 de production de CIH BANK est structuré autour de 8 nœuds distribués, configurés de la manière suivante :
+Le cluster Big Data Cloudera CDP de production de CIH BANK est structuré autour de 8 nœuds distribués, configurés de la manière suivante :
 \begin{itemize}
     \item \textbf{1 Nœud Edge (Gateway) principal} : Ce serveur sert de point d'entrée pour l'administration et l'orchestration des jobs. Il héberge les workers d'Apache Airflow, le coordinateur Dremio, ainsi que le service Hive Metastore. C'est sur ce nœud qu'est installé l'environnement virtuel Python contenant les packages \texttt{soda-core} et \texttt{soda-core-spark} ,
-    \item \textbf{3 Nœuds Masters} : Ils assurent la haute disponibilité du stockage (HDFS NameNodes configurés en Actif/Standby et JournalNodes) et la coordination de l'ordonnancement distributed. Ils hébergent également le YARN ResourceManager pour la répartition des ressources du cluster ,
+    \item \textbf{3 Nœuds Masters} : Ils assurent la haute disponibilité du stockage (HDFS NameNodes configurés en Actif/Standby et JournalNodes) et la coordination de l'ordonnancement distribué. Ils hébergent également le YARN ResourceManager pour la répartition des ressources du cluster ,
     \item \textbf{3 Nœuds Workers} : Ces serveurs gèrent le stockage local physique sous HDFS (DataNodes) et disposent des YARN NodeManagers pour allouer des conteneurs de calcul lors de l'exécution distribuée de nos requêtes PySpark et Dremio Executors.
 \end{itemize}
 
@@ -570,16 +489,17 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \vspace{0.4cm}
 
 \noindent
+\noindent
 \begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/dbeaver.png}
+    \includegraphics[width=1.2\textwidth, height=1.5cm, keepaspectratio]{figures/logos/dbeaver.png}
     \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
     \captionof{figure}{DBeaver}
 \end{minipage}
 \hspace{0.03\textwidth}
 \begin{minipage}[c]{0.73\textwidth}
     \textbf{DBeaver} --- Outil d'exploration de base de données\\
-    {\small Client SQL universel utilisé durant la phase de cadrage. Suite à l'ouverture de flux par l'équipe réseau, DBeaver nous a permis d'accéder au système opérant en lecture seule afin d'explorer la structure des tables sources et d'analyser un échantillon de données pour définir nos règles de qualité.}
+    {\small Client SQL universel qui nous a permis d'accéder directement aux bases de données et tables du système opérant NOVA, là où sont stockées les données brutes des Tiers. Cet accès a été crucial pour explorer la structure des tables sources et définir nos règles de qualité pertinentes.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
@@ -595,21 +515,6 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \begin{minipage}[c]{0.73\textwidth}
     \textbf{MobaXterm} --- Client SSH et terminal distant\\
     {\small Outil d'administration système tout-en-un fournissant un terminal avancé pour accéder de manière sécurisée aux serveurs Linux de la banque. Il s'avère indispensable pour configurer l'environnement, déployer les scripts et tester les pipelines en ligne de commande directement sur le nœud Edge du cluster.}
-\end{minipage}
-
-\vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
-
-\noindent
-\begin{minipage}[c]{0.22\textwidth}
-    \centering
-    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_sqoop.png}
-    \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
-    \captionof{figure}{Apache Sqoop}
-\end{minipage}
-\hspace{0.03\textwidth}
-\begin{minipage}[c]{0.73\textwidth}
-    \textbf{Apache Sqoop} --- Ingestion batch Oracle vers HDFS\\
-    {\small Technologie d'ingestion permettant le transfert en masse des tables NOVA vers l'infrastructure Hadoop. Les scripts sont organisés par domaine métier et par mode d'ingestion (remplacement complet ou incrémental par \textit{timestamp}). L'écriture s'effectue via HCatalog au format ORC, avec authentification Kerberos préalable.}
 \end{minipage}
 
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
@@ -647,7 +552,7 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \noindent
 \begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_soda.png}
+    \includegraphics[width=1.2\textwidth, height=1.5cm, keepaspectratio]{figures/logos/logo_soda.png}
     \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
     \captionof{figure}{Soda Core}
 \end{minipage}
@@ -662,7 +567,7 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
 \noindent
 \begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth, height=1.0cm, keepaspectratio]{figures/logos/logo_airflow.png}
+    \includegraphics[width=1.2\textwidth, height=1.5cm, keepaspectratio]{figures/logos/logo_airflow.png}
     \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
     \captionof{figure}{Apache Airflow}
 \end{minipage}
@@ -702,13 +607,12 @@ Pour s'insérer au mieux au sein du système d'information décisionnel et Big D
     {\small Solution BI standard de CIH BANK, connectée en direct à Dremio pour fournir un reporting réactif sur la qualité des tiers à l'intention des Data Owners.}
 \end{minipage}
 
-
 \vspace{0.4cm}\noindent\rule{\textwidth}{0.2pt}\vspace{0.3cm}
 
 \noindent
 \begin{minipage}[c]{0.22\textwidth}
     \centering
-    \includegraphics[width=0.8\textwidth, height=1.5cm, keepaspectratio]{figures/logos/logo_gitlab.png}
+    \includegraphics[width=1.2\textwidth, height=2.25cm, keepaspectratio]{figures/logos/logo_gitlab.png}
     \captionsetup{font=scriptsize}\renewcommand{\figurename}{Fig.}
     \captionof{figure}{GitLab}
 \end{minipage}
