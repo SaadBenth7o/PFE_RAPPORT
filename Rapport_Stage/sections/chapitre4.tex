@@ -164,13 +164,13 @@ checks for ccm_job:
         domaine: Tiers
 \end{lstlisting}
 
-Les fonctions SodaCL utilisées sont les suivantes :
-\begin{itemize}
-    \item \textbf{\texttt{missing\_count}} : Compte le nombre d'enregistrements où la colonne est nulle ou vide.
-    \item \textbf{\texttt{invalid\_count}} : Couplé à \texttt{valid values} ou \texttt{valid regex}, valide l'appartenance à un référentiel ou le respect d'un format.
-    \item \textbf{\texttt{duplicate\_count}} : Détecte les doublons sur une clé métier (ex: \texttt{radical}).
-    \item \textbf{\texttt{freshness}} : Mesure le délai entre la valeur maximale d'une colonne date et l'instant d'exécution du scan.
-    \item \textbf{\texttt{failed rows}} : Permet d'injecter du SQL pur pour des règles multi-colonnes complexes (cohérence, croisement de référentiels).
+Les fonctions d'évaluation SodaCL mobilisées dans notre catalogue s'articulent ainsi :
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
+    \item \textbf{\texttt{missing\_count}} : Dénombre les enregistrements pour lesquels l'attribut est nul ou vide.
+    \item \textbf{\texttt{invalid\_count}} : Évalue la conformité par rapport à un dictionnaire de valeurs autorisées (\texttt{valid values}) ou une expression régulière (\texttt{valid regex}).
+    \item \textbf{\texttt{duplicate\_count}} : Identifie les doublons d'enregistrements sur les clés d'identification métier (ex: \texttt{radical}).
+    \item \textbf{\texttt{freshness}} : Mesure l'écart temporel entre la valeur maximale d'une colonne date et l'instant d'évaluation du scan.
+    \item \textbf{\texttt{failed rows}} : Permet d'injecter une requête SQL arbitraire pour vérifier des règles multi-colonnes ou des jointures complexes.
 \end{itemize}
 
 \subsection{Traduction des règles SodaCL en Spark SQL}
@@ -369,26 +369,44 @@ CREATE TABLE dq_results.consolidated_execution_log (
 % =========================
 \section{Création du DAG Airflow indépendant}
 
-Pour garantir un découplage total avec le processus d'ingestion (Sqoop), un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été configuré dans Airflow. Ce DAG s'exécute quotidiennement à 00h00. Il utilise le \texttt{PythonOperator} couplé à \texttt{subprocess} pour déclencher le job d'évaluation de la qualité. En cas d'échec d'une règle critique, l'orchestrateur remonte une erreur globale.
+Pour garantir un découplage tout en sécurisant la chaîne de traitement, un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été configuré dans Airflow. Ce DAG s'exécute quotidiennement à 00h00 et implémente le pattern de \textbf{Data Quality Gate (Circuit Breaker)}. 
+
+La première tâche exécute exclusivement les contrôles de pipeline (fraîcheur, volumétrie). Si l'ingestion a échoué en amont, cette tâche remonte une alerte critique et stoppe immédiatement l'exécution. Ce n'est que si le pipeline est validé que la seconde tâche s'exécute pour calculer les scores métier de qualité (validité, complétude, etc.), évitant ainsi de générer de faux rapports sur des données périmées.
 
 \begin{lstlisting}[language=Python]
 from airflow.operators.python import PythonOperator
 import subprocess
 
-def run_dq_tiers(**context):
-    run_date = context['ds']
+def run_pipeline_checks(**context):
     result = subprocess.run(
-        ['python', '/opt/airflow/scripts/dq/dq_tiers_checks.py', '--run_date', run_date],
+        ['python', '/opt/airflow/scripts/dq/dq_pipeline_checks.py', '--run_date', context['ds']],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        raise Exception(f"Alerte Pipeline (Circuit Breaker declenche):\n{result.stderr}")
+
+def run_business_checks(**context):
+    result = subprocess.run(
+        ['python', '/opt/airflow/scripts/dq/dq_business_checks.py', '--run_date', context['ds']],
         capture_output=True, text=True
     )
     if result.returncode != 0:
         raise Exception(f"Echec DQ Tiers:\n{result.stderr}")
 
-dq_tiers_task = PythonOperator(
-    task_id='run_dq_tiers_checks',
-    python_callable=run_dq_tiers,
+pipeline_task = PythonOperator(
+    task_id='run_pipeline_checks',
+    python_callable=run_pipeline_checks,
     dag=dag
 )
+
+business_task = PythonOperator(
+    task_id='run_business_checks',
+    python_callable=run_business_checks,
+    dag=dag
+)
+
+# Dependance : Les regles metier ne s'executent que si l'ingestion est saine
+pipeline_task >> business_task
 \end{lstlisting}
 
 % =========================
@@ -437,13 +455,13 @@ La figure \ref{fig:vuehome} présente la page d'accueil du dashboard, offrant un
     \label{fig:vuehome}
 \end{figure}
 
-Cet onglet centralise les indicateurs de haut niveau :
-\begin{itemize}
-    \item Le \textbf{Score Général} de qualité (ex: 88,70\%) et sa variation par rapport à la semaine précédente.
-    \item La répartition des contrôles par statut : le nombre de tests en succès (PASS), en avertissement (WARN) ou en échec (FAIL), accompagnés de leurs pourcentages respectifs.
-    \item Le périmètre évalué (nombre de tables contrôlées et nombre de règles déployées).
-    \item L'\textbf{Évolution du score} sur les 5 dernières semaines sous forme de graphique linéaire, permettant d'observer la tendance globale de la qualité.
-    \item Un tableau de classement détaillant le \textbf{Score par table}, permettant d'identifier d'un coup d'œil les tables les plus problématiques (marquées en rouge "Fail").
+Cet onglet centralise les indicateurs de pilotage de haut niveau nécessaires aux décideurs et aux Data Owners :
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
+    \item \textbf{Score Général de qualité} : Affiche l'indicateur global (ex: 88,70\%) ainsi que sa variation comparative par rapport à la semaine précédente.
+    \item \textbf{Répartition des contrôles par statut} : Dénombre et quantifie les tests validés (PASS), en avertissement (WARN) ou en échec critique (FAIL) avec leurs pourcentages respectifs.
+    \item \textbf{Périmètre et couverture} : Précise le volume de tables sous contrôle et le nombre total de règles de qualité déployées en production.
+    \item \textbf{Évolution temporelle du score} : Retrace la dynamique de qualité sur les 5 dernières semaines sous forme de courbe d'analyse de tendance.
+    \item \textbf{Score par table} : Classement interactif permettant d'identifier immédiatement les tables sources nécessitant des actions d'assainissement prioritaires.
 \end{itemize}
 
 \subsection{Onglet 2 — Heatmap Qualité}
@@ -457,10 +475,10 @@ La figure \ref{fig:heatmap} présente la vue matricielle détaillée.
     \label{fig:heatmap}
 \end{figure}
 
-Cet onglet permet une analyse granulaire du niveau de qualité :
-\begin{itemize}
-    \item Il liste précisément chaque \textbf{Indicateur contrôlé} (ex: \texttt{birthdate}, \texttt{gender}, \texttt{city}, etc.) associé à sa \textbf{Règle de qualité} (Complétude, Validité, Conformité).
-    \item Une \textbf{carte de chaleur (Heatmap) temporelle} colore les résultats par date de scan, allant du rouge (échec total) au vert (succès total). Cette visualisation est extrêmement pertinente pour repérer rapidement des dégradations soudaines (incident de pipeline) ou confirmer l'efficacité d'une campagne de remédiation des données au fil du temps.
+Cet onglet permet une analyse granulaire et temporelle du niveau de qualité :
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
+    \item \textbf{Granularité par indicateur} : Liste exhaustivement chaque attribut sous contrôle (\texttt{birthdate}, \texttt{gender}, \texttt{city}, etc.) associé à sa règle et sa dimension DQ.
+    \item \textbf{Matrice thermique temporelle (Heatmap)} : Colore les résultats quotidiens selon un gradient allant du rouge (non-conformité) au vert (conformité totale). Cette représentation visuelle permet de détecter instantanément les incidents techniques ponctuels ou de valider l'impact positif des campagnes de remédiation.
 \end{itemize}
 
 \subsection{Onglet 3 — Top Anomalies}
@@ -474,11 +492,11 @@ La figure \ref{fig:anomaly} présente la vue orientée sur l'analyse et la remé
     \label{fig:anomaly}
 \end{figure}
 
-Ce dernier onglet est un véritable outil d'action pour les Data Stewards :
-\begin{itemize}
-    \item Il cible exclusivement les règles de qualité et les colonnes présentant des taux d'anomalies élevés.
-    \item Un diagramme en barres horizontales présente le \textbf{Score Global (\%)} pour chaque indicateur en souffrance. Plus la barre s'approche du rouge et de 0, plus la volumétrie de données non-conformes est critique.
-    \item Grâce aux filtres dynamiques situés en haut (par table, par indicateur, par règle ou par date), les utilisateurs métiers peuvent isoler instantanément les axes nécessitant des actions de correction collectives dans l'application source NOVA.
+Ce dernier onglet constitue l'outil d'action opérationnelle pour les Data Stewards :
+\begin{itemize}[leftmargin=1.2em, itemsep=2pt, topsep=2pt]
+    \item \textbf{Ciblage des défaillances critiques} : Isole les règles et attributs présentant les taux d'anomalies les plus sévères.
+    \item \textbf{Diagramme de distribution des scores} : Un graphique en barres horizontales met en exergue le niveau de sévérité des défaillances pour chaque indicateur.
+    \item \textbf{Filtrage dynamique contextuel} : Des filtres interactifs (par table, par attribut, par dimension ou par date) permettent d'isoler rapidement les causes racines pour engager les corrections requises dans le système source NOVA.
 \end{itemize}
 
 \section*{Conclusion}

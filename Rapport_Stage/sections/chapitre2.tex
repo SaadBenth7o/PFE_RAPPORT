@@ -9,30 +9,28 @@ Après avoir décrit le cadre général du projet et analysé le fonctionnement 
 Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le domaine Tiers. Ces problématiques, transverses à l'ensemble des tables du référentiel, seront principalement illustrées par les tables \texttt{np\_description} (et ses 40 colonnes telles que \texttt{name}, \texttt{firstname}, \texttt{civility}, \texttt{fatcaidentificationnumber}, etc.) et \texttt{jobs}. Les besoins se répartissent en quatre fonctionnalités majeures :
 
 \subsection{Automatisation et planification des contrôles}
-\begin{itemize}
-    \item \textbf{Sous-besoin 1.1 : Déclenchement automatique} : Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\uline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) (via un nouveau DAG dédié nommé \texttt{dq\_tiers\_daily00} s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00) ,
-    \item \textbf{Sous-besoin 1.2 : Orchestration intégrée} : L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les logs en temps réel.
-\end{itemize}
+\paragraph{Déclenchement automatique :} Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (\textbf{\uline{qui concernent environ 15 tables préfixées par \texttt{CCM\_*} pour le périmètre Tiers}}) via un nouveau DAG dédié nommé \texttt{dq\_tiers\_daily00} s'exécutant à 00h00, séparé du DAG d'ingestion \texttt{dailyow22} de 22h00.
+
+\paragraph{Orchestration intégrée :} L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les journaux de bord en temps réel.
 
 \subsection{Configuration déclarative des règles de qualité}
-\begin{itemize}
-    \item \textbf{Sous-besoin 2.1 : Moteur de règles dynamique} : Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source ,
-    \item \textbf{Sous-besoin 2.2 : Graduation des seuils et des alertes} : Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (ex : taux de valeurs manquantes inférieur à 5\%) et générer un statut de warning ou d'error selon la gravité de l'écart ,
-    \item \textbf{Sous-besoin 2.3 : Gestion des métadonnées} : Chaque règle doit être documentée avec des attributs métier (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité, etc.).
-\end{itemize}
+\paragraph{Moteur de règles dynamique :} Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source applicatif.
+
+\paragraph{Graduation des seuils et des alertes :} Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (par exemple un taux de valeurs manquantes inférieur à 5\%) et générer un statut de warning ou d'error selon la gravité de l'écart constaté.
+
+\paragraph{Gestion des métadonnées :} Chaque règle doit être documentée avec des attributs métier précis (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité fonctionnelle).
 
 \subsection{Historisation et traçabilité des indicateurs}
-\begin{itemize}
-    \item \textbf{Sous-besoin 3.1 : Persistance journalière} : À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans des tables d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution ,
-    \item \textbf{Sous-besoin 3.2 : Identification des anomalies (Remédiation)} : Le système doit capturer de manière détaillée la liste des enregistrements clients en anomalie en stockant leur identifiant technique (UUID) et leur radical (numéro client), ainsi que le libellé du contrôle en échec et sa criticité. Ces informations doivent être stockées dans une table d'anomalies pour actions correctives.
-\end{itemize}
+\paragraph{Persistance journalière :} À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans des tables d'historique de scores (base Hive dédiée \texttt{dq\_results}), indexée par date d'exécution.
+
+\paragraph{Suivi global des anomalies :} Le système doit capturer de manière consolidée les volumes et les pourcentages d'enregistrements en échec pour chaque contrôle de qualité. Cette approche permet de quantifier et d'isoler les axes de qualité défaillants sans avoir à stocker les données personnelles des clients concernés dans le système de Data Quality.
 
 \subsection{Restitution visuelle et aide à la décision}
-\begin{itemize}
-    \item \textbf{Sous-besoin 4.1 : Exposition des données} : Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels ,
-    \item \textbf{Sous-besoin 4.2 : Suivi de l'évolution temporelle} : Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (30 derniers jours) ,
-    \item \textbf{Sous-besoin 4.3 : Priorisation des remédiations} : Le tableau de bord doit fournir une liste opérationnelle des clients en anomalie triée par criticité décroissante, exportable par les Data Stewards pour traitement correctif dans le système source NOVA.
-\end{itemize}
+\paragraph{Exposition des données :} Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels.
+
+\paragraph{Suivi de l'évolution temporelle :} Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (sur les 30 derniers jours).
+
+\paragraph{Priorisation des axes de remédiation :} Le tableau de bord doit mettre en évidence les contrôles les plus critiques en échec et les dimensions de qualité les plus impactées, orientant ainsi les équipes métier vers les chantiers prioritaires de nettoyage dans le système source NOVA.
 
 % =========================
 \section{Besoins non fonctionnels}
@@ -50,11 +48,12 @@ L'ajout de nouvelles règles ou l'intégration de nouvelles colonnes du Référe
 
 \subsection{Sécurité}
 Les détails d'anomalies de qualité des données contiennent des informations clients sensibles (\texttt{name}, \texttt{firstname}, radicaux). Seuls les collaborateurs habilités du Data Office (Data Stewards, Data Project) et les Data Owners des départements concernés doivent être autorisés à accéder aux détails des anomalies. La solution s'appuie sur les mécanismes de sécurité existants de la plateforme :
-\begin{itemize}
-    \item \textbf{Authentification Kerberos} : L'ensemble des composants du cluster Cloudera (HDFS, Hive, Spark) sont sécurisés par Kerberos, garantissant l'identité de chaque service et utilisateur ,
-    \item \textbf{Autorisation Apache Ranger} : Les politiques d'accès aux tables Hive et aux espaces HDFS sont gérées de manière centralisée via Ranger, permettant un contrôle fin par rôle ,
-    \item \textbf{Annuaire LDAP / Active Directory} : L'authentification des utilisateurs Dremio et Tableau est déléguée à l'annuaire d'entreprise, assurant une gestion unifiée des identités.
-\end{itemize}
+
+\paragraph{Authentification Kerberos :} L'ensemble des composants du cluster Cloudera (HDFS, Hive, Spark) sont sécurisés par Kerberos, garantissant l'identité de chaque service et utilisateur.
+
+\paragraph{Autorisation Apache Ranger :} Les politiques d'accès aux tables Hive et aux espaces HDFS sont gérées de manière centralisée via Ranger, permettant un contrôle fin par rôle.
+
+\paragraph{Annuaire LDAP / Active Directory :} L'authentification des utilisateurs Dremio et Tableau est déléguée à l'annuaire d'entreprise, assurant une gestion unifiée des identités.
 
 \subsection{Conformité Réglementaire et Normative}
 Le système de gestion de la qualité des données doit s'inscrire dans un cadre strict de conformité légale et normative. Concernant la confidentialité et le traitement des données personnelles (noms, dates de naissance, identifiants), la solution doit impérativement respecter les exigences de la \textbf{loi 09-08} promulguée par la CNDP (Commission Nationale de contrôle de la Protection des Données à caractère personnel) au Maroc. De plus, la banque gérant potentiellement des clients résidant en Europe, la solution s'aligne sur les directives rigoureuses du \textbf{RGPD} (Règlement Général sur la Protection des Données). Enfin, la démarche globale de fiabilisation et de sécurisation de l'information s'appuie sur les standards internationaux, notamment la norme \textbf{ISO 8000} (standard mondial pour la qualité des données) et la norme \textbf{ISO/IEC 27001} (management de la sécurité de l'information).

@@ -193,11 +193,12 @@ La figure \ref{fig:fact_dq} illustre la structure des données générée par no
 
 \subsection{Modèle relationnel}
 Pour persister les résultats d'évaluation de la qualité des données, nous concevons un schéma physique relationnel indépendant au sein de la base de données Hive, basé sur trois tables distinctes :
-\begin{itemize}
-    \item \textbf{consolidated\_all\_column\_history} : Table principale d'historisation des indicateurs et scores de qualité par exécution, table et colonne. Elle inclut la criticité métier du contrôle.
-    \item \textbf{consolidated\_all\_checks\_config} : Table de configuration stockant la requête SQL générée par le moteur pour chaque règle évaluée, ainsi que sa criticité.
-    \item \textbf{consolidated\_execution\_log} : Table de journalisation technique traçant le succès ou l'échec d'exécution du contrôle.
-\end{itemize}
+
+\paragraph{consolidated\_all\_column\_history :} Table principale d'historisation des indicateurs et scores de qualité par exécution, table et colonne. Elle inclut la criticité métier du contrôle.
+
+\paragraph{consolidated\_all\_checks\_config :} Table de configuration stockant la requête SQL générée par le moteur pour chaque règle évaluée, ainsi que sa criticité.
+
+\paragraph{consolidated\_execution\_log :} Table de journalisation technique traçant le succès ou l'échec d'exécution du contrôle.
 
 
 
@@ -241,11 +242,12 @@ Les attributs clés de ces trois tables sont consolidés via Dremio pour fournir
 Les contrôles de qualité s'appliquent sur l'ensemble des données du domaine Tiers (informations signalétiques, données socioprofessionnelles, etc.). Afin d'offrir une structuration claire et directement exploitable, le catalogue des règles de gestion est organisé par \textbf{dimension de Data Quality} : Complétude, Conformité, Cohérence, Unicité et Actualité / Pipeline.
 
 L'établissement de ce catalogue découle d'une analyse exploratoire approfondie menée sur l'exhaustivité des dossiers physiques issus des tables du périmètre (\textbf{\uline{environ 15 tables \texttt{CCM\_*}}}). Cette analyse macroscopique a révélé des anomalies typiques et récurrentes de saisie au sein du système opérant Oracle NOVA, ce qui a directement guidé le choix et le paramétrage de nos dimensions de contrôle :
-\begin{itemize}
-    \item \textbf{Le phénomène des dates génériques} : Une concentration anormale de dates de naissance fixées au premier janvier a été identifiée, traduisant une saisie par défaut dans le système lorsque la date exacte n'est pas connue. Cela justifie notre règle de validité temporelle avec un seuil de tolérance métier adapté ,
-    \item \textbf{Le codage des champs de référence} : Des champs textuels (comme les villes) contiennent parfois des codes numériques issus d'anciens systèmes, nécessitant un contrôle strict par rapport au référentiel central pour assurer la cohérence des données ,
-    \item \textbf{La cohérence conditionnelle réglementaire (ex. FATCA)} : Certains identifiants fiscaux internationaux doivent obligatoirement répondre à des règles de remplissage croisées très strictes, dépendantes d'autres champs (comme le pays de nationalité ou de résidence fiscale).
-\end{itemize}
+
+\paragraph{Le phénomène des dates génériques :} Une concentration anormale de dates de naissance fixées au premier janvier a été identifiée, traduisant une saisie par défaut dans le système lorsque la date exacte n'est pas connue. Cela justifie notre règle de validité temporelle avec un seuil de tolérance métier adapté.
+
+\paragraph{Le codage des champs de référence :} Des champs textuels (comme les villes) contiennent parfois des codes numériques issus d'anciens systèmes, nécessitant un contrôle strict par rapport au référentiel central pour assurer la cohérence des données.
+
+\paragraph{La cohérence conditionnelle réglementaire (ex. FATCA) :} Certains identifiants fiscaux internationaux doivent obligatoirement répondre à des règles de remplissage croisées très strictes, dépendantes d'autres champs (comme le pays de nationalité ou de résidence fiscale).
 
 \subsubsection{Dimension Complétude}
 La dimension de complétude mesure le taux de renseignement des attributs obligatoires pour assurer l'exploitabilité opérationnelle des dossiers clients.
@@ -434,12 +436,14 @@ Les composants clés de cette architecture logicielle sont détaillés ci-dessou
 
 \subsubsection{Conception du moteur DQ — Soda Core}
 Le moteur de contrôle s'appuie sur le framework open source Soda Core, spécifiquement la bibliothèque Python \texttt{soda-core} et son connecteur Spark \texttt{soda-core-spark}. Afin d'assurer une exécution optimale dans notre écosystème Big Data, la conception logicielle repose sur les principes d'intégration suivants :
-\begin{itemize}
-    \item \textbf{Encapsulation PySpark et Vues Temporaires} : Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (\textbf{\uline{parmi la quinzaine de tables du périmètre \texttt{CCM\_*}, telles que \texttt{ccm\_npdescription} et \texttt{ccm\_job} citées en exemple}}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques ,
-    \item \textbf{Définition déclarative des règles (SodaCL)} : Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les règles fonctionnelles sont regroupées au sein d'un unique fichier métier \texttt{checks\_tiers.yml}, tandis que les vérifications techniques sont isolées dans \texttt{checks\_pipeline.yml} ,
-    \item \textbf{Extraction programmatique et typage des métadonnées} : Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle ,
-    \item \textbf{Persistance partitionnée dans trois tables Hive} : Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\allowbreak\_all\allowbreak\_column\allowbreak\_history} pour les résultats, \texttt{consolidated\allowbreak\_all\allowbreak\_checks\allowbreak\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\allowbreak\_execution\allowbreak\_log} pour la journalisation technique.
-\end{itemize}
+
+\paragraph{Encapsulation PySpark et Vues Temporaires :} Le script d'exécution principal (\texttt{dq\_tiers\_checks.py}) initialise une session Spark locale. Pour chaque table de la zone RAW à contrôler (\textbf{\uline{parmi la quinzaine de tables du périmètre \texttt{CCM\_*}, telles que \texttt{ccm\_npdescription} et \texttt{ccm\_job} citées en exemple}}), la session Spark charge la table sous forme de DataFrame PySpark, puis l'enregistre en tant que vue temporaire en mémoire via la méthode \texttt{createOrReplaceTempView()}. Cela permet à Soda Core d'exécuter l'analyse de qualité directement sur ces vues mémoire sans poser de verrous ou d'accès concurrents sur les tables Hive physiques.
+
+\paragraph{Définition déclarative des règles (SodaCL) :} Les contrôles de qualité sont externalisés dans des fichiers de règles YAML exploitant le langage déclaratif SodaCL. Les règles fonctionnelles sont regroupées au sein d'un unique fichier métier \texttt{checks\_tiers.yml}, tandis que les vérifications techniques sont isolées dans \texttt{checks\_pipeline.yml}.
+
+\paragraph{Extraction programmatique et typage des métadonnées :} Après l'exécution du scan, le script Python exploite les structures d'API de Soda Core (l'objet \texttt{Scan}) pour parcourir la liste des vérifications évaluées. Pour chaque règle, le script extrait dynamiquement le résultat (succès/échec), la valeur de la métrique, le seuil, la dimension (Completeness, Validity, Consistency), le domaine et la criticité (définis en tant qu'attributs personnalisés dans le YAML). Un score de conformité sur 100 est attribué pour chaque règle.
+
+\paragraph{Persistance partitionnée dans trois tables Hive :} Après l'exécution du scan, le script consolide les résultats et écrit dans trois tables physiques Hive distinctes : \texttt{consolidated\allowbreak\_all\allowbreak\_column\allowbreak\_history} pour les résultats, \texttt{consolidated\allowbreak\_all\allowbreak\_checks\allowbreak\_config} pour la configuration et les requêtes SQL générées, et \texttt{consolidated\allowbreak\_execution\allowbreak\_log} pour la journalisation technique.
 
 \subsubsection{Conception de l'orchestration Airflow}
 La planification, le déclenchement et le monitoring des scans de qualité sont gérés par un \textbf{nouveau DAG Airflow indépendant}, nommé \texttt{dq\_tiers\_daily00}, spécifiquement dédié au contrôle DQ. Ce DAG ne fait pas partie des projets ETL existants ; il s'agit d'un projet d'orchestration autonome. Afin de découpler totalement l'ingestion de la vérification de la qualité, ce DAG est planifié pour s'exécuter quotidiennement à \textbf{00h00} (minuit). Cela laisse une marge de sécurité de deux heures après le déclenchement du DAG d'ingestion Sqoop principal (\texttt{dailyow22}, prévu à 22h00). L'architecture d'exécution repose sur la soumission du script de qualité autonome (notre projet DQ) directement via Airflow. Cette séparation modulaire assure qu'une défaillance dans le DAG d'ingestion ne bloque pas ou ne corrompt pas la supervision de la qualité.
@@ -468,18 +472,19 @@ Ce modèle formalise la distribution des composants à travers trois niveaux str
 \end{figure}
 
 Le cluster Big Data Cloudera CDP de production de CIH BANK est structuré autour de 8 nœuds distribués, configurés de la manière suivante :
-\begin{itemize}
-    \item \textbf{1 Nœud Edge (Gateway) principal} : Ce serveur sert de point d'entrée pour l'administration et l'orchestration des jobs. Il héberge les workers d'Apache Airflow, le coordinateur Dremio, ainsi que le service Hive Metastore. C'est sur ce nœud qu'est installé l'environnement virtuel Python contenant les packages \texttt{soda-core} et \texttt{soda-core-spark} ,
-    \item \textbf{3 Nœuds Masters} : Ils assurent la haute disponibilité du stockage (HDFS NameNodes configurés en Actif/Standby et JournalNodes) et la coordination de l'ordonnancement distribué. Ils hébergent également le YARN ResourceManager pour la répartition des ressources du cluster ,
-    \item \textbf{3 Nœuds Workers} : Ces serveurs gèrent le stockage local physique sous HDFS (DataNodes) et disposent des YARN NodeManagers pour allouer des conteneurs de calcul lors de l'exécution distribuée de nos requêtes PySpark et Dremio Executors.
-\end{itemize}
+
+\paragraph{Nœud Edge (Gateway) principal :} Ce serveur sert de point d'entrée pour l'administration et l'orchestration des jobs. Il héberge les workers d'Apache Airflow, le coordinateur Dremio, ainsi que le service Hive Metastore. C'est sur ce nœud qu'est installé l'environnement virtuel Python contenant les packages \texttt{soda-core} et \texttt{soda-core-spark}.
+
+\paragraph{Nœuds Masters (3 serveurs en Haute Disponibilité) :} Ils assurent la haute disponibilité du stockage (HDFS NameNodes configurés en Actif/Standby et JournalNodes) et la coordination de l'ordonnancement distribué. Ils hébergent également le YARN ResourceManager pour la répartition des ressources du cluster.
+
+\paragraph{Nœuds Workers (3 serveurs) :} Ces serveurs gèrent le stockage local physique sous HDFS (DataNodes) et disposent des YARN NodeManagers pour allouer des conteneurs de calcul lors de l'exécution distribuée de nos requêtes PySpark et Dremio Executors.
 
 \subsubsection{Orchestration technique et protocole de sécurité Kerberos}
 Afin de sécuriser les accès aux données confidentielles du domaine Tiers de CIH BANK, l'exécution de la solution de qualité s'intègre au protocole de sécurité global du cluster :
-\begin{itemize}
-    \item \textbf{Authentification Kerberos} : Le cluster Cloudera étant sécurisé par Kerberos, l'autorisation d'accès aux répertoires HDFS RAW nécessite un ticket d'authentification valide. Avant de lancer le traitement, la tâche Airflow utilise le fichier keytab chiffré (\texttt{tiers\_dq.keytab}) associé au compte de service du domaine Tiers (\texttt{tiers\_dq\_service}) pour générer et renouveler automatiquement le ticket Kerberos via la commande système \texttt{kinit} ,
-    \item \textbf{Soumission du job Spark sur YARN} : Le script Python principal est exécuté en mode \texttt{spark-submit} avec le gestionnaire de ressources YARN configuré en mode \texttt{client} depuis le nœud Edge. Le driver Spark s'exécute ainsi localement sur le Gateway Node (dans le process Airflow), tandis que YARN ResourceManager alloue de manière distribuée des exécuteurs Spark au sein des nœuds Workers. Ces exécuteurs lisent et traitent en parallèle les partitions des fichiers HDFS de la zone RAW Hive.
-\end{itemize}
+
+\paragraph{Authentification Kerberos :} Le cluster Cloudera étant sécurisé par Kerberos, l'autorisation d'accès aux répertoires HDFS RAW nécessite un ticket d'authentification valide. Avant de lancer le traitement, la tâche Airflow utilise le fichier keytab chiffré (\texttt{tiers\_dq.keytab}) associé au compte de service du domaine Tiers (\texttt{tiers\_dq\_service}) pour générer et renouveler automatiquement le ticket Kerberos via la commande système \texttt{kinit}.
+
+\paragraph{Soumission du job Spark sur YARN :} Le script Python principal est exécuté en mode \texttt{spark-submit} avec le gestionnaire de ressources YARN configuré en mode \texttt{client} depuis le nœud Edge. Le driver Spark s'exécute ainsi localement sur le Gateway Node (dans le process Airflow), tandis que YARN ResourceManager alloue de manière distribuée des exécuteurs Spark au sein des nœuds Workers. Ces exécuteurs lisent et traitent en parallèle les partitions des fichiers HDFS de la zone RAW Hive.
 
 % =========================================================================
 \subsection{Technologies de l'écosystème utilisées}

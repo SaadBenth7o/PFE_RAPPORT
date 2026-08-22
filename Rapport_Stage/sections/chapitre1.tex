@@ -176,24 +176,26 @@ L'architecture matérielle et logicielle de cette plateforme de production s'art
 \end{enumerate}
 
 \subsection{Critique de l'existant}
-Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à l'ensemble des tables du domaine Tiers. Pour illustrer l'impact de ces problèmes, nous prendrons l'exemple des tables \texttt{np\_description} et \texttt{jobs}, qui contiennent des données KYC et CSP particulièrement sensibles concernant les personnes physiques :
-\begin{itemize}
-    \item \textbf{Absence de validation à la source :} Les données transitent vers Dremio sans aucune validation intermédiaire. Des incohérences flagrantes persistent, comme des discordances entre le genre et la civilité du client, ou des dates de naissance remplies par défaut (ex: 01/01/XXXX) ,
-    \item \textbf{Risques de non-conformité :} L'absence ou l'invalidité de certains champs critiques, tels que l'identifiant FATCA pour les clients concernés, expose la banque à des risques réglementaires et à d'éventuelles sanctions ,
-    \item \textbf{Démarche réactive et manuelle :} Lorsqu'une anomalie est repérée par les métiers en bout de chaîne, la réconciliation implique asynchronement plusieurs équipes pour des corrections curatives chronophages, créant ainsi des processus inefficaces ,
-    \item \textbf{Manque de traçabilité :} Aucune métrique n'est historisée. Les Data Stewards ne disposent d'aucun outil pour prioriser ou surveiller la santé des données KYC au quotidien.
-\end{itemize}
+Bien que cette infrastructure de production Cloudera soit robuste, l'absence d'un contrôle automatisé de la qualité des données en amont pose plusieurs problèmes majeurs transverses à l'ensemble des tables du domaine Tiers. Pour illustrer l'impact de ces problèmes, nous prenons l'exemple des tables \texttt{np\_description} et \texttt{jobs}, qui contiennent des données KYC et CSP particulièrement sensibles concernant les personnes physiques :
+
+\paragraph{Absence de validation à la source :} Les données transitent vers Dremio sans aucune validation intermédiaire. Des incohérences flagrantes persistent, comme des discordances entre le genre et la civilité du client, ou des dates de naissance remplies par défaut.
+
+\paragraph{Risques de non-conformité réglementaire :} L'absence ou l'invalidité de certains champs critiques, tels que l'identifiant FATCA pour les clients concernés, expose la banque à des risques réglementaires et à d'éventuelles sanctions.
+
+\paragraph{Démarche réactive et manuelle :} Lorsqu'une anomalie est repérée par les métiers en bout de chaîne, la réconciliation implique asynchronement plusieurs équipes pour des corrections curatives chronophages, créant ainsi des processus inefficaces.
+
+\paragraph{Manque de traçabilité et d'historisation :} Aucune métrique n'est historisée dans le temps. Les Data Stewards ne disposent d'aucun outil pour prioriser ou surveiller la santé des données KYC au quotidien.
 
 \subsection{Solution proposée}
-Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données} couvrant l'ensemble du périmètre Tiers, intégré directement dans la zone RAW de l'infrastructure Hadoop.
+Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \textbf{pipeline automatisé de contrôle de la qualité des données} couvrant l'ensemble du périmètre Tiers, intégré directement dans la zone RAW de l'infrastructure Hadoop. La solution technique s'articule autour de trois piliers majeurs :
 
-La solution technique s'articulera autour des axes suivants :
-\begin{itemize}
-    \item \textbf{Automatisation via Soda Core :} L'intégration de la bibliothèque Soda Core au sein des workflows Airflow existants permettra de valider systématiquement les données KYC (exhaustivité, unicité, validité de format, cohérence croisée) dès leur ingestion ,
-    \item \textbf{Approche proactive :} En signalant les anomalies en zone RAW, nous empêchons l'exploitation de données erronées par les métiers, appliquant ainsi le principe de la \textit{Rule of Ten} ,
-    \item \textbf{Monitoring et Restitution :} Les résultats des contrôles et les anomalies seront persistés dans des tables Hive dédiées. Un tableau de bord interactif sera ensuite construit pour offrir aux Data Stewards une vue claire de la santé des tables du référentiel. Les données sensibles affichées dans les tableaux de bord seront systématiquement anonymisées ou masquées pour garantir la confidentialité et la sécurité des informations clients.
-\end{itemize}
-Cette solution permettra d'améliorer considérablement la gouvernance des données du domaine Tiers tout en optimisant le temps de traitement des anomalies.
+\paragraph{Automatisation native via Soda Core :} L'intégration de la bibliothèque Soda Core au sein des workflows Airflow existants permet de valider systématiquement les données KYC (exhaustivité, unicité, validité de format, cohérence croisée) dès leur ingestion.
+
+\paragraph{Approche proactive et détection précoce :} En signalant les anomalies dès la zone RAW, nous empêchons l'exploitation de données erronées par les couches analytiques aval, appliquant ainsi le principe de la \textit{Rule of Ten}.
+
+\paragraph{Monitoring centralisé et restitution décisionnelle :} Les résultats des contrôles et les anomalies consolidées sont persistés dans des tables Hive dédiées. Un tableau de bord interactif est ensuite construit pour offrir aux Data Stewards une vue claire de la santé des tables du référentiel, tout en garantissant la stricte anonymisation des données personnelles.
+
+Cette solution permet d'améliorer considérablement la gouvernance des données du domaine Tiers tout en optimisant le temps de traitement des anomalies.
 
 \section{Choix du modèle de développement}
 

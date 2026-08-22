@@ -19,6 +19,9 @@
 \usepackage{float}
 \usepackage{longtable}
 \usepackage{pgfgantt}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.2em, itemsep=3pt, topsep=4pt, parsep=0pt, label=\textbullet}
+\setlist[enumerate]{leftmargin=1.5em, itemsep=3pt, topsep=4pt, parsep=0pt}
 
 % --- Configuration des en-têtes et pieds de page (fancyhdr) ---
 \usepackage{fancyhdr}
@@ -202,10 +205,13 @@
 \input{sections/abstract.tex}
 
 \newpage
+\pdfbookmark[0]{Table des matières}{toc}
 \tableofcontents
 \newpage
+\pdfbookmark[0]{Liste des figures}{lof}
 \listoffigures
 \newpage
+\pdfbookmark[0]{Liste des tableaux}{lot}
 \listoftables
 \newpage
 \input{sections/abbreviations.tex}
