@@ -407,7 +407,7 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
 
         % Ligne 3
         \node (soda) [comp, below=0.45cm of lake] {$\ll$composant$\gg$ \\ \textbf{Moteur DQ} \\ \scriptsize(Soda Core / Python)};
-        \node (dag_dq) [orchestrator, left=1.2cm of soda] {$\ll$ordonnanceur$\gg$ \\ \textbf{DAG \texttt{daily\_dq\_00}} \\ \scriptsize(Qualité à 00h00)};
+        \node (dag_dq) [orchestrator, left=1.2cm of soda] {$\ll$ordonnanceur$\gg$ \\ \textbf{DAG \texttt{dq\_tiers\_daily00}} \\ \scriptsize(Qualité à 00h00)};
 
         % Ligne 4
         \node (res) [db, below=0.45cm of soda] {$\ll$base de données$\gg$ \\ \textbf{Résultats DQ} \\ \scriptsize(Hive / HDFS)};
