@@ -392,30 +392,31 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
 
 \begin{figure}[H]
     \centering
+    \resizebox{0.56\textwidth}{!}{
     \begin{tikzpicture}[>=triangle 60, every node/.style={font=\small}, 
-        comp/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners=1mm, minimum width=4cm, minimum height=1.4cm, align=center, drop shadow},
-        db/.style={draw=blue!80!black, cylinder, shape border rotate=90, aspect=0.25, fill=blue!5, minimum width=4cm, minimum height=1.6cm, align=center, drop shadow},
-        orchestrator/.style={draw=orange!60!black, rectangle, fill=orange!10, rounded corners=1mm, minimum width=4cm, minimum height=1.4cm, align=center, drop shadow}]
+        comp/.style={draw=blue!80!black, rectangle, fill=blue!5, rounded corners=1mm, minimum width=3.6cm, minimum height=0.95cm, align=center, drop shadow},
+        db/.style={draw=blue!80!black, cylinder, shape border rotate=90, aspect=0.25, fill=blue!5, minimum width=3.6cm, minimum height=1.1cm, align=center, drop shadow},
+        orchestrator/.style={draw=orange!60!black, rectangle, fill=orange!10, rounded corners=1mm, minimum width=3.6cm, minimum height=0.95cm, align=center, drop shadow}]
         
         % Ligne 1
         \node (dag_ing) [orchestrator] {$\ll$ordonnanceur$\gg$ \\ \textbf{DAG \texttt{dailyow22}} \\ \scriptsize(Ingestion à 22h00)};
-        \node (ingest) [comp, right=2cm of dag_ing] {$\ll$composant$\gg$ \\ \textbf{Module d'Ingestion} \\ \scriptsize(Apache Sqoop)};
+        \node (ingest) [comp, right=1.2cm of dag_ing] {$\ll$composant$\gg$ \\ \textbf{Module d'Ingestion} \\ \scriptsize(Apache Sqoop)};
 
         % Ligne 2
-        \node (lake) [db, below=1cm of ingest] {$\ll$base de données$\gg$ \\ \textbf{Zone RAW} \\ \scriptsize(Hive / HDFS)};
+        \node (lake) [db, below=0.45cm of ingest] {$\ll$base de données$\gg$ \\ \textbf{Zone RAW} \\ \scriptsize(Hive / HDFS)};
 
         % Ligne 3
-        \node (soda) [comp, below=1cm of lake] {$\ll$composant$\gg$ \\ \textbf{Moteur DQ} \\ \scriptsize(Soda Core / Python)};
-        \node (dag_dq) [orchestrator, left=2cm of soda] {$\ll$ordonnanceur$\gg$ \\ \textbf{DAG \texttt{daily\_dq\_00}} \\ \scriptsize(Qualité à 00h00)};
+        \node (soda) [comp, below=0.45cm of lake] {$\ll$composant$\gg$ \\ \textbf{Moteur DQ} \\ \scriptsize(Soda Core / Python)};
+        \node (dag_dq) [orchestrator, left=1.2cm of soda] {$\ll$ordonnanceur$\gg$ \\ \textbf{DAG \texttt{daily\_dq\_00}} \\ \scriptsize(Qualité à 00h00)};
 
         % Ligne 4
-        \node (res) [db, below=1cm of soda] {$\ll$base de données$\gg$ \\ \textbf{Résultats DQ} \\ \scriptsize(Hive / HDFS)};
+        \node (res) [db, below=0.45cm of soda] {$\ll$base de données$\gg$ \\ \textbf{Résultats DQ} \\ \scriptsize(Hive / HDFS)};
 
         % Ligne 5
-        \node (dremio) [comp, below=1cm of res] {$\ll$composant$\gg$ \\ \textbf{Couche Virtualisation} \\ \scriptsize(Dremio)};
+        \node (dremio) [comp, below=0.45cm of res] {$\ll$composant$\gg$ \\ \textbf{Couche Virtualisation} \\ \scriptsize(Dremio)};
 
         % Ligne 6
-        \node (tableau) [comp, below=1cm of dremio] {$\ll$composant$\gg$ \\ \textbf{Dashboard} \\ \scriptsize(Tableau)};
+        \node (tableau) [comp, below=0.45cm of dremio] {$\ll$composant$\gg$ \\ \textbf{Dashboard} \\ \scriptsize(Tableau)};
 
         % Connectors
         \draw [->, dashed, line width=1pt, orange!80!black] (dag_ing) -- node[above, font=\scriptsize] {$\ll$déclenche$\gg$} (ingest);
@@ -428,6 +429,7 @@ L'architecture logicielle de notre solution s'articule autour de modules découp
         \draw [->, line width=1pt, blue!70!black] (dremio) -- node[right, font=\scriptsize] {$\ll$lit$\gg$} (res);
         \draw [->, line width=1pt, blue!70!black] (tableau) -- node[right, font=\scriptsize] {$\ll$requête$\gg$} (dremio);
     \end{tikzpicture}
+    }
     \caption{Diagramme de composants logiciels de la solution DQ}
     \label{fig:components_dq}
 \end{figure}
