@@ -71,33 +71,38 @@ pip install --no-index --find-links=./soda_wheels soda-core-spark
 % =========================
 \section{Implémentation du moteur DQ — Soda Core et Spark}
 
-\subsection{Arborescence du projet DQ}
+\subsection{Arborescence et packaging du projet DQ (\texttt{dq\_tiers})}
 
-Le moteur de Data Quality est structuré en un projet Python autonome, suivant les standards de packaging de l'équipe Data Office (même architecture que les projets \texttt{py-khawarizmi} et \texttt{sddiqi}). Il est packagé via \textbf{PDM} et livré sous forme de fichier \textbf{Wheel} (\texttt{.whl}). L'arborescence suivante présente une vue simplifiée des fichiers essentiels :
+Le moteur de Data Quality est structuré sous la forme d'un projet Python autonome nommé \texttt{dq\_tiers}, suivant scrupuleusement les standards d'ingénierie et de packaging en vigueur au sein du Data Office de CIH BANK (à l'instar des projets de transformation \texttt{py-khawarizmi} et \texttt{sddiqi}). Il est packagé via le gestionnaire moderne \textbf{PDM} (\textit{Python Development Master}) avec spécification conforme à la PEP 621 (\texttt{pyproject.toml}), et distribué sous forme de paquet \textbf{Wheel} (\texttt{.whl}).
+
+L'arborescence du projet s'articule comme suit sur le nœud Edge :
 
 \begin{lstlisting}
-dq_tiers/                  (Projet DQ - Noeud Edge)
-|-- dq_endpoint.py         # Point d'entree (Script principal Python)
-|-- configuration/
-|   +-- checks_tiers.yml   # Fichier YAML contenant toutes les regles DQ
-+-- context/
-    |-- scan_runner.py     # Module d'execution des scans Soda Core
-    +-- result_writer.py   # Script/Module Python contenant la fonction de persistance
+dq_tiers/                           # Racine du projet Data Quality Tiers
+|-- pyproject.toml                 # Definition des metadonnees et dependances PDM
+|-- pdm.lock                       # Verrouillage deterministe des versions
+|-- dq_tiers_endpoint.py           # Point d'entree CLI principal du moteur DQ
+|-- resources/
+|   +-- configuration/
+|       +-- checks_tiers.yml       # Catalogue declaratif des regles SodaCL
++-- src/
+    +-- dq_tiers/
+        |-- __init__.py
+        |-- context/
+        |   |-- spark_session.py   # Initialisation SparkSession avec support Hive
+        |   |-- pipeline_gate.py   # Module Circuit Breaker (fraicheur & volumetrie)
+        |   +-- scan_runner.py     # Execution distribuee des scans Soda Core
+        +-- persistance/
+            +-- hive_writer.py     # Module de persistance ORC en mode append
 \end{lstlisting}
 
 \subsection{Principe de fonctionnement de Soda Core avec Spark}
 
-Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire. Le flux de fonctionnement adopté s'articule de la manière suivante :
+Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque \texttt{soda-core-spark-df} repose sur le traitement en mémoire distribuée. Le flux de fonctionnement s'articule en deux phases séquentielles :
 
-\paragraph{Initialisation de la session Spark :} Le script Python crée une \textbf{SparkSession} avec le support du catalogue Hive activé.
+\paragraph{Phase 1 — Contrôle de Santé du Pipeline (Data Quality Gate) :} Avant toute évaluation des règles métier, le module \texttt{pipeline\_gate.py} inspecte la fraîcheur des partitions HDFS brutes et le différentiel volumétrique (\texttt{row\_count}) par rapport à la source Oracle NOVA. Si l'ingestion quotidienne Sqoop de 22h00 a échoué ou présente un retard anormal, le \textit{Circuit Breaker} s'active, consigne l'incident et interrompt le flux afin d'éviter la génération de rapports erronés sur des données obsolètes.
 
-\paragraph{Chargement en DataFrames :} Il charge les tables Hive brutes de la zone RAW sous forme de \textbf{DataFrames PySpark}.
-
-\paragraph{Enregistrement des vues temporaires :} Ces DataFrames sont enregistrés en tant que \textbf{vues temporaires Spark} en mémoire via la méthode \texttt{createOrReplaceTempView}.
-
-\paragraph{Traduction et exécution distribuée :} Soda Core lit le catalogue déclaratif de règles YAML, le traduit automatiquement en \textbf{requêtes Spark SQL optimisées}, et soumet ces requêtes distribuées aux exécuteurs du cluster via YARN.
-
-\paragraph{Persistance des métriques et logs :} Les résultats sont extraits sous forme de structures Python, puis formatés et persistés dans les \textbf{3 tables Hive physiques} en mode \texttt{append}.
+\paragraph{Phase 2 — Évaluation Distribuée et Persistance :} Une fois le pipeline validé, le script charge les tables Hive de la zone RAW en \textbf{DataFrames PySpark}, les enregistre en tant que \textbf{vues temporaires Spark} en mémoire via \texttt{createOrReplaceTempView()}, puis traduit et soumet l'ensemble du catalogue SodaCL aux exécuteurs YARN. Les résultats sont ensuite sérialisés et persistés dans les 3 tables Hive physiques.
 
 \subsection{Fichier de configuration YAML (\texttt{checks\_tiers.yml} — exemplaire)}
 
@@ -108,32 +113,32 @@ Les règles métier sont définies de manière déclarative en utilisant le lang
 # Regles Data Quality - Domaine Tiers (KYC & CSP)
 
 checks for ccm_npdescription:
-  # --- Completude ---
+  # --- Completude KYC ---
   - missing_count(name) = 0:
-      name: "KYC-01 | Completude | Nom"
+      name: "KYC-01 | Completude | Nom obligatoire"
       attributes:
         criticite: CRITIQUE
         dimension: completeness
         domaine: Tiers
 
   - missing_count(first_name) = 0:
-      name: "KYC-02 | Completude | Prenom"
+      name: "KYC-02 | Completude | Prenom obligatoire"
       attributes:
         criticite: CRITIQUE
         dimension: completeness
 
-  # --- Validite ---
+  # --- Validite KYC ---
   - invalid_count(gender) = 0:
       valid values: ["M", "F"]
-      name: "KYC-06 | Validite | Genre hors referentiel"
+      name: "KYC-06 | Validite | Genre conforme au referentiel"
       attributes:
         criticite: HAUTE
         dimension: validity
         domaine: Tiers
 
-  # --- Unicite ---
+  # --- Unicite KYC ---
   - duplicate_count(radical) = 0:
-      name: "KYC-07 | Unicite | Doublon radical client"
+      name: "KYC-07 | Unicite | Unicite stricte du radical client"
       attributes:
         criticite: CRITIQUE
         dimension: uniqueness
@@ -141,27 +146,27 @@ checks for ccm_npdescription:
 checks for ccm_job:
   # --- Completude CSP ---
   - missing_count(professional_sector) = 0:
-      name: "CSP-01 | Completude | Secteur professionnel"
+      name: "CSP-01 | Completude | Secteur professionnel obligatoire"
       attributes:
         criticite: CRITIQUE
         dimension: completeness
 
-  # --- Fraicheur ---
+  # --- Fraicheur Pipeline (Gate) ---
   - freshness(batch_datetime) < 26h:
-      name: "CSP-04 | Fraicheur | Retard batch superieur a 26h"
+      name: "CSP-04 | Fraicheur | Retard batch ingestion < 26h"
       attributes:
-        criticite: HAUTE
+        criticite: CRITIQUE
         dimension: timeliness
 
-  # --- Regle SQL personnalisee (failed rows) ---
+  # --- Regle SQL personnalisee multi-attributs (failed rows) ---
   - failed rows:
-      name: "CSP-05 | Coherence | Employeur invalide pour ce secteur"
+      name: "CSP-05 | Coherence | Incoherence employeur / situation"
       fail query: |
         SELECT radical, employer, professional_sector 
         FROM ccm_job 
         WHERE employer = 'SANS EMPLOI' AND professional_sector != 'CHOMAGE'
       attributes:
-        criticite: MOYENNE
+        criticite: HAUTE
         dimension: consistency
         domaine: Tiers
 \end{lstlisting}
@@ -225,34 +230,35 @@ SELECT MAX(batch_datetime) AS last_batch FROM ccm_job
 -- et compare le resultat en heures a la limite de 26h.
 \end{lstlisting}
 
-\subsection{Script Python principal (\texttt{dq\_tiers\_checks.py})}
+\subsection{Script d'exécution principal (\texttt{dq\_tiers\_endpoint.py})}
 
-Le script Python principal orchestre l'exécution complète. Soda Core exécutant les checks sur Spark ne persiste pas automatiquement les résultats dans Hive (contrairement à l'intégration cloud). C'est le script Python qui extrait la matrice de résultats JSON via \texttt{get\_scan\_results()}, l'aplatit, puis structure les données en \textbf{3 DataFrames} dont les schémas respectent exactement les tables physiques définies en conception. Les écritures se font systématiquement en mode \textbf{append} pour historiser chaque run journalier.
+Le script Python principal orchestre l'exécution complète. Soda Core exécutant les checks sur Spark ne persiste pas automatiquement les résultats dans Hive (contrairement à l'intégration cloud). C'est notre module Python qui extrait la matrice de résultats JSON via \texttt{get\_scan\_results()}, l'aplatit, puis structure les données en \textbf{3 DataFrames} dont les schémas respectent exactement les tables physiques définies en conception. Les écritures se font systématiquement en mode \textbf{append} pour historiser chaque run journalier.
 
 \begin{lstlisting}[language=Python]
-# dq_tiers_checks.py
+# dq_tiers_endpoint.py
 import datetime, uuid, argparse
 from datetime import date
 from pyspark.sql import SparkSession, Row
 from soda.scan import Scan
 
-def run_dq_checks(run_date: str):
-    # --- 1. SparkSession avec support Hive ---
+def run_dq_pipeline(run_date: str):
+    # --- 1. Initialisation SparkSession avec support Hive & Kerberos ---
     spark = SparkSession.builder \
-        .appName("DQ_Tiers_Checks") \
+        .appName("DQ_Tiers_Engine") \
         .enableHiveSupport() \
         .getOrCreate()
 
     # --- 2. Chargement des tables RAW en vues temporaires Spark ---
-    for table in ["ccm_npdescription", "ccm_job"]:
+    tables_tiers = ["ccm_npdescription", "ccm_job"]
+    for table in tables_tiers:
         spark.sql(f"SELECT * FROM raw_nova_referentieltiers.{table}") \
              .createOrReplaceTempView(table)
 
-    # --- 3. Scan Soda Core ---
+    # --- 3. Execution du scan Soda Core ---
     scan = Scan()
     scan.set_data_source_name("spark_df")
     scan.add_spark_session(spark)
-    scan.add_sodacl_yaml_file("checks/checks_tiers.yml")
+    scan.add_sodacl_yaml_file("resources/configuration/checks_tiers.yml")
     scan.execute()
     results = scan.get_scan_results()
 
@@ -270,81 +276,61 @@ def run_dq_checks(run_date: str):
         total    = check.get("metrics", {}).get("row_count", 0) or 0
         anomalies= int(check.get("metrics", {}).get("value", 0) or 0)
 
-        # Recuperation SQL genere par Soda Core
-        sql_gen = next(
-            (q.get("sql","") for q in results.get("queries",[])
-             if qid in q.get("name","")), ""
-        )
+        # Recuperation de la requete Spark SQL generee
+        sql_gen = next((q.get("sql","") for q in results.get("queries",[]) if qid in q.get("name","")), "")
         exec_ok = (outcome != "error")
 
-        # -- Table 1 : consolidated_all_column_history --
+        # -- Table 1 : consolidated_all_column_history (13 colonnes) --
         history_rows.append(Row(
-            run_id          = run_id,
-            query_id        = qid,
-            colonne_controlee = col,
-            chemin_source   = f"raw_nova_referentieltiers.{dataset}",
-            table_dataset   = dataset,
-            domaine_metier  = attrs.get("domaine", "Tiers"),
-            type_regle_dq   = attrs.get("dimension", "completeness"),
-            volume_total    = total,
-            lignes_conformes = total - anomalies,
-            score_qualite_pct = score,
-            statut          = outcome.upper(),
-            date_execution  = now,
-            criticite       = attrs.get("criticite", "HAUTE")
+            run_id = run_id, query_id = qid, colonne_controlee = col,
+            chemin_source = f"raw_nova_referentieltiers.{dataset}",
+            table_dataset = dataset, domaine_metier = attrs.get("domaine", "Tiers"),
+            type_regle_dq = attrs.get("dimension", "completeness"),
+            volume_total = total, lignes_conformes = total - anomalies,
+            score_qualite_pct = score, statut = outcome.upper(),
+            date_execution = now, criticite = attrs.get("criticite", "HAUTE")
         ))
 
-        # -- Table 2 : consolidated_all_checks_config --
+        # -- Table 2 : consolidated_all_checks_config (8 colonnes) --
         config_rows.append(Row(
-            run_id    = run_id,
-            query_id  = qid,
-            run_date  = run_date,
-            table     = dataset,
-            domain    = attrs.get("domaine", "Tiers"),
-            rule      = check.get("name", ""),
-            sql       = sql_gen,
-            updated_at = now,
-            criticite = attrs.get("criticite", "HAUTE")
+            run_id = run_id, query_id = qid, run_date = run_date,
+            table = dataset, domain = attrs.get("domaine", "Tiers"),
+            rule = check.get("name", ""), sql = sql_gen,
+            updated_at = now, criticite = attrs.get("criticite", "HAUTE")
         ))
 
-        # -- Table 3 : consolidated_execution_log --
+        # -- Table 3 : consolidated_execution_log (10 colonnes) --
         log_rows.append(Row(
-            run_id          = run_id,
-            query_id        = qid,
-            run_date        = run_date,
-            table           = dataset,
-            domain          = attrs.get("domaine", "Tiers"),
-            rule            = check.get("name", ""),
+            run_id = run_id, query_id = qid, run_date = run_date,
+            table = dataset, domain = attrs.get("domaine", "Tiers"),
+            rule = check.get("name", ""),
             check_execution_status = "SUCCESS" if exec_ok else "ERROR",
-            check_error_message    = "" if exec_ok else str(check.get("error","")),
-            check_timestamp        = now,
-            run_execution_status   = "SUCCESS",
-            run_error_message      = "",
-            updated_at             = now
+            check_error_message = "" if exec_ok else str(check.get("error","")),
+            check_timestamp = now, run_execution_status = "SUCCESS",
+            run_error_message = "", updated_at = now
         ))
 
-    # --- 4. APPEND dans les 3 tables Hive physiques ---
+    # --- 4. Persistance en mode APPEND dans les 3 tables Hive physiques ---
     spark.createDataFrame(history_rows).write.mode("append") \
          .saveAsTable("dq_results.consolidated_all_column_history")
-
     spark.createDataFrame(config_rows).write.mode("append") \
          .saveAsTable("dq_results.consolidated_all_checks_config")
-
     spark.createDataFrame(log_rows).write.mode("append") \
          .saveAsTable("dq_results.consolidated_execution_log")
 
     spark.stop()
-    print(f"[DQ OK] Run {run_id} | {len(history_rows)} checks persistes.")
+    print(f"[DQ SODA OK] Run {run_id} persiste avec succes ({len(history_rows)} checks).")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--run_date", default=str(date.today()))
     args = parser.parse_args()
-    run_dq_checks(args.run_date)
+    run_dq_pipeline(args.run_date)
 \end{lstlisting}
 
-Le mode \texttt{append} est fondamental : à chaque exécution nocturne du DAG \texttt{daily\_dq\_00}, une nouvelle tranche de résultats est ajoutée aux trois tables sans écraser les données historiques. Cette accumulation constitue la base temporelle qui alimente les tendances et analyses dans le dashboard Tableau.
+Le mode \texttt{append} est fondamental : à chaque exécution nocturne du DAG \texttt{dq\_tiers\_daily00}, une nouvelle tranche de résultats est ajoutée aux trois tables sans écraser les données historiques. Cette accumulation constitue la base temporelle qui alimente les tendances et analyses dans le dashboard Tableau.
 
+% =========================
 \section{Création des tables Hive physiques de persistance}
 
 Les trois tables de persistance, définies lors de la conception, sont créées physiquement dans la base Hive \texttt{dq\_results}. Ces tables stockent l'intégralité des métriques : les scores de qualité, les définitions SQL générées, et les statuts d'exécution. L'utilisation du format ORC avec compression Snappy garantit de très hautes performances lors des requêtes analytiques ultérieures.
@@ -352,66 +338,120 @@ Les trois tables de persistance, définies lors de la conception, sont créées 
 \begin{lstlisting}[language=SQL]
 CREATE DATABASE IF NOT EXISTS dq_results;
 
--- Table 1 : Historique des scores et resultats
-CREATE TABLE dq_results.consolidated_all_column_history (
-    run_id STRING, query_id STRING, colonne_controlee STRING, 
-    score_qualite_pct DOUBLE, statut STRING, anomalies_count BIGINT
+-- 1. Table Historique des scores et resultats par colonne
+CREATE TABLE IF NOT EXISTS dq_results.consolidated_all_column_history (
+    run_id              STRING,
+    query_id            STRING,
+    colonne_controlee   STRING,
+    chemin_source       STRING,
+    table_dataset       STRING,
+    domaine_metier      STRING,
+    type_regle_dq       STRING,
+    volume_total        BIGINT,
+    lignes_conformes    BIGINT,
+    score_qualite_pct   DOUBLE,
+    statut              STRING,
+    date_execution      TIMESTAMP,
+    criticite           STRING
 ) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
 
--- Table 2 : Configuration des checks (code SQL genere)
-CREATE TABLE dq_results.consolidated_all_checks_config (
-    run_id STRING, query_id STRING, sql_query STRING, 
-    check_name STRING, dimension STRING, criticite STRING
+-- 2. Table Configuration et referentiel des regles (SQL genere)
+CREATE TABLE IF NOT EXISTS dq_results.consolidated_all_checks_config (
+    run_id              STRING,
+    query_id            STRING,
+    run_date            STRING,
+    table               STRING,
+    domain              STRING,
+    rule                STRING,
+    sql                 STRING,
+    updated_at          TIMESTAMP,
+    criticite           STRING
 ) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
 
--- Table 3 : Journal d'execution (statut technique)
-CREATE TABLE dq_results.consolidated_execution_log (
-    run_id STRING, query_id STRING, execution_status STRING, 
-    error_message STRING, run_timestamp TIMESTAMP
+-- 3. Table Journal d'execution et logs techniques
+CREATE TABLE IF NOT EXISTS dq_results.consolidated_execution_log (
+    run_id                  STRING,
+    query_id                STRING,
+    run_date                STRING,
+    table                   STRING,
+    domain                  STRING,
+    rule                    STRING,
+    check_execution_status  STRING,
+    check_error_message     STRING,
+    check_timestamp         TIMESTAMP,
+    run_execution_status    STRING,
+    run_error_message       STRING,
+    updated_at              TIMESTAMP
 ) STORED AS ORC TBLPROPERTIES ('orc.compress'='SNAPPY');
 \end{lstlisting}
 
 % =========================
-\section{Création du DAG Airflow indépendant}
+\section{Création du DAG Airflow indépendant (\texttt{dq\_tiers\_daily00})}
 
-Pour garantir un découplage tout en sécurisant la chaîne de traitement, un nouveau DAG nommé \texttt{daily\allowbreak\_dq\allowbreak\_00} a été configuré dans Airflow. Ce DAG s'exécute quotidiennement à 00h00 et implémente le pattern de \textbf{Data Quality Gate (Circuit Breaker)}. 
+Pour garantir un découplage total tout en sécurisant la chaîne de traitement, un nouveau DAG autonome nommé \texttt{dq\_tiers\_daily00} a été configuré dans l'orchestrateur Apache Airflow de CIH BANK. 
 
-La première tâche exécute exclusivement les contrôles de pipeline (fraîcheur, volumétrie). Si l'ingestion a échoué en amont, cette tâche remonte une alerte critique et stoppe immédiatement l'exécution. Ce n'est que si le pipeline est validé que la seconde tâche s'exécute pour calculer les scores métier de qualité (validité, complétude, etc.), évitant ainsi de générer de faux rapports sur des données périmées.
+Ce DAG est planifié quotidiennement à \textbf{00h00} (minuit), laissant deux heures de marge de sécurité après le lancement du DAG d'ingestion Sqoop (\texttt{dailyow22}, planifié à 22h00). Il implémente le pattern de \textbf{Data Quality Gate (Circuit Breaker)} découpé en trois tâches séquentielles :
+
+\paragraph{1. Tâche \texttt{check\_pipeline\_gate} :} Exécute en amont la vérification de fraîcheur (< 26h) et de cohérence volumétrique sur les tables RAW HDFS. Si le batch d'ingestion a échoué ou a pris du retard, le DAG lève une exception bloquante et s'arrête immédiatement, empêchant le calcul de faux indicateurs sur des données périmées.
+
+\paragraph{2. Tâche \texttt{run\_business\_dq} :} Déclenche le script principal du moteur DQ (\texttt{dq\_tiers\_endpoint.py}) dans l'environnement virtuel Python dédié (\texttt{venv\_dq}) pour évaluer l'ensemble des règles métier SodaCL sur le cluster via Spark.
+
+\paragraph{3. Tâche \texttt{refresh\_dremio\_metadata} :} Déclenche via l'API REST de Dremio l'actualisation des métadonnées et des réflexions matérielles sur la vue virtuelle consolidée, garantissant la mise à jour immédiate des tableaux de bord Tableau.
 
 \begin{lstlisting}[language=Python]
+# /opt/airflow/dags/dq_tiers_daily00.py
+from airflow import DAG
+from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
 import subprocess
 
-def run_pipeline_checks(**context):
-    result = subprocess.run(
-        ['python', '/opt/airflow/scripts/dq/dq_pipeline_checks.py', '--run_date', context['ds']],
-        capture_output=True, text=True
+default_args = {
+    'owner': 'data_office',
+    'depends_on_past': False,
+    'start_date': datetime(2026, 2, 9),
+    'email_on_failure': True,
+    'email': ['data.quality@cihbank.ma'],
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
+}
+
+with DAG(
+    dag_id='dq_tiers_daily00',
+    default_args=default_args,
+    description='Pipeline automatise de Data Quality Tiers (KYC & CSP)',
+    schedule_interval='0 0 * * *',
+    catchup=False,
+    tags=['DQ', 'Tiers', 'SodaCore', 'Spark']
+) as dag:
+
+    # 1. Gate : Verification de fraicheur et completude du flux RAW
+    check_pipeline_gate = BashOperator(
+        task_id='check_pipeline_gate',
+        bash_command=(
+            'source /opt/airflow/venv_dq/bin/activate && '
+            'python -m dq_tiers.context.pipeline_gate --domain Tiers --run_date {{ ds }}'
+        )
     )
-    if result.returncode != 0:
-        raise Exception(f"Alerte Pipeline (Circuit Breaker declenche):\n{result.stderr}")
 
-def run_business_checks(**context):
-    result = subprocess.run(
-        ['python', '/opt/airflow/scripts/dq/dq_business_checks.py', '--run_date', context['ds']],
-        capture_output=True, text=True
+    # 2. Execution distribuee du moteur de qualite Soda Core sur Spark
+    run_business_dq = BashOperator(
+        task_id='run_business_dq',
+        bash_command=(
+            'source /opt/airflow/venv_dq/bin/activate && '
+            'kinit -kt /etc/security/keytabs/dq_svc.keytab dq_svc@CIH.MA && '
+            'python /opt/airflow/projects/dq_tiers/dq_tiers_endpoint.py --run_date {{ ds }}'
+        )
     )
-    if result.returncode != 0:
-        raise Exception(f"Echec DQ Tiers:\n{result.stderr}")
 
-pipeline_task = PythonOperator(
-    task_id='run_pipeline_checks',
-    python_callable=run_pipeline_checks,
-    dag=dag
-)
+    # 3. Rafraichissement sémantique Dremio pour restitution BI
+    refresh_dremio_metadata = BashOperator(
+        task_id='refresh_dremio_metadata',
+        bash_command='curl -s -X POST http://dremio.cih.ma:9047/api/v3/dataset/fact_tiers_dq_consolidated/reflection/refresh'
+    )
 
-business_task = PythonOperator(
-    task_id='run_business_checks',
-    python_callable=run_business_checks,
-    dag=dag
-)
-
-# Dependance : Les regles metier ne s'executent que si l'ingestion est saine
-pipeline_task >> business_task
+    # Ordonnancement séquentiel avec Circuit Breaker
+    check_pipeline_gate >> run_business_dq >> refresh_dremio_metadata
 \end{lstlisting}
 
 % =========================
@@ -425,7 +465,7 @@ Dans Dremio, nous créons un dataset virtuel (VDS) nommé \texttt{fact\allowbrea
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth, keepaspectratio]{figures/lignage_dremio.png}
+    \includegraphics[width=0.88\textwidth, keepaspectratio]{figures/lignage_dremio.png}
     \caption{Lignage des données dans Dremio montrant la création de la vue sémantique à partir des 3 tables Hive}
     \label{fig:screenshot_dremio}
 \end{figure}
@@ -441,7 +481,7 @@ Tous les filtres (par date d'exécution, par sous-domaine, par dimension de qual
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/connexiondremio.png}
+    \includegraphics[width=0.82\textwidth, keepaspectratio]{figures/connexiondremio.png}
     \caption{Interface de connexion entre Tableau Desktop et le serveur Dremio}
     \label{fig:connexion_dremio}
 \end{figure}
@@ -455,7 +495,7 @@ La figure \ref{fig:vuehome} présente la page d'accueil du dashboard, offrant un
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/vuehome.png}
+    \includegraphics[width=0.88\textwidth, keepaspectratio]{figures/vuehome.png}
     \caption{Dashboard Tableau — Vue d'ensemble de la qualité des données}
     \label{fig:vuehome}
 \end{figure}
@@ -478,7 +518,7 @@ La figure \ref{fig:heatmap} présente la vue matricielle détaillée.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/HEATMAP5.png}
+    \includegraphics[width=0.88\textwidth, keepaspectratio]{figures/HEATMAP5.png}
     \caption{Dashboard Tableau — Heatmap Qualité par colonne et par date}
     \label{fig:heatmap}
 \end{figure}
@@ -495,7 +535,7 @@ La figure \ref{fig:anomaly} présente la vue orientée sur l'analyse et la remé
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/anomaly.png}
+    \includegraphics[width=0.88\textwidth, keepaspectratio]{figures/anomaly.png}
     \caption{Dashboard Tableau — Top anomalies et colonnes en échec}
     \label{fig:anomaly}
 \end{figure}
