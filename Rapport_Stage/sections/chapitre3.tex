@@ -362,7 +362,7 @@ La dimension d'unicité contrôle l'absence de doublons d'enregistrements et gar
 \end{longtable}
 
 \subsubsection{Dimension Actualité et Pipeline}
-La dimension de fraîcheur s'assure du bon cadencement de l'ingestion quotidienne et de l'intégrité de la chaîne technique.
+La dimension de fraîcheur et de flux s'assure du bon cadencement de l'ingestion quotidienne et de l'intégrité de la chaîne technique. Afin de s'adapter à la croissance naturelle du référentiel bancaire, le contrôle de volumétrie (\texttt{row\_count}) n'est jamais figé en dur (\textit{hardcodé}) : il compare dynamiquement le volume extrait au jour $J$ avec la volumétrie validée du jour précédent ($J-1$) ainsi qu'avec le comptage de la source Oracle NOVA. Toute déviation anormale au-delà du seuil de tolérance déclenche une alerte bloquante avant de mettre à jour la nouvelle référence pour le jour suivant.
 
 \begin{longtable}{|p{0.20\textwidth}|p{0.30\textwidth}|p{0.14\textwidth}|p{0.30\textwidth}|}
 \caption{Dimension Actualité et Pipeline — Flux Batch} \label{tab:regles_fraicheur} \\
@@ -378,7 +378,7 @@ La dimension de fraîcheur s'assure du bon cadencement de l'ingestion quotidienn
 \endhead
 \texttt{batch\_}\allowbreak\texttt{datetime} & Retard d'ingestion HDFS RAW < 26h & HAUTE & Alerte infrastructure Big Data et relance Sqoop \\
 \hline
-\texttt{row\_count} & Écart de volumétrie entre Oracle NOVA et Hive RAW < 0.1\% & CRITIQUE & Rejouer le DAG d'ingestion Sqoop \\
+\texttt{row\_count} & Dérive volumétrique dynamique (Source vs Cible et $J$ vs $J-1$) < 0.1\% & CRITIQUE & Déclencher le Circuit Breaker et rejouer l'ingestion \\
 \hline
 \end{longtable}
 
