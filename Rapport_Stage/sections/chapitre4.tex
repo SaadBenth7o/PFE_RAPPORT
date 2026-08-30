@@ -394,17 +394,13 @@ Ce DAG est planifié quotidiennement à \textbf{00h00} (minuit), laissant deux h
 
 \paragraph{1. Tâche \texttt{check\_pipeline\_gate} :} Exécute en amont la vérification de fraîcheur (< 26h) et de cohérence volumétrique sur les tables RAW HDFS. Si le batch d'ingestion a échoué ou a pris du retard, le DAG lève une exception bloquante et s'arrête immédiatement, empêchant le calcul de faux indicateurs sur des données périmées.
 
-\paragraph{2. Tâche \texttt{run\_business\_dq} :} Déclenche le script principal du moteur DQ (\texttt{dq\_tiers\_endpoint.py}) dans l'environnement virtuel Python dédié (\texttt{venv\_dq}) pour évaluer l'ensemble des règles métier SodaCL sur le cluster via Spark.
-
-\paragraph{3. Tâche \texttt{refresh\_dremio\_metadata} :} Déclenche via l'API REST de Dremio l'actualisation des métadonnées et des réflexions matérielles sur la vue virtuelle consolidée, garantissant la mise à jour immédiate des tableaux de bord Tableau.
+\paragraph{2. Tâche \texttt{run\_business\_dq} :} Déclenche le script principal du moteur DQ (\texttt{dq\_tiers\_endpoint.py}) dans l'environnement virtuel Python dédié (\texttt{venv\_dq}) pour évaluer l'ensemble des règles métier SodaCL sur le cluster via Spark et persister les résultats dans Hive.
 
 \begin{lstlisting}[language=Python]
 # /opt/airflow/dags/dq_tiers_daily00.py
 from airflow import DAG
 from airflow.operators.bash import BashOperator
-from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
-import subprocess
 
 default_args = {
     'owner': 'data_office',
@@ -425,7 +421,7 @@ with DAG(
     tags=['DQ', 'Tiers', 'SodaCore', 'Spark']
 ) as dag:
 
-    # 1. Gate : Verification de fraicheur et completude du flux RAW
+    # 1. Gate : Verification de fraicheur et integrite volumetrique du flux RAW
     check_pipeline_gate = BashOperator(
         task_id='check_pipeline_gate',
         bash_command=(
@@ -434,7 +430,7 @@ with DAG(
         )
     )
 
-    # 2. Execution distribuee du moteur de qualite Soda Core sur Spark
+    # 2. Execution distribuee du moteur de qualite Soda Core sur Spark & persistance
     run_business_dq = BashOperator(
         task_id='run_business_dq',
         bash_command=(
@@ -444,14 +440,8 @@ with DAG(
         )
     )
 
-    # 3. Rafraichissement sémantique Dremio pour restitution BI
-    refresh_dremio_metadata = BashOperator(
-        task_id='refresh_dremio_metadata',
-        bash_command='curl -s -X POST http://dremio.cih.ma:9047/api/v3/dataset/fact_tiers_dq_consolidated/reflection/refresh'
-    )
-
     # Ordonnancement séquentiel avec Circuit Breaker
-    check_pipeline_gate >> run_business_dq >> refresh_dremio_metadata
+    check_pipeline_gate >> run_business_dq
 \end{lstlisting}
 
 % =========================
