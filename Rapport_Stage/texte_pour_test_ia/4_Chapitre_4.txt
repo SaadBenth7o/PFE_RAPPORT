@@ -1,0 +1,267 @@
+=== Réalisation de la Solution ===
+
+=== Introduction ===
+
+Ce chapitre présente la réalisation concrète du pipeline de Data Quality sur le Référentiel Tiers de CIH Bank. Tous les contrôles Soda Core s'effectuent exclusivement sur la zone RAW du Data Lake (base Hive raw_nova_referentieltiers), qui constitue la copie exacte et non transformée des tables CCM_* du système opérant Oracle NOVA (le périmètre complet englobe environ 15 tables Tiers ; dans ce chapitre, les tables ccm_npdescription et ccm_job serviront d'exemples illustratifs). 
+
+Nous détaillerons successivement l'environnement technique de développement et l'accès via MobaXterm, l'implémentation complète du script Soda Core avec Spark, la création des trois tables Hive physiques de persistance, l'intégration dans un DAG Airflow indépendant, la mise en place de la vue virtualisée sous Dremio, et enfin la réalisation du dashboard Tableau.
+
+=== Environnement technique de développement ===
+
+=== Environnement Hadoop et accès distant ===
+
+Le développement et les tests ont été réalisés dans l'environnement Hadoop sécurisé de CIH Bank. L'accès aux serveurs du cluster (nœud Edge) et l'exécution des commandes en ligne de commande (CLI) s'effectuent via l'outil MobaXterm. MobaXterm est un terminal avancé qui fournit toutes les fonctionnalités réseaux nécessaires (SSH, SFTP) pour se connecter au cluster Big Data. 
+
+Une fois connecté au nœud Edge, l'authentification sécurisée est garantie par le protocole Kerberos. Conformément aux pratiques de l'équipe (identiques à celles utilisées dans les scripts Sqoop), l'accès aux tables Hive et aux fichiers HDFS s'effectue via la commande kinit avec un fichier keytab chiffré associé au compte de service du domaine Tiers.
+
+ 
+ figures/mobaxterminterface.png
+ (Interface MobaXterm utilisée pour l'accès SSH au n)ud Edge du cluster Cloudera
+ 
+
+Les versions exactes des composants utilisés dans l'environnement de production sont les suivantes :
+
+tabular|l|l|
+
+gray!20
+Composant et Version 
+
+Cloudera Data Platform (CDP) et Private Cloud Base 7.1.7 
+
+Apache Hadoop (HDFS / YARN) et 3.1.1 
+
+Apache Hive et 3.1.3 
+
+Apache Spark et 3.2.0 
+
+Apache Airflow et 2.5.1 
+
+Dremio et Enterprise Edition 2026 
+
+Python et 3.9.13 
+
+Soda Core et soda-core-spark 3.0.45 
+
+Tableau Desktop et Professional Edition 2024.1.2 
+
+tabular
+(Versions des composants de l'environnement technique)
+
+=== Installation hors-ligne de Soda Core ===
+
+La politique stricte de sécurité des systèmes d'information (PSSI) de CIH BANK impose une isolation réseau (air-gap) des serveurs du cluster Big Data, interdisant par conséquent tout accès direct à Internet. L'exécution standard de la commande pip install pour rapatrier les dépendances depuis le registre public PyPI est donc impossible. L'installation de Soda Core et de son connecteur Spark a été réalisée via une procédure d'installation hors-ligne (Offline Wheel Installation) articulée en trois étapes :
+
+=== 1. Téléchargement des archives (Wheels) : ===
+
+ Sur un poste de travail disposant d'un accès à Internet, les archives des paquets soda-core et soda-core-spark ainsi que l'ensemble de leurs sous-dépendances ont été téléchargées au format .whl dans un dossier dédié via la commande pip download.
+
+=== 2. Transfert sécurisé via MobaXterm : ===
+
+ Le dossier d'archives a été transféré de manière sécurisée en SFTP vers le nœud Edge du cluster grâce à l'interface graphique de MobaXterm.
+
+=== 3. Installation locale : ===
+
+ Sur le nœud Edge, les paquets ont été déployés dans l'environnement virtuel Python (venv) alloué à l'orchestrateur Airflow à l'aide de la commande pip, en forçant la recherche locale :
+
+=== Implémentation du moteur DQ — Soda Core et Spark ===
+
+=== Arborescence et packaging du projet DQ (dq_tiers ===
+
+)
+
+Le moteur de Data Quality est structuré sous la forme d'un projet Python autonome nommé dq_tiers, suivant scrupuleusement les standards d'ingénierie et de packaging en vigueur au sein du Data Office de CIH BANK (à l'instar des projets de transformation py-khawarizmi et sddiqi). Il est packagé via le gestionnaire moderne PDM (Python Development Master) avec spécification conforme à la PEP 621 (pyproject.toml), et distribué sous forme de paquet Wheel (.whl).
+
+L'arborescence du projet s'articule comme suit sur le nœud Edge :
+
+=== Principe de fonctionnement de Soda Core avec Spark ===
+
+Contrairement à d'autres connecteurs SQL classiques (JDBC/ODBC) où Soda Core interroge directement la base de données, la bibliothèque soda-core-spark-df repose sur le traitement en mémoire distribuée. Le flux de fonctionnement s'articule en deux phases séquentielles :
+
+=== Phase 1 — Contrôle de Santé du Pipeline (Data Quality Gate) : ===
+
+ Avant toute évaluation des règles métier, le module pipeline_gate.py inspecte la fraîcheur des partitions HDFS brutes et la cohérence volumétrique (row_count). Pour éviter tout seuil statique figé (hardcodé) qui fausserait les alertes lors de la croissance naturelle de la base client, le calcul compare dynamiquement le volume du jour J avec la dernière référence validée de la veille (J-1) et le comptage de la source Oracle NOVA. Si l'ingestion quotidienne Sqoop de 22h00 a échoué, présente un retard (> 26h) ou une dérive anormale (> 0.1
+
+=== Phase 2 — Évaluation Distribuée et Persistance : ===
+
+ Une fois le pipeline validé, le script charge les tables Hive de la zone RAW en DataFrames PySpark, les enregistre en tant que vues temporaires Spark en mémoire via createOrReplaceTempView(), puis traduit et soumet l'ensemble du catalogue SodaCL aux exécuteurs YARN. Les résultats sont ensuite sérialisés et persistés dans les 3 tables Hive physiques.
+
+=== Fichier de configuration YAML (checks_tiers.yml ===
+
+ — exemplaire)
+
+Les règles métier sont définies de manière déclarative en utilisant le langage SodaCL (Soda Check Language). Ce langage permet de définir des contrôles simples (complétude, validité) ou avancés (fraîcheur, unicité, règles SQL personnalisées). Toutes les règles du domaine Tiers (KYC et CSP) sont regroupées dans un fichier unique, présenté ici en extrait illustratif sur les deux tables d'exemple ccm_npdescription et ccm_job :
+
+Les fonctions d'évaluation SodaCL mobilisées dans notre catalogue de règles s'articulent ainsi :
+
+=== missing_count ===
+
+ : Dénombre les enregistrements pour lesquels l'attribut est nul ou vide, permettant de valider l'exhaustivité des champs obligatoires.
+
+=== invalid_count ===
+
+ : Évalue la conformité par rapport à un dictionnaire de valeurs autorisées (valid values) ou une expression régulière (valid regex).
+
+=== duplicate_count ===
+
+ : Identifie les doublons d'enregistrements sur les clés d'identification métier (telles que le radical client).
+
+=== freshness ===
+
+ : Mesure l'écart temporel entre la valeur maximale d'une colonne date et l'instant d'évaluation du scan, garantissant l'actualité des données.
+
+=== failed rows ===
+
+ : Permet d'injecter une requête SQL arbitraire pour vérifier des règles multi-colonnes ou des jointures complexes entre référentiels.
+
+=== Traduction des règles SodaCL en Spark SQL ===
+
+En interne, Soda Core identifie la cible (Spark) et traduit chaque règle SodaCL en une requête Spark SQL exécutée sur les vues temporaires. Voici trois exemples de cette traduction :
+
+ 1 — Complétude (missing_count) :
+
+center Traduction automatique par Soda Corecenter
+
+ 2 — Validité (invalid_count avec referentiel) :
+
+center Traduction automatique par Soda Corecenter
+
+ 3 — Fraîcheur (freshness) :
+
+center Traduction automatique par Soda Corecenter
+
+=== Script d'exécution principal (dq_tiers_endpoint.py ===
+
+)
+
+Le script Python principal orchestre l'exécution complète. Soda Core exécutant les checks sur Spark ne persiste pas automatiquement les résultats dans Hive (contrairement à l'intégration cloud). C'est notre module Python qui extrait la matrice de résultats JSON via get_scan_results(), l'aplatit, puis structure les données en 3 DataFrames dont les schémas respectent exactement les tables physiques définies en conception. Les écritures se font systématiquement en mode append pour historiser chaque run journalier.
+
+Le mode append est fondamental : à chaque exécution nocturne du DAG dq_tiers_daily00, une nouvelle tranche de résultats est ajoutée aux trois tables sans écraser les données historiques. Cette accumulation constitue la base temporelle qui alimente les tendances et analyses dans le dashboard Tableau.
+
+=== Création des tables Hive physiques de persistance ===
+
+Les trois tables de persistance, définies lors de la conception, sont créées physiquement dans la base Hive dq_results. Ces tables stockent l'intégralité des métriques : les scores de qualité, les définitions SQL générées, et les statuts d'exécution. L'utilisation du format ORC avec compression Snappy garantit de très hautes performances lors des requêtes analytiques ultérieures.
+
+=== Création du DAG Airflow indépendant (dq_tiers_daily00 ===
+
+)
+
+Pour garantir un découplage total tout en sécurisant la chaîne de traitement, un nouveau DAG autonome nommé dq_tiers_daily00 a été configuré dans l'orchestrateur Apache Airflow de CIH BANK. 
+
+Ce DAG est planifié quotidiennement à 00h00 (minuit), laissant deux heures de marge de sécurité après le lancement du DAG d'ingestion Sqoop (dailyow22, planifié à 22h00). Il implémente le pattern de Data Quality Gate (Circuit Breaker) découpé en trois tâches séquentielles :
+
+=== 1. Tâche check_pipeline_gate ===
+
+ : Exécute en amont la vérification de fraîcheur (< 26h) et de cohérence volumétrique sur les tables RAW HDFS. Si le batch d'ingestion a échoué ou a pris du retard, le DAG lève une exception bloquante et s'arrête immédiatement, empêchant le calcul de faux indicateurs sur des données périmées.
+
+=== 2. Tâche run_business_dq ===
+
+ : Déclenche le script principal du moteur DQ (dq_tiers_endpoint.py) dans l'environnement virtuel Python dédié (venv_dq) pour évaluer l'ensemble des règles métier SodaCL sur le cluster via Spark et persister les résultats dans Hive.
+
+=== Découplage temporel et architecture cible événementielle : ===
+
+ Dans la configuration actuelle, le DAG dq_tiers_daily00 est planifié à 00h00, ménageant une marge de sécurité de deux heures après le lancement de l'ingestion de 22h00. La tâche check_pipeline_gate agit comme un disjoncteur technique (Circuit Breaker) qui vérifie la fraîcheur des données (< 26h) et la stabilité volumétrique (J vs J-1) avant de mobiliser les ressources du cluster YARN. Dans l'évolution cible de la plateforme, ce cadencement peut être couplé à un ExternalTaskSensor ou à un trigger de fin de batch pour un déclenchement purement événementiel.
+
+=== Exposition et virtualisation sous Dremio ===
+
+Une fois les trois tables physiques alimentées dans Hive (consolidated_all_column_history, consolidated_all_checks_config, et consolidated_execution_log), il est nécessaire de consolider ces informations pour les exposer à l'outil BI Tableau de manière claire et optimale. 
+
+Plutôt que de créer une table physique supplémentaire ou d'effectuer des jointures complexes et coûteuses dans Tableau, nous utilisons Dremio en tant que couche de virtualisation sémantique.
+
+Dans Dremio, nous créons un dataset virtuel (VDS) nommé fact_tiers_dq_consolidated. Cette vue réalise dynamiquement la jointure sur les clés uniques run_id et query_id des trois tables sources de Hive. Le résultat est une table de faits consolidée, exposant la totalité de la vision 360 des règles DQ, sans aucune duplication physique des données. Dremio accélère les temps de réponse de cette jointure virtuelle grâce à ses réflexions matérielles (Data Reflections).
+
+ 
+ figures/lignage_dremio.png
+ (Lignage des données dans Dremio montrant la création de la vue sémantique à partir des 3 tables Hive)
+ 
+
+=== Réalisation du dashboard Tableau ===
+
+=== Connexion Tableau à Dremio et traitement analytique ===
+
+Le dashboard Tableau est connecté à Dremio via le connecteur ODBC/JDBC natif. L'unique vue virtuelle fact_tiers_dq_consolidated est importée comme source de données unique dans Tableau Desktop. 
+
+Tous les filtres (par date d'exécution, par sous-domaine, par dimension de qualité), ainsi que toutes les agrégations (comptage de règles, calculs des moyennes de taux de conformité quotidiens ou scores moyens) sont réalisés de manière dynamique au sein des feuilles de calcul (sheets) et des tableaux de bord de Tableau en tirant directement les champs de la table de faits.
+
+ 
+ figures/connexiondremio.png
+ (Interface de connexion entre Tableau Desktop et le serveur Dremio)
+ 
+
+Note de confidentialité : Il est important de souligner que, pour des raisons évidentes de sécurité et de respect du secret bancaire, les noms de tables réels et certaines données sensibles présentées dans les captures d'écran suivantes ont fait l'objet d'un masquage ou d'un floutage systématique.
+
+=== Onglet 1 — Vue d'ensemble (Dashboard Global) ===
+
+La figure présente la page d'accueil du dashboard, offrant une vision synthétique de l'état de santé du référentiel.
+
+ 
+ figures/vuehome.png
+ (Dashboard Tableau — Vue d'ensemble de la qualité des données)
+ 
+
+Cet onglet centralise les indicateurs de pilotage de haut niveau nécessaires aux décideurs et aux Data Owners :
+
+=== Score Général de qualité : ===
+
+ Affiche l'indicateur global (ex: 88,70
+
+=== Répartition des contrôles par statut : ===
+
+ Dénombre et quantifie les tests validés (PASS), en avertissement (WARN) ou en échec critique (FAIL) avec leurs pourcentages respectifs.
+
+=== Périmètre et couverture : ===
+
+ Précise le volume de tables sous contrôle et le nombre total de règles de qualité déployées en production.
+
+=== Évolution temporelle du score : ===
+
+ Retrace la dynamique de qualité sur les 5 dernières semaines sous forme de courbe d'analyse de tendance.
+
+=== Score par table : ===
+
+ Classement interactif permettant d'identifier immédiatement les tables sources nécessitant des actions d'assainissement prioritaires.
+
+=== Onglet 2 — Heatmap Qualité ===
+
+La figure présente la vue matricielle détaillée.
+
+ 
+ figures/HEATMAP5.png
+ (Dashboard Tableau — Heatmap Qualité par colonne et par date)
+ 
+
+Cet onglet permet une analyse granulaire et temporelle du niveau de qualité :
+
+=== Granularité par indicateur : ===
+
+ Liste exhaustivement chaque attribut sous contrôle (birthdate, gender, city, etc.) associé à sa règle et sa dimension DQ.
+
+=== Matrice thermique temporelle (Heatmap) : ===
+
+ Colore les résultats quotidiens selon un gradient allant du rouge (non-conformité) au vert (conformité totale). Cette représentation visuelle permet de détecter instantanément les incidents techniques ponctuels ou de valider l'impact positif des campagnes de remédiation.
+
+=== Onglet 3 — Top Anomalies ===
+
+La figure présente la vue orientée sur l'analyse et la remédiation.
+
+ 
+ figures/anomaly.png
+ (Dashboard Tableau — Top anomalies et colonnes en échec)
+ 
+
+Ce dernier onglet constitue l'outil d'action opérationnelle pour les Data Stewards :
+
+=== Ciblage des défaillances critiques : ===
+
+ Isole les règles et attributs présentant les taux d'anomalies les plus sévères.
+
+=== Diagramme de distribution des scores : ===
+
+ Un graphique en barres horizontales met en exergue le niveau de sévérité des défaillances pour chaque indicateur.
+
+=== Filtrage dynamique contextuel : ===
+
+ Des filtres interactifs (par table, par attribut, par dimension ou par date) permettent d'isoler rapidement les causes racines pour engager les corrections requises dans le système source NOVA.
+
+=== Conclusion ===
+
+Ce chapitre a présenté l'implémentation concrète des différents composants du pipeline de Data Quality Tiers : le script Soda Core avec ses fichiers de configuration YAML, les tables Hive de persistance, la tâche Airflow post-ingestion, l'exposition sémantique de Dremio et le dashboard Tableau de visualisation. L'ensemble de ces composants forme un pipeline automatisé, opérationnel chaque nuit à 00h00, qui permet de mesurer, historiser et restituer la qualité des données métier du Référentiel Tiers.

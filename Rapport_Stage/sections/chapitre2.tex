@@ -46,8 +46,8 @@ L'exécution des contrôles de qualité ne doit pas bloquer la disponibilité de
 \subsection{Maintenabilité}
 L'ajout de nouvelles règles ou l'intégration de nouvelles colonnes du Référentiel Tiers (par exemple pour de nouveaux critères réglementaires ou pour les personnes morales) doit se faire sans modification du code Python principal de la solution. Les fichiers de configuration YAML et la structure des tables Hive de résultats doivent être conçus de manière générique pour supporter l'extensibilité.
 
-\subsection{Sécurité}
-Les détails d'anomalies de qualité des données contiennent des informations clients sensibles (\texttt{name}, \texttt{firstname}, radicaux). Seuls les collaborateurs habilités du Data Office (Data Stewards, Data Project) et les Data Owners des départements concernés doivent être autorisés à accéder aux détails des anomalies. La solution s'appuie sur les mécanismes de sécurité existants de la plateforme :
+\subsection{Sécurité et Privacy by Design}
+Conformément aux exigences de la loi CNDP 09-08 et du RGPD, la solution adopte une approche stricte de \textit{Privacy by Design} : la base de résultats \texttt{dq\_results} stocke exclusivement des indicateurs statistiques agrégés (taux de conformité, volumes, pourcentages d'anomalies) et ne duplique aucune donnée à caractère personnel nominative (\texttt{name}, \texttt{firstname}, identifiants directs). L'accès aux tables sources sensibles et aux logs détaillés pour remédiation est restreint aux collaborateurs dûment habilités via les mécanismes de sécurité du cluster :
 
 \paragraph{Authentification Kerberos :} L'ensemble des composants du cluster Cloudera (HDFS, Hive, Spark) sont sécurisés par Kerberos, garantissant l'identité de chaque service et utilisateur.
 
@@ -152,7 +152,7 @@ Nous détaillons ci-dessous le déroulement des trois phases principales constit
 \textbf{Scénario nominal} &
 1. Airflow lance automatiquement la tâche DQ de nuit. \newline
 2. Le moteur DQ Soda Core lit les fichiers YAML et exécute les requêtes sur Spark. \newline
-3. Les résultats agrégés et les détails des anomalies clients sont historisés dans la base Hive \texttt{dq\_results}. \\
+3. Les métriques de conformité, volumes et taux d'anomalies sont historisés dans la base Hive \texttt{dq\_results}. \\
 \hline
 \textbf{Postconditions} & Les indicateurs et anomalies du jour sont prêts à être exposés. \\
 \hline

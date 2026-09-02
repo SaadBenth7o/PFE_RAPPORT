@@ -1,0 +1,212 @@
+=== Analyse des Besoins et Spécification ===
+
+=== Introduction ===
+
+Après avoir décrit le cadre général du projet et analysé le fonctionnement de la solution existante au sein de CIH BANK, ce chapitre se focalise sur la définition claire et rigoureuse des besoins. Nous y détaillons d'une part les besoins fonctionnels, c'est-à-dire les fonctionnalités attendues du pipeline de Data Quality, et d'autre part les besoins non fonctionnels, liés aux exigences techniques, de performance et de sécurité. Enfin, nous présentons la modélisation fonctionnelle à travers la spécification des cas d'utilisation et de leurs acteurs.
+
+=== Besoins fonctionnels ===
+
+Les besoins fonctionnels décrivent les actions que le système doit être capable de réaliser pour répondre aux problématiques de qualité des données identifiées sur le domaine Tiers. Ces problématiques, transverses à l'ensemble des tables du référentiel, seront principalement illustrées par les tables np_description (et ses 40 colonnes telles que name, firstname, civility, fatcaidentificationnumber, etc.) et jobs. Les besoins se répartissent en quatre fonctionnalités majeures :
+
+=== Automatisation et planification des contrôles ===
+
+=== Déclenchement automatique : ===
+
+ Le système doit lancer l'évaluation de la qualité des données de manière planifiée, immédiatement après l'exécution complète du batch quotidien d'ingestion des tables sources Oracle NOVA (qui concernent environ 15 tables préfixées par CCM_* pour le périmètre Tiers) via un nouveau DAG dédié nommé dq_tiers_daily00 s'exécutant à 00h00, séparé du DAG d'ingestion dailyow22 de 22h00.
+
+=== Orchestration intégrée : ===
+
+ L'exécution du scan de qualité doit être orchestrée au sein d'Apache Airflow, permettant de suivre son statut d'exécution (Succès/Échec) et de consulter les journaux de bord en temps réel.
+
+=== Configuration déclarative des règles de qualité ===
+
+=== Moteur de règles dynamique : ===
+
+ Le système doit permettre de définir les contrôles de qualité (Missing, Invalid, Freshness, Consistency, Uniqueness) dans des fichiers de règles déclaratifs séparés du code source applicatif.
+
+=== Graduation des seuils et des alertes : ===
+
+ Pour chaque contrôle, le système doit pouvoir évaluer des seuils paramétrables (par exemple un taux de valeurs manquantes inférieur à 5
+
+=== Gestion des métadonnées : ===
+
+ Chaque règle doit être documentée avec des attributs métier précis (nom de la règle, dimension DQ associée, domaine KYC ou CSP, criticité fonctionnelle).
+
+=== Historisation et traçabilité des indicateurs ===
+
+=== Persistance journalière : ===
+
+ À chaque exécution, le système doit sauvegarder les métriques calculées et les résultats de chaque contrôle de qualité dans des tables d'historique de scores (base Hive dédiée dq_results), indexée par date d'exécution.
+
+=== Suivi global des anomalies : ===
+
+ Le système doit capturer de manière consolidée les volumes et les pourcentages d'enregistrements en échec pour chaque contrôle de qualité. Cette approche permet de quantifier et d'isoler les axes de qualité défaillants sans avoir à stocker les données personnelles des clients concernés dans le système de Data Quality.
+
+=== Restitution visuelle et aide à la décision ===
+
+=== Exposition des données : ===
+
+ Les résultats d'historisation de la qualité doivent être exposés de manière transparente sous forme de vues SQL pour les outils décisionnels.
+
+=== Suivi de l'évolution temporelle : ===
+
+ Le tableau de bord doit permettre de suivre la tendance d'évolution des scores DQ dans le temps (sur les 30 derniers jours).
+
+=== Priorisation des axes de remédiation : ===
+
+ Le tableau de bord doit mettre en évidence les contrôles les plus critiques en échec et les dimensions de qualité les plus impactées, orientant ainsi les équipes métier vers les chantiers prioritaires de nettoyage dans le système source NOVA.
+
+=== Besoins non fonctionnels ===
+
+Les besoins non fonctionnels expriment les exigences qualitatives, opérationnelles et techniques que la solution doit respecter pour être viable et performante dans l'environnement de production de CIH BANK :
+
+=== Performance ===
+
+Le Référentiel Tiers de la banque regroupe plusieurs millions de dossiers clients (personnes physiques). Les règles de cohérence inter-colonnes ou de doublons nécessitent des jointures lourdes. Le moteur DQ doit être capable d'interroger et d'évaluer ce volume massif de données en un temps minimal (moins de 15 minutes) sans dégrader les ressources du Data Lake. Cela justifie l'utilisation d'un moteur de calcul distribué (Apache Spark) pour le traitement.
+
+=== Disponibilité ===
+
+L'exécution des contrôles de qualité ne doit pas bloquer la disponibilité des données pour les outils de reporting en cas d'anomalie. Si un seuil de qualité est franchi ou si le scan échoue, le pipeline d'exposition (Dremio/Tableau) doit continuer à fonctionner en mode dégradé en signalant l'alerte. De plus, la tâche DQ doit s'exécuter même si certaines tables d'ingestion n'ont été chargées que partiellement.
+
+=== Maintenabilité ===
+
+L'ajout de nouvelles règles ou l'intégration de nouvelles colonnes du Référentiel Tiers (par exemple pour de nouveaux critères réglementaires ou pour les personnes morales) doit se faire sans modification du code Python principal de la solution. Les fichiers de configuration YAML et la structure des tables Hive de résultats doivent être conçus de manière générique pour supporter l'extensibilité.
+
+=== Sécurité et Privacy by Design ===
+
+Conformément aux exigences de la loi CNDP 09-08 et du RGPD, la solution adopte une approche stricte de Privacy by Design : la base de résultats dq_results stocke exclusivement des indicateurs statistiques agrégés (taux de conformité, volumes, pourcentages d'anomalies) et ne duplique aucune donnée à caractère personnel nominative (name, firstname, identifiants directs). L'accès aux tables sources sensibles et aux logs détaillés pour remédiation est restreint aux collaborateurs dûment habilités via les mécanismes de sécurité du cluster :
+
+=== Authentification Kerberos : ===
+
+ L'ensemble des composants du cluster Cloudera (HDFS, Hive, Spark) sont sécurisés par Kerberos, garantissant l'identité de chaque service et utilisateur.
+
+=== Autorisation Apache Ranger : ===
+
+ Les politiques d'accès aux tables Hive et aux espaces HDFS sont gérées de manière centralisée via Ranger, permettant un contrôle fin par rôle.
+
+=== Annuaire LDAP / Active Directory : ===
+
+ L'authentification des utilisateurs Dremio et Tableau est déléguée à l'annuaire d'entreprise, assurant une gestion unifiée des identités.
+
+=== Conformité Réglementaire et Normative ===
+
+Le système de gestion de la qualité des données doit s'inscrire dans un cadre strict de conformité légale et normative. Concernant la confidentialité et le traitement des données personnelles (noms, dates de naissance, identifiants), la solution doit impérativement respecter les exigences de la loi 09-08 promulguée par la CNDP (Commission Nationale de contrôle de la Protection des Données à caractère personnel) au Maroc. De plus, la banque gérant potentiellement des clients résidant en Europe, la solution s'aligne sur les directives rigoureuses du RGPD (Règlement Général sur la Protection des Données). Enfin, la démarche globale de fiabilisation et de sécurisation de l'information s'appuie sur les standards internationaux, notamment la norme ISO 8000 (standard mondial pour la qualité des données) et la norme ISO/IEC 27001 (management de la sécurité de l'information).
+
+=== Modélisation des cas d'utilisation ===
+
+=== Acteurs du système ===
+
+L'intégration de la solution de Data Quality au sein de CIH BANK repose sur une étroite collaboration entre les experts métier, l'équipe technique et les systèmes d'information. Le tableau présente les cinq acteurs clés du système.
+
+(Acteurs du système de Data Quality)
+
+1.4
+!
+tabular|l|l|p9cm|
+
+gray!20
+Acteur et Type et Rôle dans le système DQ 
+
+Équipe Data (DE / Data Steward) et Interne et Organise les ateliers d'alignement, formalise les règles dans les fichiers YAML Soda Core et implémente les flux techniques. 
+
+Métiers (Data Owners) et Humain et Experts fonctionnels qui définissent et valident les règles de qualité, consultent le dashboard et remédient aux anomalies. 
+
+Équipe SI et Appui et Valide la faisabilité technique des règles vis-à-vis du modèle physique Oracle NOVA. 
+
+Airflow (Orchestrateur) et Système et Déclenche automatiquement le scan DQ chaque soir après l'ingestion (nouveau DAG à 00h00). 
+
+Oracle NOVA (Système source) et Externe et Récepteur final des corrections de données opérées par les gestionnaires suite aux alertes DQ. 
+
+tabular
+
+=== Diagramme global des cas d'utilisation ===
+
+Le diagramme ci-dessous synthétise graphiquement les cas d'utilisation du système de Data Quality et les interactions avec les différents acteurs impliqués dans ce cycle de gouvernance.
+
+figures/usecaseGeneral.png
+(Diagramme global des cas d'utilisation de la solution DQ Tiers)
+
+=== Description textuelle des cas d'utilisation principaux ===
+
+Nous détaillons ci-dessous le déroulement des trois phases principales constituant le cycle de vie de la qualité des données de notre solution.
+
+=== Cas d'utilisation 01 : Définir et formaliser les règles de qualité ===
+
+(Description du cas d'utilisation 01)
+
+1.4
+tabular|l|p10cm|
+
+gray!20
+Champ et Description 
+
+Titre et Définir et formaliser les règles de qualité 
+
+Acteurs et Équipe Data (Steward / DE), Métiers (Data Owners), Équipe SI 
+
+Préconditions et Cadrage fonctionnel du domaine Tiers défini 
+
+Scénario nominal et
+1. L'équipe Data organise des ateliers d'alignement avec les experts Métier et l'équipe SI. 
+2. Les parties s'accordent sur le catalogue des contrôles (complétude KYC, cohérence CSP) et les seuils de tolérance. 
+3. L'équipe Data consigne les spécifications dans un document de cadrage. 
+4. Le Data Engineer implémente les règles dans les fichiers YAML Soda Core. 
+
+Postconditions et Les règles de qualité sont formalisées et déployées dans le moteur Soda. 
+
+tabular
+
+=== Cas d'utilisation 02 : Exécuter le scan de qualité (automatique) ===
+
+(Description du cas d'utilisation 02)
+
+1.4
+tabular|l|p10cm|
+
+gray!20
+Champ et Description 
+
+Titre et Exécuter le scan de qualité (automatique) 
+
+Acteur principal et Orchestrateur Airflow (Système) 
+
+Préconditions et Fin de l'ingestion quotidienne Sqoop des tables NOVA 
+
+Scénario nominal et
+1. Airflow lance automatiquement la tâche DQ de nuit. 
+2. Le moteur DQ Soda Core lit les fichiers YAML et exécute les requêtes sur Spark. 
+3. Les métriques de conformité, volumes et taux d'anomalies sont historisés dans la base Hive dq_results. 
+
+Postconditions et Les indicateurs et anomalies du jour sont prêts à être exposés. 
+
+tabular
+
+=== Cas d'utilisation 03 : Consulter le dashboard et remédier aux anomalies ===
+
+(Description du cas d'utilisation 03)
+
+1.4
+tabular|l|p10cm|
+
+gray!20
+Champ et Description 
+
+Titre et Consulter le dashboard et remédier aux anomalies 
+
+Acteurs et Métiers (Parties prenantes), Data Stewards 
+
+Préconditions et Le scan DQ s'est exécuté de manière conforme 
+
+Scénario nominal et
+1. Le dashboard Tableau se rafraîchit automatiquement chaque matin. 
+2. Chaque partie prenante consulte le dashboard depuis son poste de travail. 
+3. Chaque acteur filtre et exporte la liste des anomalies de son périmètre. 
+4. Les acteurs procèdent à la correction des anomalies dans Oracle NOVA. 
+
+Postconditions et Les données corrigées dans NOVA sont ré-ingérées lors du prochain batch et le score DQ s'améliore automatiquement. 
+
+tabular
+
+=== Conclusion ===
+
+Ce chapitre a permis de formaliser les besoins fonctionnels et non fonctionnels, définissant de manière précise les objectifs techniques et opérationnels du pipeline de qualité des données. La modélisation des acteurs et des cas d'utilisation reflète fidèlement le cycle de gouvernance de CIH BANK, où chaque partie prenante collabore d'abord à la définition des contrôles, puis intervient individuellement sur son périmètre pour corriger les anomalies identifiées au quotidien. Fort de ces spécifications, le chapitre suivant présente la conception globale et détaillée de la solution.

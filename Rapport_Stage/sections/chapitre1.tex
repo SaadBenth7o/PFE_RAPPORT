@@ -189,7 +189,9 @@ Pour pallier ces limites, nous proposons de concevoir et d'implémenter un \text
 
 \paragraph{Monitoring centralisé et restitution décisionnelle :} Les résultats des contrôles et les anomalies consolidées sont persistés dans des tables Hive dédiées. Un tableau de bord interactif est ensuite construit pour offrir aux Data Stewards une vue claire de la santé des tables du référentiel, tout en garantissant la stricte anonymisation des données personnelles.
 
-Cette solution permet d'améliorer considérablement la gouvernance des données du domaine Tiers tout en optimisant le temps de traitement des anomalies.
+\paragraph{Fondation pour l'Intelligence Artificielle (\textit{Data Readiness for AI}) :} Dans le secteur bancaire, la fiabilité des modèles prédictifs et des algorithmes d'apprentissage automatique (tels que le scoring de risque de crédit, la détection des fraudes ou la segmentation client) est strictement conditionnée par la qualité des données en entrée (\textit{Garbage In, Garbage Out}). En garantissant la complétude et la cohérence des variables fondamentales KYC et CSP dès leur arrivée dans le Data Lake, notre pipeline assure la robustesse des données destinées à alimenter les pipelines de Machine Learning de la banque.
+
+Cette solution permet d'améliorer la gouvernance globale des données du domaine Tiers tout en optimisant le temps de traitement des anomalies.
 
 \section{Choix du modèle de développement}
 

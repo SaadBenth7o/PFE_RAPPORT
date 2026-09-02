@@ -1,0 +1,31 @@
+=== Conclusion Générale et Perspectives ===
+
+=== Conclusion générale ===
+
+Au terme de ce projet de fin d’études, nous avons conçu, développé et industrialisé un pipeline automatisé de contrôle de la qualité des données (Data Quality) intégré à l'écosystème Big Data de CIH BANK. Ce travail répond aux problématiques rencontrées par l'institution bancaire dans la gestion de volumes de données toujours plus importants, où les traitements manuels et les opérations de remédiation curatives deviennent rapidement coûteux, chronophages et sources d’erreurs ou de non-conformité réglementaire.
+
+L’étude préalable du contexte métier a permis d’identifier plusieurs limites des méthodes traditionnelles de gestion de la donnée, notamment l'absence de validation à la source, la difficulté d'obtenir une vision claire de l'état de santé du Data Lake, ainsi que le manque de traçabilité des anomalies liées aux informations d'identification KYC et aux catégories socio-professionnelles (CSP). Afin de répondre à ces contraintes et de se conformer aux exigences de la réglementation (loi 09-08 de la CNDP, RGPD, BCBS 239), une solution complète reposant sur des technologies modernes a été proposée et déployée.
+
+Le pipeline développé met en œuvre une architecture robuste permettant de prendre en charge l’ensemble du cycle de fiabilisation de la donnée. Celui-ci comprend l'ingestion automatisée depuis le système source via Apache Sqoop, l'exécution distribuée de règles de qualité complexes (complétude, validité, cohérence croisée) grâce à l'intégration du framework Soda Core au sein de jobs Apache Spark, le stockage des résultats dans la zone HDFS (format ORC), ainsi que la modélisation sémantique à travers le moteur de virtualisation Dremio. L'intégration de ces résultats dans un tableau de bord interactif développé sur Tableau Software constitue également une contribution majeure, offrant aux Data Stewards un outil de supervision clair et précis.
+
+Le projet ne s’est pas limité au développement des fonctionnalités analytiques. Une attention particulière a également été portée à l’orchestration et à l’industrialisation de la solution. La chaîne complète a été planifiée et surveillée via Apache Airflow, permettant d'automatiser le déclenchement des contrôles quotidiennement tout en s'intégrant parfaitement avec les dépendances du système d'information de la banque. Cette démarche contribue à réduire les interventions manuelles, à assurer une observabilité totale du flux de données et à garantir la fiabilité de la solution en production.
+
+Les différents tests réalisés tout au long du projet ont permis de valider le bon fonctionnement des modules développés et leur impact positif sur l'écosystème analytique de la banque. Les objectifs fixés au début du projet ont ainsi été atteints, tout en proposant une architecture modulaire, évolutive et facilement maintenable. Au-delà des résultats obtenus, ce projet nous a permis de mettre en pratique les connaissances acquises au cours de notre formation d’ingénieur dans des domaines variés tels que le développement logiciel, l'architecture Big Data, le Data Engineering, les bases de données distribuées, la Business Intelligence ainsi que la méthodologie d'industrialisation logicielle. Cette expérience constitue une étape particulièrement enrichissante sur les plans technique et méthodologique, représentant une véritable immersion dans les exigences d’un projet industriel bancaire.
+
+=== Perspectives ===
+
+À l'issue de ce déploiement opérationnel, nous identifions trois axes d'évolution majeurs pour étendre la portée de la solution et accroître la valorisation des actifs informationnels de la banque :
+
+=== Élargissement du périmètre fonctionnel : ===
+
+ Actuellement centré sur le domaine des Tiers (données KYC et CSP), le pipeline a vocation à être étendu à d'autres domaines cruciaux du système d'information de CIH BANK. Il s'agirait d'intégrer les données issues du Core Banking, notamment les écritures comptables, la comptabilité générale, ainsi que l'ensemble de la partie finance. Cette généralisation permettrait de créer une plateforme centralisée garantissant la fiabilité des données à l'échelle de toute la banque.
+
+=== Remédiation intelligente via une approche LLM local : ===
+
+ Pour pallier les limites des règles purement déterministes, l'intégration de modèles de langage (LLM) exécutés localement constitue une piste prometteuse. Cette approche permettrait de remédier automatiquement à certains problèmes de qualité de données minimes ou de valeurs manquantes (par exemple, inférer contextuellement un genre à partir d'un prénom). L'exécution locale de ces modèles au sein de l'infrastructure de la banque est primordiale pour garantir la stricte confidentialité et la souveraineté des informations.
+
+=== Intégration d'un système d'alerte multicanal intelligent : ===
+
+ Afin de rendre le dispositif encore plus proactif, il serait pertinent de le coupler à un système de notification multicanal (via e-mail, Microsoft Teams, etc.). Ce système serait capable d'alerter automatiquement et de manière ciblée les équipes métiers en cas de dégradation soudaine du score de qualité d'une table ou d'anomalies critiques détectées par Airflow, favorisant ainsi une réactivité immédiate sans nécessiter de surveillance manuelle continue.
+
+Ces perspectives contribueront à faire évoluer la plateforme vers un écosystème hautement proactif et autonome, assurant le pilotage continu de la santé des données au sein de l'institution.
