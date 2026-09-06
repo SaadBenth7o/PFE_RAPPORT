@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  27 JUL 2026 00:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.4)  6 SEP 2026 14:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -632,6 +632,48 @@ File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 z/libraries\tikzlibrarycalc.code.tex
 File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryshadows.code.tex
+File: tikzlibraryshadows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryfadings.code.tex
+File: tikzlibraryfadings.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryfadings.code.tex
+File: pgflibraryfadings.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryfit.code.tex
+File: tikzlibraryfit.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarybackgrounds.code.tex
+File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgf@layerbox@background=\box91
+\pgf@layerboxsaved@background=\box92
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen290
+\lightrulewidth=\dimen291
+\cmidrulewidth=\dimen292
+\belowrulesep=\dimen293
+\belowbottomsep=\dimen294
+\aboverulesep=\dimen295
+\abovetopsep=\dimen296
+\cmidrulesep=\dimen297
+\cmidrulekern=\dimen298
+\defaultaddspace=\dimen299
+\@cmidla=\count322
+\@cmidlb=\count323
+\@aboverulesep=\dimen300
+\@belowrulesep=\dimen301
+\@thisruleclass=\count324
+\@lastruleclass=\count325
+\@thisrulewidth=\dimen302
+)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
 Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
 
@@ -650,27 +692,27 @@ Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen290
-\captionmargin=\dimen291
-\caption@leftmargin=\dimen292
-\caption@rightmargin=\dimen293
-\caption@width=\dimen294
-\caption@indent=\dimen295
-\caption@parindent=\dimen296
-\caption@hangindent=\dimen297
+\caption@tempdima=\dimen303
+\captionmargin=\dimen304
+\caption@leftmargin=\dimen305
+\caption@rightmargin=\dimen306
+\caption@width=\dimen307
+\caption@indent=\dimen308
+\caption@parindent=\dimen309
+\caption@hangindent=\dimen310
 Package caption Info: Standard document class detected.
 Package caption Info: french babel package is loaded.
 )
-\c@caption@flags=\count322
-\c@continuedfloat=\count323
+\c@caption@flags=\count326
+\c@continuedfloat=\count327
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count324
+\c@float@type=\count328
 \float@exts=\toks40
-\float@box=\box91
+\float@box=\box93
 \@float@everytoks=\toks41
-\@floatcapt=\box92
+\@floatcapt=\box94
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
 Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
@@ -678,17 +720,17 @@ Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
 \LTright=\skip59
 \LTpre=\skip60
 \LTpost=\skip61
-\LTchunksize=\count325
-\LTcapwidth=\dimen298
-\LT@head=\box93
-\LT@firsthead=\box94
-\LT@foot=\box95
-\LT@lastfoot=\box96
-\LT@gbox=\box97
-\LT@cols=\count326
-\LT@rows=\count327
-\c@LT@tables=\count328
-\c@LT@chunks=\count329
+\LTchunksize=\count329
+\LTcapwidth=\dimen311
+\LT@head=\box95
+\LT@firsthead=\box96
+\LT@foot=\box97
+\LT@lastfoot=\box98
+\LT@gbox=\box99
+\LT@cols=\count330
+\LT@rows=\count331
+\c@LT@tables=\count332
+\c@LT@chunks=\count333
 \LT@p@ftn=\toks42
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/pgfgantt\pgfgantt.sty
@@ -701,14 +743,8 @@ File: tikzlibraryarrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
 aryarrows.code.tex
 File: pgflibraryarrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\arrowsize=\dimen299
+\arrowsize=\dimen312
 ))
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarybackgrounds.code.tex
-File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@layerbox@background=\box98
-\pgf@layerboxsaved@background=\box99
-)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarypatterns.code.tex
 File: tikzlibrarypatterns.code.tex 2025-08-29 v3.1.11a (3.1.11a)
@@ -722,34 +758,62 @@ ar.sty
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfcale
 ndar.code.tex
 File: pgfcalendar.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfcalendarcurrentjulian=\count330
-\pgf@cal@easter@Y=\count331
-\pgf@cal@easter@G=\count332
-\pgf@cal@easter@C=\count333
-\pgf@cal@easter@X=\count334
-\pgf@cal@easter@Z=\count335
-\pgf@cal@easter@D=\count336
-\pgf@cal@easter@E=\count337
-\pgf@cal@easter@N=\count338
-\pgf@cal@easter@M=\count339
-\pgf@cal@easter@julianday=\count340
+\pgfcalendarcurrentjulian=\count334
+\pgf@cal@easter@Y=\count335
+\pgf@cal@easter@G=\count336
+\pgf@cal@easter@C=\count337
+\pgf@cal@easter@X=\count338
+\pgf@cal@easter@Z=\count339
+\pgf@cal@easter@D=\count340
+\pgf@cal@easter@E=\count341
+\pgf@cal@easter@N=\count342
+\pgf@cal@easter@M=\count343
+\pgf@cal@easter@julianday=\count344
 ))
-\gtt@currentline=\count341
-\gtt@lasttitleline=\count342
-\gtt@currgrid=\count343
-\gtt@chartwidth=\count344
-\gtt@lasttitleslot=\count345
-\gtt@elementid=\count346
-\gtt@today@slot=\count347
-\gtt@startjulian=\count348
-\gtt@endjulian=\count349
-\gtt@chartid=\count350
-\gtt@vrule@slot=\count351
-\gtt@calendar@slots=\count352
-\gtt@calendar@weeknumber=\count353
-\gtt@calendar@startofweek=\count354
-\gtt@left@slot=\count355
-\gtt@right@slot=\count356
+\gtt@currentline=\count345
+\gtt@lasttitleline=\count346
+\gtt@currgrid=\count347
+\gtt@chartwidth=\count348
+\gtt@lasttitleslot=\count349
+\gtt@elementid=\count350
+\gtt@today@slot=\count351
+\gtt@startjulian=\count352
+\gtt@endjulian=\count353
+\gtt@chartid=\count354
+\gtt@vrule@slot=\count355
+\gtt@calendar@slots=\count356
+\gtt@calendar@weeknumber=\count357
+\gtt@calendar@startofweek=\count358
+\gtt@left@slot=\count359
+\gtt@right@slot=\count360
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
+Package: enumitem 2025/02/06 v3.11 Customized lists
+\labelindent=\skip62
+\enit@outerparindent=\dimen313
+\enit@toks=\toks43
+\enit@inbox=\box100
+\enit@count@id=\count361
+\enitdp@description=\count362
+)
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip63
+\f@nch@offset@elh=\skip64
+\f@nch@offset@erh=\skip65
+\f@nch@offset@olh=\skip66
+\f@nch@offset@orh=\skip67
+\f@nch@offset@elf=\skip68
+\f@nch@offset@erf=\skip69
+\f@nch@offset@olf=\skip70
+\f@nch@offset@orf=\skip71
+\f@nch@height=\skip72
+\f@nch@footalignment=\skip73
+\f@nch@widthL=\skip74
+\f@nch@widthC=\skip75
+\f@nch@widthR=\skip76
+\@temptokenb=\toks44
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip17
@@ -801,16 +865,16 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count357
+\c@section@level=\count363
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.s
 ty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen300
-\Hy@linkcounter=\count358
-\Hy@pagecounter=\count359
+\@linkdim=\dimen314
+\Hy@linkcounter=\count364
+\Hy@pagecounter=\count365
  (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -818,7 +882,7 @@ Now handling font encoding PD1 ...
 ) (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count360
+\Hy@SavedSpaceFactor=\count366
  (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -831,9 +895,9 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count361
+\c@Hy@tempcnt=\count367
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen301
+\XeTeXLinkMargin=\dimen315
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -843,9 +907,9 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count362
-\Field@Width=\dimen302
-\Fld@charsize=\dimen303
+\Fld@menulength=\count368
+\Field@Width=\dimen316
+\Fld@charsize=\dimen317
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -853,16 +917,16 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count363
-\c@Item=\count364
-\c@Hfootnote=\count365
+\Hy@abspage=\count369
+\c@Item=\count370
+\c@Hfootnote=\count371
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count366
-\c@bookmark@seq@number=\count367
+\Fld@listcount=\count372
+\c@bookmark@seq@number=\count373
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
 echeck.sty
@@ -875,32 +939,73 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 84.
 )
-\Hy@SectionHShift=\skip62
+\Hy@SectionHShift=\skip77
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 31.
+Package hyperref Info: Option `colorlinks' set `true' on input line 61.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 61.
 
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/tocloft\tocloft.sty
+Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
+Package tocloft Info: The document has chapter divisions on input line 51.
+\cftparskip=\skip78
+\cftbeforetoctitleskip=\skip79
+\cftaftertoctitleskip=\skip80
+\cftbeforepartskip=\skip81
+\cftpartnumwidth=\skip82
+\cftpartindent=\skip83
+\cftbeforechapskip=\skip84
+\cftchapindent=\skip85
+\cftchapnumwidth=\skip86
+\cftbeforesecskip=\skip87
+\cftsecindent=\skip88
+\cftsecnumwidth=\skip89
+\cftbeforesubsecskip=\skip90
+\cftsubsecindent=\skip91
+\cftsubsecnumwidth=\skip92
+\cftbeforesubsubsecskip=\skip93
+\cftsubsubsecindent=\skip94
+\cftsubsubsecnumwidth=\skip95
+\cftbeforeparaskip=\skip96
+\cftparaindent=\skip97
+\cftparanumwidth=\skip98
+\cftbeforesubparaskip=\skip99
+\cftsubparaindent=\skip100
+\cftsubparanumwidth=\skip101
+\cftbeforeloftitleskip=\skip102
+\cftafterloftitleskip=\skip103
+\cftbeforefigskip=\skip104
+\cftfigindent=\skip105
+\cftfignumwidth=\skip106
+\c@lofdepth=\count374
+\c@lotdepth=\count375
+\cftbeforelottitleskip=\skip107
+\cftafterlottitleskip=\skip108
+\cftbeforetabskip=\skip109
+\cfttabindent=\skip110
+\cfttabnumwidth=\skip111
+)
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
-\lst@mode=\count368
-\lst@gtempboxa=\box100
-\lst@token=\toks43
-\lst@length=\count369
-\lst@currlwidth=\dimen304
-\lst@column=\count370
-\lst@pos=\count371
-\lst@lostspace=\dimen305
-\lst@width=\dimen306
-\lst@newlines=\count372
-\lst@lineno=\count373
-\lst@maxwidth=\dimen307
+\lst@mode=\count376
+\lst@gtempboxa=\box101
+\lst@token=\toks45
+\lst@length=\count377
+\lst@currlwidth=\dimen318
+\lst@column=\count378
+\lst@pos=\count379
+\lst@lostspace=\dimen319
+\lst@width=\dimen320
+\lst@newlines=\count380
+\lst@lineno=\count381
+\lst@maxwidth=\dimen321
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstpatch.sty
 File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-\c@lstnumber=\count374
-\lst@skipnumbers=\count375
-\lst@framebox=\box101
+\c@lstnumber=\count382
+\lst@skipnumbers=\count383
+\lst@framebox=\box102
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
 File: listings.cfg 2025/11/14 1.11b listings configuration
@@ -912,55 +1017,61 @@ Package: listings 2025/11/14 1.11b (Carsten Heinz)
     but found:
         2025/11/14 1.11b (Carsten Heinz)
     so I'm assuming it got fixed.
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 96
-.
+Package french3.ldf Info: Setting StandardItemizeEnv=true for
+(french3.ldf)             compatibility with enumitem package,
+(french3.ldf)             reported on input line 139.
+Package french3.ldf Info: Setting StandardEnumerateEnv=true for
+(french3.ldf)             compatibility with enumitem package,
+(french3.ldf)             reported on input line 139.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 13
+9.
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count376
+\l__color_backend_stack_int=\count384
 ) (main.aux
 Package babel Info: 'french' activates 'french' shorthands.
 (babel)             Reported on input line 11.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Info: Redefining \degres on input line 96.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 139.
+LaTeX Font Info:    ... okay on input line 139.
+LaTeX Info: Redefining \degres on input line 139.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count377
-\scratchdimen=\dimen308
-\scratchbox=\box102
-\nofMPsegments=\count378
-\nofMParguments=\count379
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count380
-\MPscratchDim=\dimen309
-\MPnumerator=\count381
-\makeMPintoPDFobject=\count382
-\everyMPtoPDFconversion=\toks45
+\scratchcounter=\count385
+\scratchdimen=\dimen322
+\scratchbox=\box103
+\nofMPsegments=\count386
+\nofMParguments=\count387
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count388
+\MPscratchDim=\dimen323
+\MPnumerator=\count389
+\makeMPintoPDFobject=\count390
+\everyMPtoPDFconversion=\toks47
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -988,8 +1099,8 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \textheight=731.23584pt
 * \oddsidemargin=-1.1381pt
 * \evensidemargin=-1.1381pt
-* \topmargin=-52.36449pt
-* \headheight=12.0pt
+* \topmargin=-55.36449pt
+* \headheight=15.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
@@ -1006,13 +1117,13 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 96.
-Package microtype Info: Applying patch `item' on input line 96.
-Package microtype Info: Applying patch `toc' on input line 96.
-Package microtype Info: Applying patch `eqnum' on input line 96.
-Package microtype Info: Applying patch `footnote' on input line 96.
-Package microtype Info: Applying patch `verbatim' on input line 96.
-LaTeX Info: Redefining \microtypesetup on input line 96.
+LaTeX Info: Redefining \microtypecontext on input line 139.
+Package microtype Info: Applying patch `item' on input line 139.
+Package microtype Info: Applying patch `toc' on input line 139.
+Package microtype Info: Applying patch `eqnum' on input line 139.
+Package microtype Info: Applying patch `footnote' on input line 139.
+Package microtype Info: Applying patch `verbatim' on input line 139.
+LaTeX Info: Redefining \microtypesetup on input line 139.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1037,73 +1148,70 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 96.
+Package hyperref Info: Link coloring ON on input line 139.
 
 (main.out) (main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-\c@lstlisting=\count383
-<logos/unica.png, id=286, 707.64375pt x 180.675pt>
-File: logos/unica.png Graphic file (type png)
-<use logos/unica.png>
-Package pdftex.def Info: logos/unica.png  used on input line 105.
-(pdftex.def)             Requested size: 127.46756pt x 32.5449pt.
+\c@lstlisting=\count391
+<logos/emsi.png, id=374, 863.225pt x 863.225pt>
+File: logos/emsi.png Graphic file (type png)
+<use logos/emsi.png>
+Package pdftex.def Info: logos/emsi.png  used on input line 149.
+(pdftex.def)             Requested size: 170.71652pt x 170.70569pt.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-07.
+51.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-07.
+51.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-107.
+151.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-107.
+151.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 107.
+(Font)              <12> on input line 151.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 107.
+(Font)              <8> on input line 151.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 107.
-<logos/cih.png, id=288, 321.2pt x 321.2pt>
+(Font)              <6> on input line 151.
+<logos/unica.png, id=376, 707.64375pt x 180.675pt>
+File: logos/unica.png Graphic file (type png)
+<use logos/unica.png>
+Package pdftex.def Info: logos/unica.png  used on input line 155.
+(pdftex.def)             Requested size: 170.71652pt x 43.58618pt.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
+83.
+
+(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+<logos/cih.png, id=377, 321.2pt x 321.2pt>
 File: logos/cih.png Graphic file (type png)
 <use logos/cih.png>
-Package pdftex.def Info: logos/cih.png  used on input line 111.
-(pdftex.def)             Requested size: 127.4681pt x 127.4681pt.
-<logos/emsi.png, id=289, 863.225pt x 863.225pt>
-File: logos/emsi.png Graphic file (type png)
-<use logos/emsi.png>
-Package pdftex.def Info: logos/emsi.png  used on input line 116.
-(pdftex.def)             Requested size: 127.46289pt x 127.46289pt.
-
-Overfull \hbox (1.0pt too wide) in paragraph at lines 127--128
- [][] 
- []
-
-
-Overfull \hbox (1.0pt too wide) in paragraph at lines 135--136
- [][] 
- []
-
-[1
+Package pdftex.def Info: logos/cih.png  used on input line 192.
+(pdftex.def)             Requested size: 128.0374pt x 128.04152pt.
+ [1
 
 {C:/Users/benda/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/bend
-a/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc} <./logos/unica.pn
-g> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
+a/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/benda/Ap
+pData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc} <./logos/emsi.png> <
+./logos/unica.png> <./logos/cih.png>] (sections/dedicaces.tex)
 (sections/remerciements.tex [1
 
 ]) (sections/resume.tex [2
@@ -1113,11 +1221,9 @@ g> <./logos/cih.png> <./logos/emsi.png>] (sections/dedicaces.tex)
 
 ]) [4
 
-] (main.toc [5
-
-]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7
-2.
+] (main.toc [5]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
+16.
 
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -1126,846 +1232,690 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-)
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 153.
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[6])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [6]
-(main.lof)
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[7] (main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
- [7
-
-] (main.lot)
+ [8] (main.lot)
 \tf@lot=\write7
 \openout7 = `main.lot'.
 
- [8
-
-] (sections/abbreviations.tex) [9
+ [9] (sections/abbreviations.tex) [10
 
 ]
-(sections/introduction.tex) (sections/chapitre1.tex
+(sections/introduction.tex
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1 \chapter
-            {Pr√©sentation du cadre de projet} [1
+l.12 
+      [1
+
+]) (sections/chapitre1.tex [2]
+Chapitre 1.
+[3
 
 ]
-Chapitre 1.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/12'.
 (microtype)             Ignoring protrusion settings for this character.
-[2
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[4
 
 ]
-<figures/chiffresCles.png, id=482, 1466.47874pt x 1080.035pt>
+<figures/chiffresCles.png, id=616, 1466.47874pt x 1080.035pt>
 File: figures/chiffresCles.png Graphic file (type png)
 <use figures/chiffresCles.png>
-Package pdftex.def Info: figures/chiffresCles.png  used on input line 119.
+Package pdftex.def Info: figures/chiffresCles.png  used on input line 93.
 (pdftex.def)             Requested size: 364.19667pt x 268.21176pt.
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-[3] [4 <./figures/chiffresCles.png (PNG copy)>]
-<figures/Organigramme.png, id=494, 1504.62125pt x 1052.93375pt>
+[5 <./figures/chiffresCles.png (PNG copy)>]
+<figures/Organigramme.png, id=622, 1504.62125pt x 1052.93375pt>
 File: figures/Organigramme.png Graphic file (type png)
 <use figures/Organigramme.png>
-Package pdftex.def Info: figures/Organigramme.png  used on input line 154.
+Package pdftex.def Info: figures/Organigramme.png  used on input line 117.
 (pdftex.def)             Requested size: 1504.61758pt x 1052.93118pt.
- [5 <./figures/Organigramme.png (PNG copy)>] [6]
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[6]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[7 <./figures/Organigramme.png (PNG copy)>]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 197.
-<figures/Architecture et pipeline de donn√©es.png, id=503, 1541.76pt x 1027.84p
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 148.
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[8]
+<figures/Architecture et pipeline de donn√©es.png, id=637, 1541.76pt x 1027.84p
 t>
 File: figures/Architecture et pipeline de donn√©es.png Graphic file (type png)
 <use figures/Architecture et pipeline de donn√©es.png>
 Package pdftex.def Info: figures/Architecture et pipeline de donn√©es.png  used
- on input line 207.
+ on input line 157.
 (pdftex.def)             Requested size: 432.48051pt x 288.31079pt.
- [7 <./figures/Architecture et pipeline de donn√©es.png (PNG copy)>] [8] [9]) (
-sections/chapitre2.tex [10]
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[9 <./figures/Architecture et pipeline de donn√©es.png (PNG copy)>]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[10]
+<figures/Gantt_CIH_Bank_Final.png, id=657, 1149.8157pt x 641.2758pt>
+File: figures/Gantt_CIH_Bank_Final.png Graphic file (type png)
+<use figures/Gantt_CIH_Bank_Final.png>
+Package pdftex.def Info: figures/Gantt_CIH_Bank_Final.png  used on input line 2
+13.
+(pdftex.def)             Requested size: 455.24411pt x 253.89316pt.
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[11]) (sections/chapitre2.tex
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[12 <./figures/Gantt_CIH_Bank_Final.png>]
 Chapitre 2.
-[11
-
-] [12] [13]
-<figures/usecaseGeneral.png, id=542, 1122.1925pt x 588.1975pt>
-File: figures/usecaseGeneral.png Graphic file (type png)
-<use figures/usecaseGeneral.png>
-Package pdftex.def Info: figures/usecaseGeneral.png  used on input line 98.
-(pdftex.def)             Requested size: 432.48051pt x 226.67662pt.
- [14 <./figures/usecaseGeneral.png>] [15])
-(sections/chapitre3.tex [16]
-Chapitre 3.
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-This error message was generated by an \errmessage
-command, so I can't give any explicit help.
-Pretend that you're Hercule Poirot: Examine all clues,
-and deduce the truth by order and method.
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.60     }
-          
-(That was another \errmessage.)
-
-[17
+[13
 
 ]
 
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
+[14
+
+]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[15]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[16]
+<figures/usecaseGeneral.png, id=701, 875.27pt x 367.3725pt>
+File: figures/usecaseGeneral.png Graphic file (type png)
+<use figures/usecaseGeneral.png>
+Package pdftex.def Info: figures/usecaseGeneral.png  used on input line 97.
+(pdftex.def)             Requested size: 432.48051pt x 181.522pt.
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[17 <./figures/usecaseGeneral.png>]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[18]) (sections/chapitre3.tex
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[19]
+Chapitre 3.
+[20
+
+] [21
+
+]
+<figures/activity_dq_swimlanes.png, id=727, 1700.3525pt x 932.48375pt>
+File: figures/activity_dq_swimlanes.png Graphic file (type png)
+<use figures/activity_dq_swimlanes.png>
+Package pdftex.def Info: figures/activity_dq_swimlanes.png  used on input line 
+74.
+(pdftex.def)             Requested size: 409.71692pt x 224.68283pt.
+
+! Misplaced \noalign.
+\midrule ->\noalign 
+                    {\ifnum 0=`}\fi \@aboverulesep =\aboverulesep \global \@...
+l.189     }
            
-(That was another \errmessage.)
+I expect to see \noalign only after the \cr of
+an alignment. Proceed, and I'll ignore this case.
 
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
+! Misplaced \noalign.
+\midrule ->\noalign 
+                    {\ifnum 0=`}\fi \@aboverulesep =\aboverulesep \global \@...
+l.189     }
            
-(That was another \errmessage.)
+I expect to see \noalign only after the \cr of
+an alignment. Proceed, and I'll ignore this case.
 
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
+! Misplaced \noalign.
+\midrule ->\noalign 
+                    {\ifnum 0=`}\fi \@aboverulesep =\aboverulesep \global \@...
+l.189     }
            
-(That was another \errmessage.)
+I expect to see \noalign only after the \cr of
+an alignment. Proceed, and I'll ignore this case.
 
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101     }
-           
-(That was another \errmessage.)
-
-[18]
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.216     }
-           
-(That was another \errmessage.)
-
-! Undefined control sequence.
-<recently read> \midrule 
-                         
-l.216     }
-           
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \midrule 
-                         
-l.216     }
-           
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \midrule 
-                         
-l.216     }
-           
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.216     }
-           
-(That was another \errmessage.)
-
-
-Overfull \hbox (19.19168pt too wide) in paragraph at lines 216--216
- [][]\T1/lmr/bx/n/10.95 (-20) consolidated_all_column_history 
- []
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.216     }
-           
-(That was another \errmessage.)
-
-
-Overfull \hbox (8.20584pt too wide) in paragraph at lines 216--216
- [][]\T1/lmr/bx/n/10.95 (-20) consolidated_all_checks_config 
- []
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.216     }
-           
-(That was another \errmessage.)
-
-[19] [20]
-Underfull \hbox (badness 4492) in paragraph at lines 264--264
+[22 <./figures/activity_dq_swimlanes.png (PNG copy)>] [23]
+Underfull \hbox (badness 4492) in paragraph at lines 238--238
 []|\T1/lmr/m/n/12 (+20) RequÍte SQL exÈ-cu-tÈe par le mo-teur
  []
 
-[21]
-Overfull \hbox (61.11247pt too wide) in paragraph at lines 274--275
-[]\T1/lmr/bx/n/12 (-20) La co-hÈ-rence condi-tion-nelle FATCA \T1/lmr/m/n/12 (-
-20) : L'iden-ti-fiant FATCA (\T1/lmtt/m/n/12 fatcaidentificationnumber\T1/lmr/m
-/n/12 (-20) )
- []
-
-
-Overfull \hbox (47.7325pt too wide) in paragraph at lines 274--275
-\T1/lmr/m/n/12 (-20) est ma-jo-ri-tai-re-ment nul, ce qui est co-hÈ-rent pour l
-es ci-toyens ma-ro-cains (\T1/lmtt/m/n/12 nationalitycountry
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 284--284
+[24]
+Underfull \hbox (badness 10000) in paragraph at lines 259--259
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 280--286
+Overfull \hbox (22.6864pt too wide) in alignment at lines 255--261
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 289--289
+Underfull \hbox (badness 10000) in paragraph at lines 264--264
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 286--291
+Overfull \hbox (22.6864pt too wide) in alignment at lines 261--266
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 298--298
+Underfull \hbox (badness 10000) in paragraph at lines 273--273
 []|\T1/lmtt/m/n/12 nationality_
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 300--300
+Underfull \hbox (badness 10000) in paragraph at lines 275--275
 []|\T1/lmtt/m/n/12 professional_
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--303
+Underfull \hbox (badness 10000) in paragraph at lines 277--278
 []|\T1/lmr/m/n/12 (+20) PrÈciser la pro-fes-sion
  []
 
 
-Overfull \hbox (19.48512pt too wide) in paragraph at lines 304--304
+Overfull \hbox (19.48512pt too wide) in paragraph at lines 279--279
 []|\T1/lmtt/m/n/12 socioprofessional_
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 306--306
+Underfull \hbox (badness 10000) in paragraph at lines 281--281
 []|\T1/lmtt/m/n/12 professional_
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 310--310
-[]|\T1/lmtt/m/n/12 politically_
- []
-
-
-Overfull \hbox (22.6864pt too wide) in alignment at lines 291--312
+Overfull \hbox (22.6864pt too wide) in alignment at lines 266--285
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 321--321
+Underfull \hbox (badness 10000) in paragraph at lines 294--294
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 317--323
+Overfull \hbox (22.6864pt too wide) in alignment at lines 290--296
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 326--326
+Underfull \hbox (badness 10000) in paragraph at lines 299--299
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 323--328
+Overfull \hbox (22.6864pt too wide) in alignment at lines 296--301
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 8113) in paragraph at lines 329--329
+Underfull \hbox (badness 8113) in paragraph at lines 302--302
 []|\T1/lmr/m/n/12 (+20) Longueur $\OMS/lmsy/m/n/12 ^^U$ \T1/lmr/m/n/12 (+20) 2,
  au-cun
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 339--339
+Underfull \hbox (badness 10000) in paragraph at lines 312--312
 []|\T1/lmtt/m/n/12 professional_
  []
 
 
-Underfull \hbox (badness 7981) in paragraph at lines 339--339
+Underfull \hbox (badness 7981) in paragraph at lines 312--312
 []|\T1/lmr/m/n/12 (+20) Code nu-mÈ-rique va-lide
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 341--341
+Underfull \hbox (badness 10000) in paragraph at lines 314--314
 []|\T1/lmtt/m/n/12 professional_
  []
 
 
-Underfull \hbox (badness 1062) in paragraph at lines 341--341
+Underfull \hbox (badness 1062) in paragraph at lines 314--314
 \T1/lmr/m/n/12 (+20) FON, TRI, AUT, EMP,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 343--344
+Underfull \hbox (badness 10000) in paragraph at lines 316--317
 []|\T1/lmr/m/n/12 (+20) Normaliser : map-per
  []
 
 
-Underfull \hbox (badness 1558) in paragraph at lines 343--344
+Underfull \hbox (badness 1558) in paragraph at lines 316--317
 \T1/lmr/m/n/12 (+20) 'LUI ME-ME' vers auto-
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 328--345
+Overfull \hbox (22.6864pt too wide) in alignment at lines 301--318
  [] [] [] [] 
  []
 
-[22]
-Underfull \hbox (badness 10000) in paragraph at lines 354--354
+ignored error: Infinite glue shrinkage found in box being split [25{C:/Users/be
+nda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}]
+Underfull \hbox (badness 10000) in paragraph at lines 327--327
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 350--356
+Overfull \hbox (22.6864pt too wide) in alignment at lines 323--329
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 359--359
+Underfull \hbox (badness 10000) in paragraph at lines 332--332
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 356--361
+Overfull \hbox (22.6864pt too wide) in alignment at lines 329--334
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 364--364
+Underfull \hbox (badness 10000) in paragraph at lines 337--337
 []|\T1/lmtt/m/n/12 fatca_
  []
 
 
-Overfull \hbox (0.96011pt too wide) in paragraph at lines 364--364
+Overfull \hbox (0.96011pt too wide) in paragraph at lines 337--337
 \T1/lmtt/m/n/12 identification_
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--366
+Underfull \hbox (badness 10000) in paragraph at lines 339--339
 []|\T1/lmtt/m/n/12 employer \T1/lmr/m/n/12 (+20) +
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--366
+Underfull \hbox (badness 10000) in paragraph at lines 339--339
 \T1/lmtt/m/n/12 professional_
  []
 
 
-Underfull \hbox (badness 7012) in paragraph at lines 366--367
+Underfull \hbox (badness 7012) in paragraph at lines 339--340
 []|\T1/lmr/m/n/12 (+20) Annuler le nom d'em-
  []
 
 
-Underfull \hbox (badness 2970) in paragraph at lines 366--367
+Underfull \hbox (badness 2970) in paragraph at lines 339--340
 \T1/lmr/m/n/12 (+20) ployeur in-co-hÈ-rent dans
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 361--368
+Overfull \hbox (22.6864pt too wide) in alignment at lines 334--341
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 377--377
+Underfull \hbox (badness 10000) in paragraph at lines 350--350
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 373--379
+Overfull \hbox (22.6864pt too wide) in alignment at lines 346--352
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 382--382
+Underfull \hbox (badness 10000) in paragraph at lines 355--355
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 379--384
+Overfull \hbox (22.6864pt too wide) in alignment at lines 352--357
  [] [] [] [] 
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 384--389
+Overfull \hbox (22.6864pt too wide) in alignment at lines 357--362
  [] [] [] [] 
  []
 
-[23{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.e
-nc}{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
+[26{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{
+C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}]
 
-Underfull \hbox (badness 10000) in paragraph at lines 398--398
+Underfull \hbox (badness 10000) in paragraph at lines 371--371
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 394--400
+Overfull \hbox (22.6864pt too wide) in alignment at lines 367--373
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 403--403
+Underfull \hbox (badness 10000) in paragraph at lines 376--376
 []|\T1/lmr/bx/n/12 (+20) Description RËgle /
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 400--405
+Overfull \hbox (22.6864pt too wide) in alignment at lines 373--378
  [] [] [] [] 
  []
 
 
-Overfull \hbox (22.6864pt too wide) in alignment at lines 405--412
+Overfull \hbox (22.6864pt too wide) in alignment at lines 378--383
  [] [] [] [] 
  []
 
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 432.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 432.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 432.
+[27] [28] [29]
+<figures/deployment_uml_formal.png, id=784, 648.5028pt x 768.9528pt>
+File: figures/deployment_uml_formal.png Graphic file (type png)
+<use figures/deployment_uml_formal.png>
+Package pdftex.def Info: figures/deployment_uml_formal.png  used on input line 
+473.
+(pdftex.def)             Requested size: 446.13727pt x 528.99402pt.
+ [30] [31 <./figures/deployment_uml_formal.png (PNG copy)>]
+<figures/logos/dbeaver.png, id=795, 3011.25pt x 2007.5pt>
+File: figures/logos/dbeaver.png Graphic file (type png)
+<use figures/logos/dbeaver.png>
+Package pdftex.def Info: figures/logos/dbeaver.png  used on input line 504.
+(pdftex.def)             Requested size: 64.00545pt x 42.67029pt.
 
 
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 506.
+See the caption package documentation for explanation.
 
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-
-! Package pgfkeys Error: I do not know the key '/tikz/drop shadow' and I am goi
-ng to ignore it. Perhaps you misspelled it.
-
-See the pgfkeys package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.450     }
-           
-(That was another \errmessage.)
-
-[24]
-Overfull \hbox (29.71902pt too wide) in paragraph at lines 463--464
-\T1/lmtt/m/n/12 _all_checks_config \T1/lmr/m/n/12 (-20) pour la confi-gu-ra-tio
-n et les re-quÍtes SQL gÈ-nÈ-rÈes, et \T1/lmtt/m/n/12 consolidated
- []
-
-[25] [26]
-<figures/logos/logo_oracle.png, id=624, 501.875pt x 65.24374pt>
-File: figures/logos/logo_oracle.png Graphic file (type png)
-<use figures/logos/logo_oracle.png>
-Package pdftex.def Info: figures/logos/logo_oracle.png  used on input line 540.
-
-(pdftex.def)             Requested size: 54.6244pt x 7.10117pt.
- [27]
-<figures/logos/logo_mobaxterm.png, id=632, 513.92pt x 497.86pt>
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/8'.
+(microtype)             Ignoring protrusion settings for this character.
+<figures/logos/logo_mobaxterm.png, id=796, 513.92pt x 497.86pt>
 File: figures/logos/logo_mobaxterm.png Graphic file (type png)
 <use figures/logos/logo_mobaxterm.png>
 Package pdftex.def Info: figures/logos/logo_mobaxterm.png  used on input line 5
-53.
+19.
 (pdftex.def)             Requested size: 29.36745pt x 28.44972pt.
-<figures/logos/logo_sqoop.png, id=633, 262.9825pt x 262.9825pt>
-File: figures/logos/logo_sqoop.png Graphic file (type png)
-<use figures/logos/logo_sqoop.png>
-Package pdftex.def Info: figures/logos/logo_sqoop.png  used on input line 566.
-(pdftex.def)             Requested size: 28.45064pt x 28.45064pt.
-<figures/logos/logo_hive.png, id=634, 963.6pt x 867.24pt>
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 521.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_hive.png, id=797, 963.6pt x 867.24pt>
 File: figures/logos/logo_hive.png Graphic file (type png)
 <use figures/logos/logo_hive.png>
-Package pdftex.def Info: figures/logos/logo_hive.png  used on input line 579.
+Package pdftex.def Info: figures/logos/logo_hive.png  used on input line 534.
 (pdftex.def)             Requested size: 31.61215pt x 28.45094pt.
-<figures/logos/logo_spark.png, id=635, 377.41pt x 200.75pt>
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 536.
+See the caption package documentation for explanation.
+
+[32 <./figures/logos/dbeaver.png> <./figures/logos/logo_mobaxterm.png> <./figur
+es/logos/logo_hive.png>]
+<figures/logos/logo_spark.png, id=810, 377.41pt x 200.75pt>
 File: figures/logos/logo_spark.png Graphic file (type png)
 <use figures/logos/logo_spark.png>
-Package pdftex.def Info: figures/logos/logo_spark.png  used on input line 592.
+Package pdftex.def Info: figures/logos/logo_spark.png  used on input line 549.
 (pdftex.def)             Requested size: 53.48778pt x 28.45094pt.
-<figures/logos/logo_soda.png, id=636, 338.26375pt x 338.26375pt>
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 551.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_soda.png, id=811, 338.26375pt x 338.26375pt>
 File: figures/logos/logo_soda.png Graphic file (type png)
 <use figures/logos/logo_soda.png>
-Package pdftex.def Info: figures/logos/logo_soda.png  used on input line 605.
-(pdftex.def)             Requested size: 28.45009pt x 28.45009pt.
-<figures/logos/logo_airflow.png, id=637, 1204.5pt x 1204.5pt>
+Package pdftex.def Info: figures/logos/logo_soda.png  used on input line 564.
+(pdftex.def)             Requested size: 42.67513pt x 42.67513pt.
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 566.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_airflow.png, id=812, 1204.5pt x 1204.5pt>
 File: figures/logos/logo_airflow.png Graphic file (type png)
 <use figures/logos/logo_airflow.png>
-Package pdftex.def Info: figures/logos/logo_airflow.png  used on input line 618
+Package pdftex.def Info: figures/logos/logo_airflow.png  used on input line 579
 .
-(pdftex.def)             Requested size: 28.45094pt x 28.45094pt.
-<figures/logos/logo_dremio.png, id=638, 513.92pt x 513.92pt>
+(pdftex.def)             Requested size: 42.67642pt x 42.67642pt.
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 581.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_dremio.png, id=813, 513.92pt x 513.92pt>
 File: figures/logos/logo_dremio.png Graphic file (type png)
 <use figures/logos/logo_dremio.png>
-Package pdftex.def Info: figures/logos/logo_dremio.png  used on input line 631.
+Package pdftex.def Info: figures/logos/logo_dremio.png  used on input line 594.
 
 (pdftex.def)             Requested size: 28.44997pt x 28.44997pt.
-<figures/logos/logo_tableau.png, id=639, 578.16pt x 119.7273pt>
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 596.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_tableau.png, id=814, 578.16pt x 119.7273pt>
 File: figures/logos/logo_tableau.png Graphic file (type png)
 <use figures/logos/logo_tableau.png>
-Package pdftex.def Info: figures/logos/logo_tableau.png  used on input line 644
+Package pdftex.def Info: figures/logos/logo_tableau.png  used on input line 609
 .
-(pdftex.def)             Requested size: 54.62581pt x 11.31209pt.
-<figures/logos/logo_gitlab.png, id=640, 513.92pt x 513.92pt>
+(pdftex.def)             Requested size: 80.1214pt x 16.5918pt.
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 611.
+See the caption package documentation for explanation.
+
+<figures/logos/logo_gitlab.png, id=815, 513.92pt x 513.92pt>
 File: figures/logos/logo_gitlab.png Graphic file (type png)
 <use figures/logos/logo_gitlab.png>
-Package pdftex.def Info: figures/logos/logo_gitlab.png  used on input line 658.
+Package pdftex.def Info: figures/logos/logo_gitlab.png  used on input line 624.
 
-(pdftex.def)             Requested size: 49.78745pt x 49.78745pt.
-) (sections/chapitre4.tex [28 <./figures/logos/logo_oracle.png> <./figures/logo
-s/logo_mobaxterm.png> <./figures/logos/logo_sqoop.png> <./figures/logos/logo_hi
-ve.png> <./figures/logos/logo_spark.png> <./figures/logos/logo_soda.png> <./fig
-ures/logos/logo_airflow.png> <./figures/logos/logo_dremio.png> <./figures/logos
-/logo_tableau.png> <./figures/logos/logo_gitlab.png>] [29]
+(pdftex.def)             Requested size: 64.01242pt x 64.01242pt.
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 626.
+See the caption package documentation for explanation.
+
+) (sections/chapitre4.tex [33 <./figures/logos/logo_spark.png> <./figures/logos
+/logo_soda.png> <./figures/logos/logo_airflow.png> <./figures/logos/logo_dremio
+.png> <./figures/logos/logo_tableau.png> <./figures/logos/logo_gitlab.png>]
 Chapitre 4.
-<figures/mobaxterminterface.png, id=659, 1135.24126pt x 718.18312pt>
+[34
+
+]
+<figures/mobaxterminterface.png, id=830, 1135.24126pt x 718.18312pt>
 File: figures/mobaxterminterface.png Graphic file (type png)
 <use figures/mobaxterminterface.png>
 Package pdftex.def Info: figures/mobaxterminterface.png  used on input line 19.
 
-(pdftex.def)             Requested size: 455.24411pt x 288.00238pt.
-[30
+(pdftex.def)             Requested size: 341.43307pt x 215.99356pt.
 
-] [31 <./figures/mobaxterminterface.png>]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[35
+
+ <./figures/mobaxterminterface.png>]
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 68.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 99.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 74.
 
-[32] [33]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[36]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[37]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[38]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[39]
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-[34]
 (C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-[35] [36] [37] [38]
-Overfull \hbox (31.72493pt too wide) in paragraph at lines 396--397
-[]\T1/lmr/m/n/12 (-20) Une fois les trois tables phy-siques ali-men-tÈes dans H
-ive (\T1/lmtt/m/n/12 consolidated_all_column_history\T1/lmr/m/n/12 (-20) ,
- []
 
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
-00.
-(C:\Users\benda\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (18.9981pt too wide) in paragraph at lines 400--401
-[]\T1/lmr/m/n/12 (-20) Dans Dre-mio, nous crÈons un da-ta-set vir-tuel (VDS) no
-mmÈ \T1/lmtt/m/n/12 fact_tiers_dq_consolidated\T1/lmr/m/n/12 (-20) .
- []
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-<figures/lignage_dremio.png, id=943, 1746.525pt x 907.39pt>
-File: figures/lignage_dremio.png Graphic file (type png)
-<use figures/lignage_dremio.png>
-Package pdftex.def Info: figures/lignage_dremio.png  used on input line 404.
-(pdftex.def)             Requested size: 455.24411pt x 236.5112pt.
-[39{C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}
- <./figures/lignage_dremio.png (PNG copy)>]
-<figures/vuehome.png, id=961, 1541.76pt x 1027.84pt>
-File: figures/vuehome.png Graphic file (type png)
-<use figures/vuehome.png>
-Package pdftex.def Info: figures/vuehome.png  used on input line 427.
-(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
- [40 <./figures/vuehome.png (PNG copy)>]
-<figures/HEATMAP5.png, id=967, 1541.76pt x 1027.84pt>
-File: figures/HEATMAP5.png Graphic file (type png)
-<use figures/HEATMAP5.png>
-Package pdftex.def Info: figures/HEATMAP5.png  used on input line 447.
-(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
-<figures/anomaly.png, id=969, 1541.76pt x 1027.84pt>
-File: figures/anomaly.png Graphic file (type png)
-<use figures/anomaly.png>
-Package pdftex.def Info: figures/anomaly.png  used on input line 464.
-(pdftex.def)             Requested size: 455.24411pt x 303.49248pt.
- [41 <./figures/HEATMAP5.png (PNG copy)>]) (sections/conclusion.tex
-[42 <./figures/anomaly.png (PNG copy)>]
+[40]
 
-! LaTeX Error: Invalid UTF-8 byte sequence (√\global).
+! LaTeX Error: Invalid UTF-8 byte sequence (√\expandafter).
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...ture essentielle sur laquelle reposent l\'√
-                                                  ©valuation des risques et ...
-
+l.252 ... tables Tiers (extensible au p√©rim√®tre 
+                                                  global CCM_*)
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
 in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
-
-
-! LaTeX Error: Invalid UTF-8 byte sequence (√\egroup).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.4 ...ture essentielle sur laquelle reposent l\'√
-                                                  ©valuation des risques et ...
-
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-! Missing number, treated as zero.
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...ture essentielle sur laquelle reposent l\'√
-                                                  ©valuation des risques et ...
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Bad space factor (0).
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...ture essentielle sur laquelle reposent l\'√
-                                                  ©valuation des risques et ...
-I allow only values in the range 1..32767 here.
 
 
 ! LaTeX Error: Invalid UTF-8 byte "A9.
@@ -1974,9 +1924,8 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...ure essentielle sur laquelle reposent l\'√©
-                                                  valuation des risques et l...
-
+l.252 ... tables Tiers (extensible au p√©rim√®tre 
+                                                  global CCM_*)
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
@@ -1984,15 +1933,14 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-! LaTeX Error: Invalid UTF-8 byte sequence (√\global).
+! LaTeX Error: Invalid UTF-8 byte sequence (√\expandafter).
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...mit√© r√©glementaire, ce Projet de Fin d\'√
-                                                  âtudes s\'est fix√© pour o...
-
+l.252 ... tables Tiers (extensible au p√©rim√®tre 
+                                                  global CCM_*)
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
@@ -2000,47 +1948,82 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-! LaTeX Error: Invalid UTF-8 byte sequence (√\egroup).
+! LaTeX Error: Invalid UTF-8 byte "A8.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...mit√© r√©glementaire, ce Projet de Fin d\'√
-                                                  âtudes s\'est fix√© pour o...
-
+l.252 ... tables Tiers (extensible au p√©rim√®tre 
+                                                  global CCM_*)
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
 in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
-! Missing number, treated as zero.
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...mit√© r√©glementaire, ce Projet de Fin d\'√
-                                                  âtudes s\'est fix√© pour o...
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
 
-! Bad space factor (0).
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...mit√© r√©glementaire, ce Projet de Fin d\'√
-                                                  âtudes s\'est fix√© pour o...
-I allow only values in the range 1..32767 here.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[41]
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[42]
+Overfull \hbox (21.04366pt too wide) in paragraph at lines 333--334
+[]\T1/lmr/m/n/12 (-20) Le mode \T1/lmtt/m/n/12 append \T1/lmr/m/n/12 (-20) est 
+fon-da-men-tal : ‡ chaque exÈ-cu-tion noc-turne du DAG \T1/lmtt/m/n/12 dq_tiers
+_daily00\T1/lmr/m/n/12 (-20) ,
+ []
 
 
-! LaTeX Error: Invalid UTF-8 byte "89.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[43]
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 391.
+
+Overfull \hbox (70.59721pt too wide) in paragraph at lines 391--391
+|[]\T1/lmr/bx/n/17.28 (-20) CrÈation du DAG Air-flow in-dÈ-pen-dant (\T1/lmtt/b
+/n/17.28 dq_tiers_daily00\T1/lmr/bx/n/17.28 (-20) )| 
+ []
+
+
+Overfull \hbox (54.65706pt too wide) in paragraph at lines 399--400
+[] [] \T1/lmr/bx/n/12 (-20) 2. T‚che \T1/lmtt/b/n/12 run_business_dq \T1/lmr/bx
+/n/12 (-20) :[] \T1/lmr/m/n/12 (-20) DÈ-clenche le script prin-ci-pal du mo-teu
+r DQ (\T1/lmtt/m/n/12 dq_tiers_endpoint.py\T1/lmr/m/n/12 (-20) )
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[44]
+
+! LaTeX Error: Invalid UTF-8 byte sequence (√\expandafter).
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...it√© r√©glementaire, ce Projet de Fin d\'√â
-                                                  tudes s\'est fix√© pour ob...
-
+l.445     # Ordonnancement s√©quentiel 
+                                       avec Circuit Breaker
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
@@ -2048,15 +2031,14 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-! LaTeX Error: Invalid UTF-8 byte sequence (¬\global).
+! LaTeX Error: Invalid UTF-8 byte "A9.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.4 ...uelles co√ªteuses, souvent qualifi√©es d\'¬
-                                                  ´ usines √† donn√©es fant√...
-
+l.445     # Ordonnancement s√©quentiel 
+                                       avec Circuit Breaker
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
 or specify an encoding such as \usepackage [latin1]{inputenc}
@@ -2064,339 +2046,322 @@ in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
 
-! LaTeX Error: Invalid UTF-8 byte sequence (¬\egroup).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.4 ...uelles co√ªteuses, souvent qualifi√©es d\'¬
-                                                  ´ usines √† donn√©es fant√...
-
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-! Missing number, treated as zero.
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...uelles co√ªteuses, souvent qualifi√©es d\'¬
-                                                  ´ usines √† donn√©es fant√...
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Bad space factor (0).
-<to be read again> 
-                   \accent@spacefactor 
-l.4 ...uelles co√ªteuses, souvent qualifi√©es d\'¬
-                                                  ´ usines √† donn√©es fant√...
-I allow only values in the range 1..32767 here.
+Overfull \hbox (31.72493pt too wide) in paragraph at lines 454--455
+[]\T1/lmr/m/n/12 (-20) Une fois les trois tables phy-siques ali-men-tÈes dans H
+ive (\T1/lmtt/m/n/12 consolidated_all_column_history\T1/lmr/m/n/12 (-20) ,
+ []
 
 
-! LaTeX Error: Invalid UTF-8 byte "AB.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.4 ...elles co√ªteuses, souvent qualifi√©es d\'¬´
-                                                   usines √† donn√©es fant√¥...
+[45]
+Overfull \hbox (18.9981pt too wide) in paragraph at lines 458--459
+[]\T1/lmr/m/n/12 (-20) Dans Dre-mio, nous crÈons un da-ta-set vir-tuel (VDS) no
+mmÈ \T1/lmtt/m/n/12 fact_tiers_dq_consolidated\T1/lmr/m/n/12 (-20) .
+ []
 
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
+<figures/lignage_dremio.png, id=1187, 1746.525pt x 907.39pt>
+File: figures/lignage_dremio.png Graphic file (type png)
+<use figures/lignage_dremio.png>
+Package pdftex.def Info: figures/lignage_dremio.png  used on input line 462.
+(pdftex.def)             Requested size: 400.61703pt x 208.12764pt.
+<figures/connexiondremio.png, id=1188, 1780.6525pt x 890.32625pt>
+File: figures/connexiondremio.png Graphic file (type png)
+<use figures/connexiondremio.png>
+Package pdftex.def Info: figures/connexiondremio.png  used on input line 478.
+(pdftex.def)             Requested size: 373.3035pt x 186.64798pt.
 
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-! LaTeX Error: Invalid UTF-8 byte sequence (√\global).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.8 ...d√©niable, certaines limites m√©ritent d\'√
-                                                  ™tre soulign√©es. La maint...
-
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-
-! LaTeX Error: Invalid UTF-8 byte sequence (√\egroup).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.8 ...d√©niable, certaines limites m√©ritent d\'√
-                                                  ™tre soulign√©es. La maint...
-
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-! Missing number, treated as zero.
-<to be read again> 
-                   \accent@spacefactor 
-l.8 ...d√©niable, certaines limites m√©ritent d\'√
-                                                  ™tre soulign√©es. La maint...
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-! Bad space factor (0).
-<to be read again> 
-                   \accent@spacefactor 
-l.8 ...d√©niable, certaines limites m√©ritent d\'√
-                                                  ™tre soulign√©es. La maint...
-I allow only values in the range 1..32767 here.
+[46 <./figures/lignage_dremio.png (PNG copy)>]
+<figures/vuehome.png, id=1195, 1541.76pt x 1027.84pt>
+File: figures/vuehome.png Graphic file (type png)
+<use figures/vuehome.png>
+Package pdftex.def Info: figures/vuehome.png  used on input line 492.
+(pdftex.def)             Requested size: 400.61703pt x 267.07526pt.
 
 
-! LaTeX Error: Invalid UTF-8 byte "AA.
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.8 ...√©niable, certaines limites m√©ritent d\'√™
-                                                  tre soulign√©es. La mainte...
+[47 <./figures/connexiondremio.png (PNG copy)> <./figures/vuehome.png (PNG copy
+)>]
+<figures/HEATMAP5.png, id=1201, 1541.76pt x 1027.84pt>
+File: figures/HEATMAP5.png Graphic file (type png)
+<use figures/HEATMAP5.png>
+Package pdftex.def Info: figures/HEATMAP5.png  used on input line 515.
+(pdftex.def)             Requested size: 400.61703pt x 267.07526pt.
+<figures/anomaly.png, id=1203, 1541.76pt x 1027.84pt>
+File: figures/anomaly.png Graphic file (type png)
+<use figures/anomaly.png>
+Package pdftex.def Info: figures/anomaly.png  used on input line 532.
+(pdftex.def)             Requested size: 400.61703pt x 267.07526pt.
 
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
 
-) (sections/bibliographie.tex [43
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
 
-]
-Overfull \hbox (72.50044pt too wide) in paragraph at lines 7--8
+[48 <./figures/HEATMAP5.png (PNG copy)>]) (sections/conclusion.tex
+
+Package fancyhdr Warning: \headheight is too small (15.0pt): 
+(fancyhdr)                Make it at least 15.35403pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.35403pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.35403pt}.
+
+[49 <./figures/anomaly.png (PNG copy)>] [50
+
+]) (sections/bibliographie.tex
+[51]
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
 [][][]$\T1/lmtt/m/n/12 https : / / scielo . org . za / scielo . php ? script = 
-sci _ arttext & pid = S2304 -[] 82632024000200007$[][] \T1/lmr/m/n/12 (-20) :
+sci _ arttext & pid = S2304 -[]
  []
 
 
-Overfull \hbox (3.9185pt too wide) in paragraph at lines 8--9
-[][][]$\T1/lmtt/m/n/12 https : / / www . ewsolutions . com / financial -[] data
- -[] quality -[] management/$[][] \T1/lmr/m/n/12 (-20) : Fi-nan-
+Underfull \hbox (badness 1024) in paragraph at lines 33--34
+\T1/lmtt/m/n/12 82632024000200007$[][] \T1/lmr/m/n/12 (+20) : Ar-ti-fi-cial in-
+tel-li-gence tech-no-logy to en-hance data qua-
  []
 
 
-Overfull \hbox (4.90814pt too wide) in paragraph at lines 9--10
-[][][]$\T1/lmtt/m/n/12 https : / / www . ibm . com / new / product -[] blog / b
-cbs239 -[] compliance$[][] \T1/lmr/m/n/12 (-20) : BCBS 239 com-
- []
-
-
-Overfull \hbox (36.31735pt too wide) in paragraph at lines 10--11
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
 [][][]$\T1/lmtt/m/n/12 https : / / www . researchgate . net / publication / 389
-700967 _ Assessing _ Data _ Quality _
+700967 _ Assessing _ Data _
  []
 
 
-Overfull \hbox (41.13243pt too wide) in paragraph at lines 10--11
-\T1/lmtt/m/n/12 Challenges _ on _ International _ Banking _ In _ Case _ of _ Co
-mmercial _ Bank _ of _ Ethiopia$[][] \T1/lmr/m/n/12 (-20) :
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
+\T1/lmtt/m/n/12 Quality _ Challenges _ on _ International _ Banking _ In _ Case
+ _ of _ Commercial _
  []
 
 
-Overfull \hbox (42.50636pt too wide) in paragraph at lines 12--13
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
 [][][]$\T1/lmtt/m/n/12 https : / / www . researchgate . net / publication / 282
-829737 _ Data _ quality _ in _ banking _
+829737 _ Data _ quality _ in _
  []
 
 
-Overfull \hbox (42.54337pt too wide) in paragraph at lines 13--14
+Underfull \hbox (badness 6348) in paragraph at lines 38--39
+\T1/lmtt/m/n/12 banking _ regulatory _ requirements _ and _ best _ practices$[]
+[] \T1/lmr/m/n/12 (+20) : Data qua-lity in
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
 [][][]$\T1/lmtt/m/n/12 https : / / sbs -[] software . com / insights / artifici
-al -[] intelligence -[] data / data -[] driven -[]
+al -[] intelligence -[] data / data -[]
  []
 
 
-Overfull \hbox (17.84335pt too wide) in paragraph at lines 14--15
+Underfull \hbox (badness 1048) in paragraph at lines 39--40
+\T1/lmtt/m/n/12 driven -[] transformation -[] banking/$[][] \T1/lmr/m/n/12 (+20
+) : Data-driven trans-for-ma-tion in Eu-ro-pean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
 [][][]$\T1/lmtt/m/n/12 https : / / www . actian . com / blog / data -[] managem
-ent / the -[] costly -[] consequences -[] of -[]
+ent / the -[] costly -[] consequences -[]
  []
 
 
-Overfull \hbox (18.93242pt too wide) in paragraph at lines 18--19
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
 [][][]$\T1/lmtt/m/n/12 https : / / www . integrate . io / blog / data -[] quali
-ty -[] improvement -[] stats -[] from -[] etl/$[][] \T1/lmr/m/n/12 (-20) :
+ty -[] improvement -[] stats -[] from -[]
  []
 
-[44
+[52
 
 ]
-Overfull \hbox (12.16835pt too wide) in paragraph at lines 21--22
+Underfull \hbox (badness 2261) in paragraph at lines 46--47
+[][][]$\T1/lmtt/m/n/12 https : / / www . doubletrack . com / post / hidden -[] 
+cost -[] dirty -[] data$[][] \T1/lmr/m/n/12 (+20) : The Hid-den
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
 [][][]$\T1/lmtt/m/n/12 https : / / veridion . com / blog -[] posts / banking -[
-] capital -[] markets -[] data -[] strategy -[]
+] capital -[] markets -[] data -[]
  []
 
 
-Overfull \hbox (37.45042pt too wide) in paragraph at lines 26--27
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
 [][][]$\T1/lmtt/m/n/12 https : / / www . fluxforce . ai / regulations / bcbs -[
-] bcbs -[] 239 -[] risk -[] data -[] aggregation/$[][] \T1/lmr/m/n/12 (-20) :
+] bcbs -[] 239 -[] risk -[] data -[]
  []
 
 
-Overfull \hbox (5.99335pt too wide) in paragraph at lines 27--28
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
 [][][]$\T1/lmtt/m/n/12 https : / / www . collibra . com / blog / how -[] to -[]
  achieve -[] data -[] quality -[] excellence -[]
  []
 
 
-Overfull \hbox (4.99335pt too wide) in paragraph at lines 28--29
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
 [][][]$\T1/lmtt/m/n/12 https : / / www . ey . com / en _ nl / industries / bank
 ing -[] capital -[] markets / why -[] bcbs -[]
  []
 
 
-Overfull \hbox (32.16336pt too wide) in paragraph at lines 30--31
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
 [][][]$\T1/lmtt/m/n/12 https : / / iason -[] onigiri -[] prod . s3 . eu -[] sou
-th -[] 1 . amazonaws . com / Credit _ Risk _ Basel _
+th -[] 1 . amazonaws . com / Credit _ Risk _
  []
 
 
-Overfull \hbox (49.71837pt too wide) in paragraph at lines 31--32
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
 [][][]$\T1/lmtt/m/n/12 https : / / kpmg . com / xx / en / our -[] insights / ec
-b -[] office / ecb -[] ratchets -[] up -[] the -[] pressure -[]
+b -[] office / ecb -[] ratchets -[] up -[] the -[]
  []
 
 
-Overfull \hbox (47.71837pt too wide) in paragraph at lines 32--33
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
 [][][]$\T1/lmtt/m/n/12 https : / / www . oliverwyman . com / our -[] expertise 
-/ insights / 2024 / jul / data -[] management -[]
+/ insights / 2024 / jul / data -[]
  []
 
 
-Overfull \hbox (5.84586pt too wide) in paragraph at lines 33--34
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+\T1/lmtt/m/n/12 management -[] risk -[] reporting -[] challenges -[] eu -[] ban
+ks -[] bcbs239 . html$[][] \T1/lmr/m/n/12 (+20) : Data
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
 [][][]$\T1/lmtt/m/n/12 https : / / www . grantthornton . com . cy / insights / 
 quantitative -[] risk -[] articles /
  []
 
 
-Overfull \hbox (12.43214pt too wide) in paragraph at lines 33--34
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
 \T1/lmtt/m/n/12 ECB -[] Guide -[] on -[] effective -[] risk -[] data -[] aggreg
-ation -[] and -[] risk -[] reporting/$[][] \T1/lmr/m/n/12 (-20) : ECB
+ation -[] and -[] risk -[] reporting/$[][] \T1/lmr/m/n/12 (+20) :
  []
 
 
-Overfull \hbox (26.10042pt too wide) in paragraph at lines 34--35
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
 [][][]$\T1/lmtt/m/n/12 https : / / validio . io / blog / bcbs -[] 239 -[] from 
--[] regulatory -[] burden -[] to -[] data -[] quality$[][] \T1/lmr/m/n/12 (-20)
- :
+-[] regulatory -[] burden -[] to -[] data -[]
  []
 
-
-Overfull \hbox (24.50435pt too wide) in paragraph at lines 35--36
+[53]
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
 [][][]$\T1/lmtt/m/n/12 https : / / www . bairdholm . com / blog / citigroup -[]
- fined -[] 136 -[] million -[] totaling -[] 536 -[]
+ fined -[] 136 -[] million -[] totaling -[]
  []
 
 
-Overfull \hbox (1.75134pt too wide) in paragraph at lines 36--37
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
 [][][]$\T1/lmtt/m/n/12 https : / / www . bankingsupervision . europa . eu / pre
 ss / pr / date / 2026 / html / ssm .
  []
 
 
-Overfull \hbox (49.21837pt too wide) in paragraph at lines 38--39
+Underfull \hbox (badness 10000) in paragraph at lines 64--65
 [][][]$\T1/lmtt/m/n/12 https : / / www . banque -[] france . fr / en / press -[
-] release / ecb -[] sanctions -[] bofa -[] securities -[]
+] release / ecb -[] sanctions -[] bofa -[]
  []
 
-[45]
-Overfull \hbox (51.15837pt too wide) in paragraph at lines 39--40
+
+Underfull \hbox (badness 1048) in paragraph at lines 64--65
+\T1/lmtt/m/n/12 securities -[] europe -[] sa -[] breaching -[] reporting -[] re
+quirements$[][] \T1/lmr/m/n/12 (+20) : ECB sanc-tions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--66
 [][][]$\T1/lmtt/m/n/12 https : / / www . federalreserve . gov / newsevents / pr
-essreleases / enforcement20240710a .
+essreleases /
  []
 
 
-Overfull \hbox (4.49335pt too wide) in paragraph at lines 40--41
+Underfull \hbox (badness 2809) in paragraph at lines 65--66
+\T1/lmtt/m/n/12 enforcement20240710a . htm$[][] \T1/lmr/m/n/12 (+20) : Fe-de-ra
+l Re-serve Board fines Ci-ti-group $60.6
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 66--67
 [][][]$\T1/lmtt/m/n/12 https : / / www . experian . co . uk / blogs / latest -[
 ] thinking / data -[] quality / hidden -[]
  []
 
 
-Overfull \hbox (6.69899pt too wide) in paragraph at lines 42--43
-[][][]$\T1/lmtt/m/n/12 https : / / www . ibm . com / think / insights / cost -[
-] of -[] poor -[] data -[] quality$[][] \T1/lmr/m/n/12 (-20) : The True
- []
-
-
-Overfull \hbox (48.71837pt too wide) in paragraph at lines 43--44
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
 [][][]$\T1/lmtt/m/n/12 https : / / www . querysurge . com / resource -[] center
- / white -[] papers / the -[] data -[] validation -[]
+ / white -[] papers / the -[] data -[]
  []
 
 
-Overfull \hbox (52.30743pt too wide) in paragraph at lines 43--44
-\T1/lmtt/m/n/12 deficit -[] analyzing -[] banking -[] pain -[] points -[] and -
-[] the -[] quest -[] for -[] effective -[] solutions$[][] \T1/lmr/m/n/12 (-20) 
-:
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
+\T1/lmtt/m/n/12 validation -[] deficit -[] analyzing -[] banking -[] pain -[] p
+oints -[] and -[] the -[] quest -[] for -[]
  []
 
 
-Overfull \hbox (1.0972pt too wide) in paragraph at lines 45--46
-[][][]$\T1/lmtt/m/n/12 https : / / ideas . repec . org / p / bdi / opques / qef
- _ 666 _ 22 . html$[][] \T1/lmr/m/n/12 (-20) : A decision-making
+Underfull \hbox (badness 1377) in paragraph at lines 70--71
+[][][]$\T1/lmtt/m/n/12 https : / / journals . co . za / doi / abs / 10 . 7553 /
+ 90 -[] 2 -[] 2392$[][] \T1/lmr/m/n/12 (+20) : Ar-ti-fi-cial in-tel-li-gence
  []
 
 
-Overfull \hbox (0.31134pt too wide) in paragraph at lines 46--47
+Underfull \hbox (badness 10000) in paragraph at lines 72--73
 [][][]$\T1/lmtt/m/n/12 https : / / barrmoses . medium . com / citigroup -[] fin
 ed -[] 136m -[] for -[] bad -[] data -[] what -[]
  []
 
-) [46] (main.aux)
+) [54] [55] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 88659246206F53EE1330127331CCFD68;14828.
- )
-(\end occurred inside a group at level 4)
-
-### simple group (level 4) entered at line 8 ({)
-### simple group (level 3) entered at line 4 ({)
-### simple group (level 2) entered at line 4 ({)
-### simple group (level 1) entered at line 4 ({)
-### bottom level 
+(rerunfilecheck)             Checksum: 73BA9B57FD375B1587DC280CE440CEC4;21787.
+ ) 
 Here is how much of TeX's memory you used:
- 32601 strings out of 467871
- 628221 string characters out of 5418377
- 1846741 words of memory out of 5000000
- 60226 multiletter control sequences out of 15000+600000
- 709806 words of font info for 198 fonts, out of 8000000 for 9000
+ 33627 strings out of 467871
+ 645351 string characters out of 5418377
+ 1807264 words of memory out of 5000000
+ 61030 multiletter control sequences out of 15000+600000
+ 731365 words of font info for 242 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,12n,94p,1325b,2146s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/lm/lmbx10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/lm/lmbx12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/lm/lmbx8.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmcsc10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/lm/lmr10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmr12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-lm/lmr6.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmr8.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mri10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mri12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-msy10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mtk10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mtt10.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mtt12.pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
-mtti10.pfb>
-Output written on main.pdf (56 pages, 9459490 bytes).
+ 84i,13n,94p,1218b,2152s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pf
+b><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pf
+b><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.p
+fb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.
+pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.
+pfb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.p
+fb><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pf
+b><C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb>
+<C:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C
+:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C
+:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb><C
+:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C
+:/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:
+/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:
+/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:
+/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:
+/Users/benda/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
+Output written on main.pdf (66 pages, 13121372 bytes).
 PDF statistics:
- 1279 PDF objects out of 1440 (max. 8388607)
- 480 named destinations out of 1000 (max. 500000)
- 48811 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 1576 PDF objects out of 1728 (max. 8388607)
+ 602 named destinations out of 1000 (max. 500000)
+ 61850 words of extra memory for PDF output out of 61914 (max. 10000000)
 
